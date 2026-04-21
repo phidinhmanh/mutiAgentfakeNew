@@ -1,0 +1,7 @@
+```json
+{
+  "verdict": "UNVERIFIABLE",
+  "confidence": 1.0,
+  "reasoning": "Evidence chỉ đề cập đến việc đồng ý rằng toàn cảnh đã xảy ra và cần giải quyết hòa bình, không cung cấp thông tin để xác nhận hay phủ định việc 'thoát cảnh rồi giúp Việt Nam giải quyết tồn cường'."
+}
+```

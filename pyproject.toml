@@ -1,0 +1,69 @@
+[project]
+name = "fake-news-detector"
+version = "0.1.0"
+description = "Vietnamese Fake News Detection with Multi-Agent RAG"
+requires-python = ">=3.10"
+dependencies = [
+    "transformers>=4.36.0",
+    "torch>=2.0.0",
+    "underthesea>=6.8.0",
+    "langchain>=0.1.0",
+    "langchain-community>=0.0.20",
+    "faiss-cpu>=1.7.4",
+    "sentence-transformers>=2.2.0",
+    "streamlit>=1.28.0",
+    "wordcloud>=1.9.0",
+    "matplotlib>=3.8.0",
+    "requests>=2.31.0",
+    "beautifulsoup4>=4.12.0",
+    "pydantic-settings>=2.0.0",
+    "openai>=1.10.0",
+    "google-generativeai>=0.8.0",
+    "httpx>=0.26.0",
+    "python-dotenv>=1.0.0",
+    "huggingface_hub>=0.20.0",
+    "numpy>=1.24.0",
+    "pandas>=2.0.0",
+    "datasets>=4.8.4",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0",
+    "pytest-cov>=4.1.0",
+    "ruff>=0.2.0",
+    "mypy>=1.8.0",
+    "hypothesis>=6.92.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.pytest.ini_options]
+minversion = "8.0"
+testpaths = ["tests"]
+pythonpath = ["."]
+markers = [
+    "slow: marks tests as slow",
+    "integration: marks integration tests",
+    "unit: marks unit tests",
+]
+addopts = ["--strict-markers", "--tb=short", "-v"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "UP", "B", "C4"]
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+ignore_missing_imports = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/fake_news_detector"]
