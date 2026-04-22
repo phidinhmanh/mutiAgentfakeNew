@@ -31,7 +31,7 @@ from trust_agents.agents.evidence_retrieval import run_evidence_retrieval_agent_
 from trust_agents.agents.explainer import run_explainer_agent_sync
 
 load_dotenv()
-logger = logging.getLogger("TRUST_agents.orchestrator_research")
+logger = logging.getLogger("trust_agents.orchestrator_research")
 
 
 @dataclass
@@ -199,7 +199,7 @@ class ResearchTRUSTOrchestrator:
             verdict = self.delphi_jury.verify_with_jury(claim, evidence)
         else:
             # Fallback to simple verification
-            from TRUST_agents.agents.verifier import run_verifier_agent_sync
+            from trust_agents.agents.verifier import run_verifier_agent_sync
             verdict = run_verifier_agent_sync(claim, evidence)
         
         # Add claim and evidence to result

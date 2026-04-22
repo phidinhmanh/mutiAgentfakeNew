@@ -19,7 +19,7 @@ from typing import List, Any
 from dotenv import load_dotenv
 
 # Import LLM configuration
-from TRUST_agents.config import get_llm_config
+from trust_agents.config import get_llm_config
 
 # Conditional imports for different LLM providers
 llm_provider = os.getenv("LLM_PROVIDER", "google").lower()
@@ -28,12 +28,12 @@ if llm_provider == "openai":
     from langchain_openai import ChatOpenAI
 else:
     # Use our custom ChatGemini for Google or NVIDIA
-    from TRUST_agents.llm.gemini_langchain import ChatGemini
+    from trust_agents.llm.gemini_langchain import ChatGemini
 
 from langgraph.prebuilt import create_react_agent
 
 # Tools (async @tool functions)
-from TRUST_agents.agents.claim_extractor_tools import (
+from trust_agents.agents.claim_extractor_tools import (
     ner_claim_extraction_tool,
     dependency_claim_extraction_tool,
     llm_claim_extraction_tool,

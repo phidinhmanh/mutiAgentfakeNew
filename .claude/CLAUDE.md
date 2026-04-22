@@ -58,7 +58,9 @@ Vietnamese Fake News Detection using **Multi-Agent RAG** (Retrieval Augmented Ge
 | `src/rag/retriever.py` | Hybrid retrieval orchestration |
 | `src/rag/vector_store.py` | FAISS index management |
 | `src/utils/citation_checker.py` | Validates LLM citations exist in evidence |
-| `src/app.py` | Streamlit UI with streaming |
+| `src/trust_agents/orchestrator.py` | Main pipeline coordinator |
+| `src/trust_agents/llm/groq_client.py` | Groq LLM API client |
+| `notebooks/trust_agents_colab.ipynb` | Google Colab workflow (GPU) |
 
 ---
 
@@ -91,6 +93,8 @@ uv run mypy src/
 ## Environment Variables
 
 ```bash
+GEMINI_API_KEY=xxxxx          # Google Gemini
+GROQ_API_KEY=xxxxx           # Groq API (Free tier)
 NVIDIA_API_KEY=nvapi-xxxxx     # NVIDIA NIM for LLM
 SERPER_API_KEY=xxxxx          # Google Search
 TAVILY_API_KEY=xxxxx          # Alternative search

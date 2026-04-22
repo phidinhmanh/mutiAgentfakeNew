@@ -20,7 +20,7 @@ from typing import Dict, List, Any
 from dotenv import load_dotenv
 
 # Import LLM configuration
-from TRUST_agents.config import get_llm_config
+from trust_agents.config import get_llm_config
 
 # Conditional imports for different LLM providers
 llm_provider = os.getenv("LLM_PROVIDER", "google").lower()
@@ -28,11 +28,11 @@ llm_provider = os.getenv("LLM_PROVIDER", "google").lower()
 if llm_provider == "openai":
     from langchain_openai import ChatOpenAI
 else:
-    from TRUST_agents.llm.gemini_langchain import ChatGemini
+    from trust_agents.llm.gemini_langchain import ChatGemini
 
 from langgraph.prebuilt import create_react_agent
 
-from TRUST_agents.agents.explainer_tools import (
+from trust_agents.agents.explainer_tools import (
     summarize_verification_tool,
     generate_explanation_tool,
     cite_evidence_tool,

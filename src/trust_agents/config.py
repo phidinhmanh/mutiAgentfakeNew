@@ -22,6 +22,7 @@ class LLMProvider(str, Enum):
     OPENAI = "openai"
     GEMINI_GOOGLE = "google"
     GEMINI_NVIDIA = "nvidia"
+    GROQ = "groq"
 
 
 class LLMConfig(BaseModel):
@@ -43,6 +44,7 @@ class LLMConfig(BaseModel):
             LLMProvider.OPENAI: os.getenv("OPENAI_MODEL", "gpt-4o-mini"),
             LLMProvider.GEMINI_GOOGLE: os.getenv("GEMINI_MODEL", "gemini-2.0-flash"),
             LLMProvider.GEMINI_NVIDIA: os.getenv("GEMINI_MODEL", "google/gemma-4-31b-it"),
+            LLMProvider.GROQ: os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile"),
         }
 
         return cls(
@@ -58,6 +60,8 @@ class LLMConfig(BaseModel):
             return os.getenv("OPENAI_API_KEY")
         elif self.provider in (LLMProvider.GEMINI_GOOGLE, LLMProvider.GEMINI_NVIDIA):
             return os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
+        elif self.provider == LLMProvider.GROQ:
+            return os.getenv("GROQ_API_KEY") or os.getenv("GROQ_KEY")
         return None
 
 

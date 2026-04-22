@@ -1,6 +1,7 @@
 """Pytest configuration and shared fixtures."""
 from __future__ import annotations
 
+import json
 from typing import Any
 from unittest.mock import AsyncMock, MagicMock, Mock
 from unittest.mock import patch
@@ -310,3 +311,289 @@ class MockNVIDIAResponse:
     @staticmethod
     def get_invalid_json() -> str:
         return "This is not valid JSON response from LLM"
+
+
+# === Orchestrator Fixtures for Integration/Acceptance Tests ===
+
+class MockAgentResponses:
+    """Mock responses for agent pipeline testing."""
+
+    @staticmethod
+    def claim_extractor_success() -> str:
+        """Return valid claims JSON."""
+        return '{"claims": ["Việt Nam đạt tăng trưởng 8% trong năm 2023", "GDP Việt Nam cao nhất ASEAN"]}'
+
+    @staticmethod
+    def claim_extractor_multiple() -> str:
+        """Return multiple claims including opinions."""
+        return '{"claims": ["Số ca mắc COVID-19 giảm 30%", "Chúng tôi đã kiểm soát được dịch", "Tốc độ tăng trưởng đạt 8%"]}'
+
+    @staticmethod
+    def claim_extractor_empty() -> str:
+        """Return empty claims list."""
+        return '{"claims": []}'
+
+    @staticmethod
+    def evidence_retriever_real() -> str:
+        """Return evidence supporting real claim."""
+        return json.dumps({
+            "evidence": [
+                {"content": "Việt Nam đạt tăng trưởng 8% trong quý 3/2023, cao nhất ASEAN", "source": "vnexpress", "score": 0.92},
+                {"content": "Theo WB, GDP VN 2023 đạt 5.6%, thuộc nhóm cao nhất khu vực", "source": "worldbank", "score": 0.88},
+            ]
+        })
+
+    @staticmethod
+    def evidence_retriever_fake() -> str:
+        """Return evidence contradicting claim."""
+        return json.dumps({
+            "evidence": [
+                {"content": "Việt Nam tăng trưởng 4.2% trong năm 2023, không phải cao nhất", "source": "tuoitre", "score": 0.85},
+                {"content": "Campuchia đạt 5.6%, cao hơn Việt Nam", "source": "vietnamnet", "score": 0.82},
+            ]
+        })
+
+    @staticmethod
+    def verifier_real() -> str:
+        """Return REAL verdict."""
+        return json.dumps({
+            "verdict": "true",
+            "confidence": 0.85,
+            "reasoning": "Evidence strongly supports the claim. Multiple sources confirm Vietnam's 8% growth.",
+            "label": "true"
+        })
+
+    @staticmethod
+    def verifier_fake() -> str:
+        """Return FAKE verdict."""
+        return json.dumps({
+            "verdict": "false",
+            "confidence": 0.90,
+            "reasoning": "Evidence contradicts the claim. Actual growth is 4.2%, not 8%.",
+            "label": "false"
+        })
+
+    @staticmethod
+    def verifier_unverifiable() -> str:
+        """Return UNVERIFIABLE verdict."""
+        return json.dumps({
+            "verdict": "uncertain",
+            "confidence": 0.3,
+            "reasoning": "Not enough evidence to verify this claim.",
+            "label": "uncertain"
+        })
+
+    @staticmethod
+    def verifier_with_citations() -> str:
+        """Return verdict with citations."""
+        return json.dumps({
+            "verdict": "true",
+            "confidence": 0.85,
+            "reasoning": "Evidence from multiple sources supports claim",
+            "label": "true",
+            "citations": [
+                {"evidence_id": 0, "quote_text": "Vietnam GDP grew 8%"},
+                {"evidence_id": 1, "quote_text": "Highest in ASEAN"}
+            ]
+        })
+
+    @staticmethod
+    def explainer_report() -> str:
+        """Return explainer report."""
+        return json.dumps({
+            "summary": "Claim verified as REAL with 85% confidence",
+            "explanation": "Multiple authoritative sources confirm Vietnam's economic growth",
+            "evidence_count": 2
+        })
+
+
+@pytest.fixture
+def mock_claim_extractor_agent(monkeypatch: pytest.MonkeyPatch) -> Mock:
+    """Mock claim extractor agent for integration tests."""
+    mock = Mock()
+    mock.return_value = [
+        "Việt Nam đạt tăng trưởng 8% trong năm 2023",
+        "GDP Việt Nam cao nhất ASEAN"
+    ]
+    monkeypatch.setattr(
+        "trust_agents.orchestrator.run_claim_extractor_agent_sync",
+        mock
+    )
+    return mock
+
+
+@pytest.fixture
+def mock_claim_extractor_multiple(monkeypatch: pytest.MonkeyPatch) -> Mock:
+    """Mock claim extractor returning multiple claims."""
+    mock = Mock()
+    mock.return_value = [
+        "Số ca mắc COVID-19 giảm 30%",
+        "Chúng tôi đã kiểm soát được dịch",
+        "Tốc độ tăng trưởng đạt 8%"
+    ]
+    monkeypatch.setattr(
+        "trust_agents.orchestrator.run_claim_extractor_agent_sync",
+        mock
+    )
+    return mock
+
+
+@pytest.fixture
+def mock_claim_extractor_empty(monkeypatch: pytest.MonkeyPatch) -> Mock:
+    """Mock claim extractor returning empty list."""
+    mock = Mock()
+    mock.return_value = []
+    monkeypatch.setattr(
+        "trust_agents.orchestrator.run_claim_extractor_agent_sync",
+        mock
+    )
+    return mock
+
+
+@pytest.fixture
+def mock_evidence_retriever(monkeypatch: pytest.MonkeyPatch) -> Mock:
+    """Mock evidence retriever agent for integration tests."""
+    mock = Mock()
+    mock.return_value = [
+        {"content": "Việt Nam đạt tăng trưởng 8%", "source": "vnexpress", "score": 0.92},
+        {"content": "GDP cao nhất ASEAN", "source": "worldbank", "score": 0.88}
+    ]
+    monkeypatch.setattr(
+        "trust_agents.orchestrator.run_evidence_retrieval_agent_sync",
+        mock
+    )
+    return mock
+
+
+@pytest.fixture
+def mock_evidence_retriever_empty(monkeypatch: pytest.MonkeyPatch) -> Mock:
+    """Mock evidence retriever returning empty list."""
+    mock = Mock()
+    mock.return_value = []
+    monkeypatch.setattr(
+        "trust_agents.orchestrator.run_evidence_retrieval_agent_sync",
+        mock
+    )
+    return mock
+
+
+@pytest.fixture
+def mock_verifier_agent(monkeypatch: pytest.MonkeyPatch) -> Mock:
+    """Mock verifier agent for integration tests."""
+    mock = Mock()
+    mock.return_value = {
+        "verdict": "true",
+        "confidence": 0.85,
+        "label": "true",
+        "reasoning": "Evidence supports claim"
+    }
+    monkeypatch.setattr(
+        "trust_agents.orchestrator.run_verifier_agent_sync",
+        mock
+    )
+    return mock
+
+
+@pytest.fixture
+def mock_verifier_agent_fake(monkeypatch: pytest.MonkeyPatch) -> Mock:
+    """Mock verifier agent returning FAKE verdict."""
+    mock = Mock()
+    mock.return_value = {
+        "verdict": "false",
+        "confidence": 0.90,
+        "label": "false",
+        "reasoning": "Evidence contradicts claim"
+    }
+    monkeypatch.setattr(
+        "trust_agents.orchestrator.run_verifier_agent_sync",
+        mock
+    )
+    return mock
+
+
+@pytest.fixture
+def mock_explainer_agent(monkeypatch: pytest.MonkeyPatch) -> Mock:
+    """Mock explainer agent for integration tests."""
+    mock = Mock()
+    mock.return_value = {
+        "summary": "Claim verified as REAL",
+        "explanation": "Multiple sources confirm",
+        "verdict": "true",
+        "confidence": 0.85
+    }
+    monkeypatch.setattr(
+        "trust_agents.orchestrator.run_explainer_agent_sync",
+        mock
+    )
+    return mock
+
+
+# === Golden Samples for Acceptance Tests ===
+
+@pytest.fixture
+def golden_samples_vietnamese() -> list[dict[str, Any]]:
+    """Golden samples for acceptance testing with Vietnamese news."""
+    return [
+        {
+            "id": "sample_real_1",
+            "text": "Theo báo cáo của WB, Việt Nam đạt tăng trưởng GDP 8% trong quý 3 năm 2023, cao nhất ASEAN.",
+            "expected_verdict": "true",
+            "expected_claims": 1,
+            "description": "Tin thật với số liệu cụ thể từ nguồn uy tín"
+        },
+        {
+            "id": "sample_fake_1",
+            "text": "Việt Nam đã phát hiện người ngoài hành tinh tại Hà Nội và chính phủ đang che giấu thông tin này.",
+            "expected_verdict": "false",
+            "expected_claims": 1,
+            "description": "Tin giả với thông tin vô lý"
+        },
+        {
+            "id": "sample_unverifiable_1",
+            "text": "Một nguồn tin cho biết lãnh đạo đất nước sẽ có cuộc họp quan trọng vào tuần tới nhưng không tiết lộ chi tiết.",
+            "expected_verdict": "uncertain",
+            "expected_claims": 1,
+            "description": "Tin không thể xác minh do thiếu chi tiết cụ thể"
+        },
+        {
+            "id": "sample_real_2",
+            "text": "Bộ Y tế công bố số ca mắc COVID-19 ngày 15/3/2024 giảm 30% so với tuần trước, xuống còn 1,500 ca.",
+            "expected_verdict": "true",
+            "expected_claims": 1,
+            "description": "Tin thật với số liệu chính thức từ Bộ Y tế"
+        },
+        {
+            "id": "sample_fake_2",
+            "text": "Tỷ lệ thất nghiệp tại Việt Nam đạt 50% trong năm 2024, cao nhất thế giới.",
+            "expected_verdict": "false",
+            "expected_claims": 1,
+            "description": "Tin giả với số liệu phi lý"
+        }
+    ]
+
+
+@pytest.fixture
+def sample_orchestrator_result() -> dict[str, Any]:
+    """Sample orchestrator result structure for testing."""
+    return {
+        "original_text": "Việt Nam đạt tăng trưởng 8%",
+        "claims": ["Việt Nam đạt tăng trưởng 8%"],
+        "results": [
+            {
+                "claim": "Việt Nam đạt tăng trưởng 8%",
+                "verdict": "true",
+                "confidence": 0.85,
+                "label": "true",
+                "reasoning": "Evidence supports claim",
+                "summary": "Claim verified",
+                "explanation": "Multiple sources confirm"
+            }
+        ],
+        "summary": {
+            "total_claims": 1,
+            "verdicts": {"true": 1, "false": 0, "uncertain": 0, "error": 0},
+            "average_confidence": 0.85,
+            "high_confidence_claims": 1,
+            "low_confidence_claims": 0
+        }
+    }

@@ -56,6 +56,23 @@ def call_llm(
         )
         return response.choices[0].message.content.strip()
 
+    elif config.provider.value == "groq":
+        from groq import Groq
+
+        messages = []
+        if system_prompt:
+            messages.append({"role": "system", "content": system_prompt})
+        messages.append({"role": "user", "content": prompt})
+
+        client = Groq(api_key=config.get_api_key())
+        response = client.chat.completions.create(
+            model=config.model,
+            messages=messages,
+            temperature=temperature,
+            max_tokens=max_tokens,
+        )
+        return response.choices[0].message.content.strip()
+
     else:
         # Use Gemini
         import google.genai as genai
