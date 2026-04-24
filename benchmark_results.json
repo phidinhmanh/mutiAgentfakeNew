@@ -1,15 +1,15 @@
 {
   "benchmark": "Baseline vs Multi-Agent vs Single-Agent",
-  "test_samples": 200,
+  "test_samples": 20,
   "train_samples_baseline": 500,
   "results": [
     {
       "approach": "Baseline (Keyword-based)",
-      "samples": 200,
-      "total_time": 0.0050106048583984375,
-      "avg_time_per_sample": 2.5053024291992187e-05,
-      "correct": 98,
-      "accuracy": 0.49,
+      "samples": 20,
+      "total_time": 0.0034759044647216797,
+      "avg_time_per_sample": 0.000173795223236084,
+      "correct": 10,
+      "accuracy": 0.5,
       "predictions": [
         {
           "id": 1,
@@ -77,636 +77,6 @@
         {
           "id": 16,
           "claim": "Câu chuyện về cô gái Tô Thị Sự bị phỏng với việc gom rác vào buổi sáng và tối đế",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 17,
-          "claim": "Trung tâm Dự báo khí tượng thủy văn Quốc gia dự báo miền Bắc có mưa rào rải rác ",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 19,
-          "claim": "Sự việc 2 thanh niên lạ mặt đi xe máy tiếp cận học sinh ở nhiều trường tại Vinh ",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 21,
-          "claim": "Tại họp báo thường kỳ Bộ Ngoại giao chiều 23/3, Phó Phát ngôn Bộ Ngoại giao Phạm",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 24,
-          "claim": "Bạn của Alex Kwong – chồng cũ Abby Choi bị buộc tội vì hỗ trợ cho chồng cũ của A",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 25,
-          "claim": "PGS.TS Minh (Học viện Chính trị khu vực 3 - Đà Nẵng) dẫn đoàn học viên lớp cao c",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 26,
-          "claim": "Do có sự khác nhau giữa các tỉnh thành nên Bộ vẫn chịu trách nhiệm ban hành quy ",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 27,
-          "claim": "Thành phố đã chỉ đạo công an tăng cường theo dõi, giám sát qua camera để phát hi",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 30,
-          "claim": "Vinh dự là người Việt Nam giành được học bổng danh giá, Tường Anh mong muốn được",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 33,
-          "claim": "Video clip gây xôn xao dư luận những ngày gần đây đang được lan truyền trên mạng",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 34,
-          "claim": "NXB Regiospectra ấn hành tại Đức, bìa sách Mùi hương trầm bản tiếng Đức Tập tùy ",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 35,
-          "claim": "Giám đốc tài chính của Victoria's Secret - Timothy Johnson cho biết, quyết định ",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 36,
-          "claim": "Kết luận của UBKT Trung ương tại Kỳ họp thứ 23 đối với Ban cán sự đảng UBND tỉnh",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 37,
-          "claim": "Nhiều bình luận bày tỏ sự mong chờ tác phẩm và kỳ vọng vào sự kết hợp của 2 diễn",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 39,
-          "claim": "Theo thông báo của Liên đoàn bóng đá Hà Lan,  trong đội hình của HLV Ronald Koem",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 40,
-          "claim": "Dù hiện tại quá trình này vẫn gặp nhiều khó khăn nhưng đẩy mạnh chuyển đổi số tr",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 41,
-          "claim": "Chiều 28/3, tại Văn phòng Cục An ninh Quốc phòng, Bộ Công an tổ chức họp báo thô",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 42,
-          "claim": "Có học sinh của Trường THPT Phú Nhuận bị dụ dỗ, lừa đảo trước cổng trường.",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 43,
-          "claim": "Nền cờ có màu đỏ tươi như màu cờ Tổ quốc; biểu tưởng \"Búa - Liềm\" được đặt ở tru",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 44,
-          "claim": "Kỷ niệm 1980 năm Ngày mất Hai Bà Trưng (6-2-43 – 6-2-2023 âm lịch) do Hội Liên h",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 45,
-          "claim": "Nhật Bản đã thể hiện rất tốt trước Uruguay nên quyết tâm đả bại Colombia để vô đ",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 46,
-          "claim": "Theo khoản 1 Điều 56 Luật Đất đai năm 2003, doanh nghiệp nhà nước phải tiến hành",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 47,
-          "claim": "Theo thống kê của Phòng Cảnh sát môi trường, Công an TP Đà Nẵng, từ năm 2019 đến",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 48,
-          "claim": "Hệ thống tên lửa đạn đạo tầm ngắn Iskander có đầu đạn thông thường lẫn đầu đạn h",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 49,
-          "claim": "Trong Tháng hành động an toàn, vệ sinh lao động năm 2023, các hoạt động hướng tớ",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 50,
-          "claim": "Tại Diễn đàn châu Á Bác Ngao ở tỉnh Hải Nam, Trung Quốc, ngày 30-3, Thủ tướng Si",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 51,
-          "claim": "Theo đó, sửa đổi khoản 1 và khoản 2 Điều 1 về nhân sự tại Quyết định số 596/QĐ-T",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 54,
-          "claim": "Các hãng hàng không Việt Nam, công ty lữ hành đang ráo riết chuẩn bị nguồn lực, ",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 56,
-          "claim": "Đây là cuộc đụng độ thứ 8 giữa hai đội tuyển quốc gia và Hàn Quốc đã thống trị t",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 57,
-          "claim": "Chiều 23/3, Chánh văn Phòng Sở Giáo dục và Đào tạo TP Hồ Chí Minh ông Hồ Tấn Min",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 58,
-          "claim": "Lí do bị lộ thông tin cá nhân có thể là do hệ thống bị tấn công và lấy thông tin",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 59,
-          "claim": "Trận đấu tiếp theo của U20 Việt Nam là gặp U20 Iran tại VCK U20 châu Á.",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 60,
-          "claim": "Đội tuyển Việt Nam trải qua 3 trận đấu với Iraq, UAE, Kyrgyzstan, thua đậm ở trậ",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 61,
-          "claim": "Đây là biệt thự bốn tầng tọa lạc tại số 45 đường Barker, với tổng diện tích sàn ",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 63,
-          "claim": "Chính thức khởi động Giải thưởng Nhiếp ảnh Heritage 2023 từ ngày 1/4 đến hết ngà",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 64,
-          "claim": "Thời tiết tại Thổ Nhĩ Kỳ khắc nghiệt hơn so với Việt Nam gây ra không ít khó khă",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 65,
-          "claim": "Giám đốc Đài Khí tượng thủy văn khu vực Nam Bộ ông Lê Ngọc Quyền năm nay 60 tuổi",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 67,
-          "claim": "Sử dụng Chat GPT giúp việc học tập hiệu quả hơn nhưng một số bạn trẻ lại đang lạ",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 68,
-          "claim": "Trước đây, khi Anh rời khỏi khối EU khiến người dân nước này hoang mang, nên sau",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 70,
-          "claim": "Áp lực thi tuyển sinh, nhiều học sinh ăn uống, ngủ nghỉ không điều độ, căng thẳn",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 71,
-          "claim": "Trương Huệ Vân sinh năm 1980 là tổng giám đốc Công ty CP Tập đoàn quản lý bất độ",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 72,
-          "claim": "Công trình cầu Nam Lý trên đường Đỗ Xuân Hợp, TP Thủ Đức dài 750 m, trong đó phầ",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 73,
-          "claim": "Khi mới thành lập, khách sạn được đặt tên là \"Grand Hotel de Hue\" và nhanh chóng",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 74,
-          "claim": "Giám đốc Sở Y tế Quảng Nam, ông Mai Văn Mười cho biết các bệnh nhân trong vụ ngộ",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 75,
-          "claim": "Tằng Xỉu Phùng và V.M.K đã ly thân theo thông tin của công an, tuy nhiên khi thấ",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 77,
-          "claim": "Tòa án không có khái niệm “tiền công tư vấn để cầu thủ Barcelona khỏi mắc lỗi” n",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 78,
-          "claim": "CLB Barcelona liên quan vụ án hối lộ trọng tài khiến người hâm mộ hoang mang, Ch",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 80,
-          "claim": "Theo thông tin từ Báo Tuổi trẻ Online, vào ngày 20-3, các thủ lĩnh dân quân châu",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 82,
-          "claim": "Nguyễn Thị Tâm sẽ đối đầu với Nikhat Zareen, võ sĩ nước chủ nhà Ấn Độ, trong trậ",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 83,
-          "claim": "Pho tượng An Dương Vương có một lịch sử khá đặc biệt. Năm 1790, trong quá trình ",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 84,
-          "claim": "Trong bối cảnh xung đột giữa Nga và Ukraine đang diễn biến căng thẳng, Nga cảnh ",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 85,
-          "claim": "Theo sửa đổi khoản 1 và khoản 2 Điều 1 về nhân sự tại Quyết định số 596/QĐ-TTg, ",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 86,
-          "claim": "Giáo sư Karen Bakker tại Đại học British Columbia (Canada) sinh năm 1970 đã có c",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 89,
-          "claim": "Tiếp tục triển khai các biện pháp phòng chống dịch bệnh COVID-19 theo hướng dẫn ",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 91,
-          "claim": "Trận động đất độ lớn 7,8 có tâm chấn tại Thổ Nhĩ Kỳ đã gây thiệt hại lớn tại nướ",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 92,
-          "claim": "Pháp luật đất đai hiện hành theo luật sư Nguyễn Văn Hậu vẫn chưa ghi nhận chính ",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 94,
-          "claim": "Việt Nam được AFD tài trợ 5.000 tỷ phí dự án trong chương trình kêu gọi hỗ trợ.",
-          "true_label": "REAL",
-          "predicted_label": "FAKE",
-          "correct": false
-        },
-        {
-          "id": 95,
-          "claim": "Ông Jean-Paul Guihaumé, Đại sứ đặc trách Ngoại vụ địa phương, Bộ Châu Âu và Ngoạ",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 97,
-          "claim": "Bảy trường đại học kỹ thuật hàng đầu Việt Nam ký kết hợp tác đào tạo kỹ sư và ch",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 98,
-          "claim": "Sự xuất hiện của một hành tinh đá lớn như siêu Trái Đất sẽ làm hỗn loạn quỹ đạo ",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 100,
-          "claim": "Chương trình được tổ chức thông qua hình thức tham dự trực tiếp, phát sóng trên ",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 102,
-          "claim": "Việc triển khai các hoạt động đầu tư còn chậm do chưa có sự đồng bộ, thống nhất ",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 103,
-          "claim": "Khách hàng có số thứ tự 27 ông Trần Tấn 60 tuổi vẫn ra quầy giao dịch để thực hi",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 104,
-          "claim": "Tổ công tác yêu cầu quản lý điểm kinh doanh có mặt trong vòng 48 tiếng để làm rõ",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 106,
-          "claim": "Một số loại thuốc được đảm bảo nguồn cung do cho phép các giấy đăng ký lưu hành ",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 108,
-          "claim": "BV Hoàn Mỹ Sài Gòn là BV duy nhất tại Việt Nam phát hiện ung thư gan khi khám sứ",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 110,
-          "claim": "Đề án dạy và học môn Toán, Khoa học và tiếng Anh tích hợp theo khung chương trìn",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 112,
-          "claim": "Một cổ đông cho biết đã mua cổ phiếu DGC tại mức giá 140.000 đồng/cổ phiếu và cô",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 114,
-          "claim": "Trẻ em được tham gia môi trường mạng có rất nhiều bất cập và nguy hiểm khi các n",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 116,
-          "claim": "Mỗi doanh nghiệp có hàng chục, thậm chí hàng trăm loại, theo Vụ phó Bảo hiểm xã ",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 117,
-          "claim": "Tập thể Ban Thường vụ Tỉnh ủy sẽ lãnh đạo giúp đưa Bình Thuận phát triển thành m",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 118,
-          "claim": "Khi học sinh không trúng tuyển NV1 được xét tuyển NV2 nhưng phải có điểm xét tuy",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 119,
-          "claim": "Phó Thủ tướng Trần Hồng Hà yêu cầu Bộ Kế hoạch và Đầu tư hướng dẫn thực hiện cơ ",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 120,
-          "claim": "Với tổng chiều dài 399,99 m, rộng 61,3 m, mớn nước tàu vào -15 m và mớn nước tàu",
-          "true_label": "REAL",
-          "predicted_label": "FAKE",
-          "correct": false
-        },
-        {
-          "id": 126,
-          "claim": "Cách đây khoảng 109 năm Yersin đã tìm cách lên đỉnh núi Hòn Bà ở độ cao 1.500m  ",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 127,
-          "claim": "Độ tuổi nghỉ hưu ở nước Anh dự kiến là sẽ tăng lên 68 tuổi trong vòng 23 năm tới",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 128,
-          "claim": "Gần 11.400 máy tính bảng được Chủ tịch nước trao tặng học sinh vùng sâu, vùng xa",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 134,
-          "claim": "Cô phụ việc chăm sóc cho Hồng Nga là người chăm sóc cho nữ nghệ sĩ hơn 30 năm qu",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 136,
-          "claim": "Sau đó, vào tháng 9/1985, Thornton cất cánh trong phi vụ buôn lậu ma túy cuối cù",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 138,
-          "claim": "Ông Gavin Christopher Newsom Thống đốc bang California, vừa ký ban hành một đạo ",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 139,
-          "claim": "Roy vẫn không nắm được những yếu tố cụ thể đã góp phần vào màn trình diễn tệ hại",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 140,
-          "claim": "U20 Việt Nam đang dẫn đầu bảng B VCK U20 châu Á với 6 điểm.",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 141,
-          "claim": "Trước Toney là Jarrod Bowen (West Ham) và James Justin (Leicester), Toney chỉ là",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 142,
-          "claim": "Ngân sách của TP Cần Thơ năm 2023 là 1.000 cho dự án tuyến cao tốc Châu Đốc - Cầ",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 144,
-          "claim": "Bộ trưởng Quốc phòng Nga trao Huân chương dũng cảm cho các phi công vì đã ngăn c",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 145,
-          "claim": "Về bất động sản và thế chấp theo tỉ phú Musk đây là vấn đề nghiêm trọng nhất hiệ",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 146,
-          "claim": "“Chăm chỉ, đam mê với mục tiêu của mình, dám đương đầu khó khăn và vượt qua vùng",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 147,
-          "claim": "Chương trình âm nhạc và nghệ thuật TIS GALA 2023 cũng nhau các show giải trí như",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 149,
-          "claim": "Bộ trưởng Quốc phòng Ukraine Oleksii Reznikov ngày 27.3 thông báo đã nhận được n",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 151,
-          "claim": "Công ty DGC dự kiến đầu tư tổng cộng 550 tỷ đồng vào các dự án xây dựng trong nă",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 152,
-          "claim": "Masan đẩy nhanh tiến độ mở chuỗi cửa hàng flagship nhằm đạt mục tiêu mở 1.000 ki",
           "true_label": "REAL",
           "predicted_label": "REAL",
           "correct": true
@@ -780,648 +150,18 @@
           "true_label": "FAKE",
           "predicted_label": "REAL",
           "correct": false
-        },
-        {
-          "id": 23,
-          "claim": "Chủ tịch PSSI cố gắng giúp Indonesia giữ quyền đăng cai U20 World Cup 2023, bên ",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 28,
-          "claim": "Bộ Phát triển kỹ thuật số Nga đã thừa nhận có tới 500.000 nhân viên trong lĩnh v",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 29,
-          "claim": "Khoảng 1/3 tổng số ngoại hành tinh là siêu Trái Đất - đây là thuật ngữ dùng cho ",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 31,
-          "claim": "Covid-19 đang bước vào giai đoạn cầm chừng do đó việc bắt buộc phải đeo khẩu tra",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 32,
-          "claim": "Dù là xét tuyển hay thi tuyển thì thí sinh đều không phải cố gắng học nhiều.",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 38,
-          "claim": "Prompt điều khiển hành vi và kết quả của AI và không yêu cầu Ai tuân theo các ti",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 52,
-          "claim": "Với chương trình cử nhân tài năng và cử nhân Asean Co-op, thí sinh đăng ký tối đ",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 53,
-          "claim": "Điều phối viên Truyền thông Chiến lược của Hội đồng An ninh Quốc gia Nhà Trắng J",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 55,
-          "claim": "Báo Nông thôn ngày nay đã gửi văn bản số 133-CV/NTNN ngày 23-3-2023 đến Cục Báo ",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 62,
-          "claim": "Đề xuất sửa đổi của Ngân hàng Nhà nước cũng mang tính chặt chẽ hơn với thị trườn",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 66,
-          "claim": "Sau khi chị T. bị nhóm của Phùng làm nhục và rời đi, cô gái ở Bình Thuận mới phá",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 69,
-          "claim": "Sau khi tiến hành xác mình, Cơ quan cảnh sát điều tra Công an quận Sơn Trà đã kế",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 76,
-          "claim": "Theo Medical News Today, một nghiên cứu năm 2017 cho rằng vitamin C có thể giúp ",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 79,
-          "claim": "NASA đã công bố bức hình tuyệt đẹp của WR 124 vào ngày 15/3, với hình ảnh ngôi s",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 81,
-          "claim": "Việc nghệ sĩ Vũ Linh qua đời vào tối ngày 5/3 khiến nhiều nghệ sĩ cảm thấy bàng ",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 87,
-          "claim": "Câu chuyện bị đánh rớt của Wesley Anna được nhiều người tin tưởng nên cô đã đưa ",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 88,
-          "claim": "Các ngân hàng đối thủ của Deutsche Bank đều có giá cổ phiếu tăng.",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 90,
-          "claim": "Bà Trang nhìn nhận nó có thể làm nhanh và tốt mảng thông tin nhưng không phải để",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 93,
-          "claim": "Biện pháp xác minh bằng giọng nói của người dùng sẽ được TikTok cũng sẽ áp dụng ",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 96,
-          "claim": "Sở cũng yêu cầu các cơ sở giáo dục phối hợp với lực lượng chức năng tại địa phươ",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 99,
-          "claim": "Thủ tướng Chính phủ Võ Văn Thưởng vừa ký Quyết định 320/QĐ-TTg, theo đó khoản 1 ",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 101,
-          "claim": "Hai trận đấu họ thua kém hoàn toàn đối thủ về lối chơi và những thống kê quan tr",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 105,
-          "claim": "Ông Long đã làm bẫy chuột bằng chất hóa học để diệt chuột phá ruộng.",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 107,
-          "claim": "Thông tin 2 thanh niên lạ mặt đi xe máy, tiếp cận học sinh ở nhiều trường học tạ",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 109,
-          "claim": "Vào ngày 6/3, cơn bão lần đầu tiên được đặt tên là Freddy và đã di chuyển hơn 8.",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 111,
-          "claim": "Kết quả kỳ thi này sẽ được sử dụng để xét tuyển vào trường với tỉ lệ tối đa 25% ",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 113,
-          "claim": "Bộ Công an đã cam kết ủng hộ, hỗ trợ tỉnh 1.420 căn nhà, tương đương hơn 75 tỷ đ",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 115,
-          "claim": "Lần thứ hai Karolina Bielawska tới Ấn Độ trong nhiệm kỳ, màn xuất hiện hoành trá",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 121,
-          "claim": "Vào ngày 26/5, Công an huyện Hóc Môn cùng Phòng Cảnh sát Hình sự đã xác định đượ",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 122,
-          "claim": "Trong bối cảnh đại dịch COVID-19, năm 202 kim ngạch xuất khẩu của SHTP vẫn tăng ",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 123,
-          "claim": "Các nhà khoa học của Tổ chức Nghiên cứu khoa học và công nghiệp Úc (CSIRO) cho b",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 124,
-          "claim": "Giá của tất cả các mặt hàng nông nghiệp, bao gồm cả ngô và lúa mì, được giao dịc",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 125,
-          "claim": "Nhiễm nấm thông thường được chỉ định dùng thuốc kháng nấm, tuyệt đối không được ",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 129,
-          "claim": "Tổng lợi nhuận kế toán sau thuế của LPB đạt 5.690 tỷ đồng và 4.510 tỷ đồng lãi s",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 130,
-          "claim": "Bên cạnh việc đầu tư, bổ sung hệ thống camera giám sát giao thông thì sở GTVT TP",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 131,
-          "claim": "Hạ nghị sĩ thuộc đảng Cộng hòa nói TikTok mặc dù thiết kế giảm thiểu tác hại cho",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 132,
-          "claim": "Quy hoạch chưa ưu tiên phát triển du lịch bền vững.",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 133,
-          "claim": "Tại chương trình Vầng trăng cổ nhạc tối 27/3, khán giả vô cùng xúc động khi xem ",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 135,
-          "claim": "Nam và nữ sống trên quần đảo Faroe có lối sống giống nhau vì cả hai đều sống the",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 137,
-          "claim": "Việt Nam và Trung Quốc sẽ tiếp tục hợp tác chặt chẽ trong lĩnh vực nông nghiệp.",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 143,
-          "claim": "Nhà máy MPE Smart Factory đã được khánh thành vào ngày 25/3 sau khoảng 10 năm xâ",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 148,
-          "claim": "Ngày 25/3, Công an đã triệu tập người đàn ông là chồng của cô giáo chủ nhiệm của",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 150,
-          "claim": "Với các triệu chứng như sốt, ho, đau họng, mệt mỏi, ói; trong đó có những học si",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 153,
-          "claim": "50 cháu đang nhập viện khám sàng lọc tại Bệnh viện Bạch Mai, Bệnh viện Đống Đa, ",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 155,
-          "claim": "Đặng Văn Châu và Nguyễn Văn Tân (cùng trú huyện Tiền Hải, tỉnh Thái Bình)  bị kh",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 158,
-          "claim": "Nhật Bản đã mời 1 đội bóng hàng đầu của Nam Mỹ là Uruguay tham gia giải đấu giao",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 161,
-          "claim": "Mbappe khi mới 27 tuổi đã được huấn luyện viên của Les Blues, Didier Deschamps c",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 163,
-          "claim": "Nhiều ngôi sao Hoa ngữ cũng gặp trường hợp như Đô Mỹ Trúc, ảnh khác xa đời thật ",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 165,
-          "claim": "Chất lượng báo, tạp chí Đảng đã được cải thiện, tuy nhiên cách thể hiện khá khô ",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 166,
-          "claim": "Nặng 700 kg, cao 1,7 m, rộng 1,6 m, dài 2,3 m, tượng cố nhạc sĩ Trịnh Công Sơn m",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 173,
-          "claim": "U màng não là loại khối u bệnh án và khó chữa trị.",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 175,
-          "claim": "Ngoài tấm bản đồ Thanh Hóa, nhiều hiện vật của Việt Nam được mua lại với mức giá",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 179,
-          "claim": "Làng chài Nhơn Hải không phải là địa điểm du lịch thu hút khách do đó các tập đo",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 182,
-          "claim": "Các nạn nhân còn lại của vụ nổ đều thuộc diện hộ nghèo và đang được điều trị tại",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 183,
-          "claim": "Thông tin từ cơ quan điều tra, ông Nguyễn Quốc Bắc có liên quan tới việc tổ chức",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 187,
-          "claim": "Tính đến ngày 1-3-2023, chỉ mới có 304.170 tài khoản được kích hoạt thành công, ",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 188,
-          "claim": "Phát biểu tại Lễ trao giải, ông Lê Xuân Thành, Tổng biên tập Báo Thể thao và Văn",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 189,
-          "claim": "Số liệu của Tổng cục Dự trữ Nhà nước (DTNN) cho thấy có 16.920 tấn gạo hỗ trợ họ",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 193,
-          "claim": "Hệ thống xăng dầu, khí đốt phải vận hành đồng bộ, thông suốt, đảm bảo cho nền ki",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 194,
-          "claim": "Có thể nhận đến 5.300 điểm SkyPoint khi khách hàng đăng ký trở thành Hội viên ch",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 198,
-          "claim": "Một phụ huynh có con học tại trường Việt Úc nhận cuộc gọi trong nagy 3-3 tự xưng",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 203,
-          "claim": "Saudi Arabia và Hà Lan lần lượt xếp thứ 2 và thứ 3 với tỉ lệ 86% và 85%, xếp thứ",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 208,
-          "claim": "Đường bay giữa TPHCM và Brisbane sẽ phục vụ hành khách vào các ngày thứ Ba và th",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 210,
-          "claim": "Bà Laurie Hansen (60 tuổi) tại cuộc mít tinh  bác bỏ thông tin cho rằng ông Trum",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 214,
-          "claim": "Công ty DGC đặt kế hoạch tổng doanh thu và lợi nhuận năm 2023 tăng so với năm 20",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 217,
-          "claim": "Nữ tài xế lái xe Porsche 4 chỗ chạy trên đường dẫn cao tốc Long Thành bất ngờ la",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 221,
-          "claim": "U20 Việt Nam chơi phòng ngự phản công trong hiệp 2 trận đấu với Qatar.",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 224,
-          "claim": "Điều kiện các bạn trẻ dễ dàng tiếp cận hơn về các giá trị là thông qua sách vở, ",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 227,
-          "claim": "Năm 2019, tỉnh Quảng Nam các chương trình, đề án, kế hoạch triển khai đã có nhiề",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 236,
-          "claim": "Chính phủ Ukraine phủ nhận có liên quan đến vụ việc UAV ở Nga và chưa đưa ra bất",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 237,
-          "claim": "Sân bay Rzeszow-Jasionka là sân bay nhộn nhịp nhất Ba Lan, phục vụ hơn 4 triệu h",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 238,
-          "claim": "Với màn kịch \"con đang cấp cứu ở bệnh viện, cần chuyển tiền gấp để phẫu thuật\", ",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 249,
-          "claim": "Trong suốt 45 năm mở bán, quán được nhiều người biết đến do gắn liền với tuổi th",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 258,
-          "claim": "Trước dịch tiền hỗ trợ là 300.000 đồng, qua năm thì không tăng tiền hỗ trợ.",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 263,
-          "claim": "Đề xuất lắp đặt mái tôn dọc đường Lê Lợi được các kiến trúc sư và chuyên gia nhấ",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 268,
-          "claim": "Nga đang chuẩn bị thỏa thuận liên chính phủ về việc miễn thị thực với 12 quốc gi",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 269,
-          "claim": "Ông Nguyễn Doãn Toản không ký các văn bản về việc lựa chọn nhà thầu ",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 275,
-          "claim": "UEF Warm Kisses Club đang ngày càng tạo được nhiều dấu ấn tích cực trong cộng đồ",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 280,
-          "claim": "Bạn hãy khẳng định giá trị của bản thân và đi đến thống nhất nếu mức lương bằng ",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 281,
-          "claim": "Các lực lượng kiểm tra liên ngành trên địa bàn thành phố đã kiểm tra 445 tổ chức",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 284,
-          "claim": "Tại hiện trường ghi nhận một người phụ nữ cùng với một chiếc xe máy bị hư hỏng n",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 286,
-          "claim": "Chiều 23-3, đoàn công tác của Bộ Giáo dục - Đào tạo (GD-ĐT) đã đến làm việc và x",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 288,
-          "claim": "Tổng số tiền nhóm sử dụng để cho vây là 3.7 tỷ đồng và mức lãi suất giao động từ",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 290,
-          "claim": "Nếu không có kinh nghiệm mua và sử dụng sản phẩm thì tốt hơn hết bạn nên chọn nh",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 294,
-          "claim": "Bụi bẩn ảnh hưởng đến sức khỏe, việc kinh doanh, ... của người đi ngang khu vực ",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 295,
-          "claim": "Công an đến nhà, mời Trần Lợi làm việc, Lợi bất ngờ xông ra, dùng xà beng tấn cô",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 298,
-          "claim": "Sáng 29/3, giới đầu tư đã thoải mái hơn khi Tổng cục Thống kê công bố các chỉ số",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 302,
-          "claim": "Không chỉ Nhà bà Nữ, hai phim khác là Chị chị em em 2 và Siêu lừa gặp siêu lầy đ",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 304,
-          "claim": "Với lịch thi chi tiết từng ngày, địa chỉ https://www.facebook.com/tuyensinhso có",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 307,
-          "claim": "Viện Nghiên cứu nông nghiệp xác nhận vaccine NAVET-ASFVAC không đảm bảo an toàn,",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
         }
       ],
       "status": "completed",
       "error_message": ""
     },
     {
-      "approach": "Single-Agent (LLM only)",
-      "samples": 66,
-      "total_time": 62.15498065948486,
-      "avg_time_per_sample": 0.9417421312043162,
-      "correct": 3,
-      "accuracy": 0.045454545454545456,
+      "approach": "Single-Agent (openai:openai/gpt-oss-120b)",
+      "samples": 20,
+      "total_time": 186.4967005252838,
+      "avg_time_per_sample": 9.324835026264191,
+      "correct": 12,
+      "accuracy": 0.6,
       "predictions": [
         {
           "id": 1,
@@ -1434,7 +174,7 @@
           "id": 2,
           "claim": "Đối tượng cố gắng bỏ chạy sau khi lực lượng công an đón dừng xe để kiểm tra.",
           "true_label": "REAL",
-          "predicted_label": "FAKE",
+          "predicted_label": "UNKNOWN",
           "correct": false
         },
         {
@@ -1448,22 +188,22 @@
           "id": 4,
           "claim": "Tại một địa điểm trên địa bàn huyện Củ Chi, TPHCM, Công an đã phát hiện hai nghi",
           "true_label": "REAL",
-          "predicted_label": "FAKE",
-          "correct": false
+          "predicted_label": "REAL",
+          "correct": true
         },
         {
           "id": 6,
           "claim": "Những yếu tố xã hội cần thiết cho sự phát triển ổn định và bền vững của mỗi quốc",
           "true_label": "REAL",
-          "predicted_label": "FAKE",
-          "correct": false
+          "predicted_label": "REAL",
+          "correct": true
         },
         {
           "id": 8,
           "claim": "Chuỗi sự kiện “UEH Sharing - Career Fair” là hoạt động khởi đầu cho chương trình",
           "true_label": "REAL",
-          "predicted_label": "FAKE",
-          "correct": false
+          "predicted_label": "REAL",
+          "correct": true
         },
         {
           "id": 9,
@@ -1476,7 +216,7 @@
           "id": 14,
           "claim": "Bụi từ vũ khí chứa urani nghèo có thể đi vào sâu trong các cơ quan nội tạng, gây",
           "true_label": "REAL",
-          "predicted_label": "UNKNOWN",
+          "predicted_label": "FAKE",
           "correct": false
         },
         {
@@ -1494,415 +234,93 @@
           "correct": false
         },
         {
-          "id": 17,
-          "claim": "Trung tâm Dự báo khí tượng thủy văn Quốc gia dự báo miền Bắc có mưa rào rải rác ",
-          "true_label": "REAL",
+          "id": 0,
+          "claim": "Bộ xương bản sao được đưa đến Lodon bằng cách nghép thành con hoàn chỉnh rồi vận",
+          "true_label": "FAKE",
           "predicted_label": "FAKE",
-          "correct": false
-        },
-        {
-          "id": 19,
-          "claim": "Sự việc 2 thanh niên lạ mặt đi xe máy tiếp cận học sinh ở nhiều trường tại Vinh ",
-          "true_label": "REAL",
-          "predicted_label": "FAKE",
-          "correct": false
-        },
-        {
-          "id": 21,
-          "claim": "Tại họp báo thường kỳ Bộ Ngoại giao chiều 23/3, Phó Phát ngôn Bộ Ngoại giao Phạm",
-          "true_label": "REAL",
-          "predicted_label": "FAKE",
-          "correct": false
-        },
-        {
-          "id": 24,
-          "claim": "Bạn của Alex Kwong – chồng cũ Abby Choi bị buộc tội vì hỗ trợ cho chồng cũ của A",
-          "true_label": "REAL",
-          "predicted_label": "FAKE",
-          "correct": false
-        },
-        {
-          "id": 25,
-          "claim": "PGS.TS Minh (Học viện Chính trị khu vực 3 - Đà Nẵng) dẫn đoàn học viên lớp cao c",
-          "true_label": "REAL",
-          "predicted_label": "FAKE",
-          "correct": false
-        },
-        {
-          "id": 26,
-          "claim": "Do có sự khác nhau giữa các tỉnh thành nên Bộ vẫn chịu trách nhiệm ban hành quy ",
-          "true_label": "REAL",
-          "predicted_label": "UNKNOWN",
-          "correct": false
-        },
-        {
-          "id": 27,
-          "claim": "Thành phố đã chỉ đạo công an tăng cường theo dõi, giám sát qua camera để phát hi",
-          "true_label": "REAL",
-          "predicted_label": "FAKE",
-          "correct": false
-        },
-        {
-          "id": 30,
-          "claim": "Vinh dự là người Việt Nam giành được học bổng danh giá, Tường Anh mong muốn được",
-          "true_label": "REAL",
-          "predicted_label": "FAKE",
-          "correct": false
-        },
-        {
-          "id": 33,
-          "claim": "Video clip gây xôn xao dư luận những ngày gần đây đang được lan truyền trên mạng",
-          "true_label": "REAL",
-          "predicted_label": "FAKE",
-          "correct": false
-        },
-        {
-          "id": 34,
-          "claim": "NXB Regiospectra ấn hành tại Đức, bìa sách Mùi hương trầm bản tiếng Đức Tập tùy ",
-          "true_label": "REAL",
-          "predicted_label": "FAKE",
-          "correct": false
-        },
-        {
-          "id": 35,
-          "claim": "Giám đốc tài chính của Victoria's Secret - Timothy Johnson cho biết, quyết định ",
-          "true_label": "REAL",
-          "predicted_label": "FAKE",
-          "correct": false
-        },
-        {
-          "id": 36,
-          "claim": "Kết luận của UBKT Trung ương tại Kỳ họp thứ 23 đối với Ban cán sự đảng UBND tỉnh",
-          "true_label": "REAL",
-          "predicted_label": "UNKNOWN",
-          "correct": false
-        },
-        {
-          "id": 37,
-          "claim": "Nhiều bình luận bày tỏ sự mong chờ tác phẩm và kỳ vọng vào sự kết hợp của 2 diễn",
-          "true_label": "REAL",
-          "predicted_label": "FAKE",
-          "correct": false
-        },
-        {
-          "id": 39,
-          "claim": "Theo thông báo của Liên đoàn bóng đá Hà Lan,  trong đội hình của HLV Ronald Koem",
-          "true_label": "REAL",
-          "predicted_label": "FAKE",
-          "correct": false
-        },
-        {
-          "id": 40,
-          "claim": "Dù hiện tại quá trình này vẫn gặp nhiều khó khăn nhưng đẩy mạnh chuyển đổi số tr",
-          "true_label": "REAL",
-          "predicted_label": "UNKNOWN",
-          "correct": false
-        },
-        {
-          "id": 41,
-          "claim": "Chiều 28/3, tại Văn phòng Cục An ninh Quốc phòng, Bộ Công an tổ chức họp báo thô",
-          "true_label": "REAL",
-          "predicted_label": "FAKE",
-          "correct": false
-        },
-        {
-          "id": 42,
-          "claim": "Có học sinh của Trường THPT Phú Nhuận bị dụ dỗ, lừa đảo trước cổng trường.",
-          "true_label": "REAL",
-          "predicted_label": "FAKE",
-          "correct": false
-        },
-        {
-          "id": 43,
-          "claim": "Nền cờ có màu đỏ tươi như màu cờ Tổ quốc; biểu tưởng \"Búa - Liềm\" được đặt ở tru",
-          "true_label": "REAL",
-          "predicted_label": "FAKE",
-          "correct": false
-        },
-        {
-          "id": 44,
-          "claim": "Kỷ niệm 1980 năm Ngày mất Hai Bà Trưng (6-2-43 – 6-2-2023 âm lịch) do Hội Liên h",
-          "true_label": "REAL",
-          "predicted_label": "UNKNOWN",
-          "correct": false
-        },
-        {
-          "id": 45,
-          "claim": "Nhật Bản đã thể hiện rất tốt trước Uruguay nên quyết tâm đả bại Colombia để vô đ",
-          "true_label": "REAL",
-          "predicted_label": "FAKE",
-          "correct": false
-        },
-        {
-          "id": 46,
-          "claim": "Theo khoản 1 Điều 56 Luật Đất đai năm 2003, doanh nghiệp nhà nước phải tiến hành",
-          "true_label": "REAL",
-          "predicted_label": "FAKE",
-          "correct": false
-        },
-        {
-          "id": 47,
-          "claim": "Theo thống kê của Phòng Cảnh sát môi trường, Công an TP Đà Nẵng, từ năm 2019 đến",
-          "true_label": "REAL",
-          "predicted_label": "FAKE",
-          "correct": false
-        },
-        {
-          "id": 48,
-          "claim": "Hệ thống tên lửa đạn đạo tầm ngắn Iskander có đầu đạn thông thường lẫn đầu đạn h",
-          "true_label": "REAL",
-          "predicted_label": "FAKE",
-          "correct": false
-        },
-        {
-          "id": 49,
-          "claim": "Trong Tháng hành động an toàn, vệ sinh lao động năm 2023, các hoạt động hướng tớ",
-          "true_label": "REAL",
-          "predicted_label": "FAKE",
-          "correct": false
-        },
-        {
-          "id": 50,
-          "claim": "Tại Diễn đàn châu Á Bác Ngao ở tỉnh Hải Nam, Trung Quốc, ngày 30-3, Thủ tướng Si",
-          "true_label": "REAL",
-          "predicted_label": "FAKE",
-          "correct": false
-        },
-        {
-          "id": 51,
-          "claim": "Theo đó, sửa đổi khoản 1 và khoản 2 Điều 1 về nhân sự tại Quyết định số 596/QĐ-T",
-          "true_label": "REAL",
-          "predicted_label": "FAKE",
-          "correct": false
-        },
-        {
-          "id": 54,
-          "claim": "Các hãng hàng không Việt Nam, công ty lữ hành đang ráo riết chuẩn bị nguồn lực, ",
-          "true_label": "REAL",
-          "predicted_label": "FAKE",
-          "correct": false
-        },
-        {
-          "id": 56,
-          "claim": "Đây là cuộc đụng độ thứ 8 giữa hai đội tuyển quốc gia và Hàn Quốc đã thống trị t",
-          "true_label": "REAL",
-          "predicted_label": "FAKE",
-          "correct": false
-        },
-        {
-          "id": 57,
-          "claim": "Chiều 23/3, Chánh văn Phòng Sở Giáo dục và Đào tạo TP Hồ Chí Minh ông Hồ Tấn Min",
-          "true_label": "REAL",
-          "predicted_label": "FAKE",
-          "correct": false
-        },
-        {
-          "id": 58,
-          "claim": "Lí do bị lộ thông tin cá nhân có thể là do hệ thống bị tấn công và lấy thông tin",
-          "true_label": "REAL",
-          "predicted_label": "FAKE",
-          "correct": false
-        },
-        {
-          "id": 59,
-          "claim": "Trận đấu tiếp theo của U20 Việt Nam là gặp U20 Iran tại VCK U20 châu Á.",
-          "true_label": "REAL",
-          "predicted_label": "FAKE",
-          "correct": false
-        },
-        {
-          "id": 60,
-          "claim": "Đội tuyển Việt Nam trải qua 3 trận đấu với Iraq, UAE, Kyrgyzstan, thua đậm ở trậ",
-          "true_label": "REAL",
-          "predicted_label": "FAKE",
-          "correct": false
-        },
-        {
-          "id": 61,
-          "claim": "Đây là biệt thự bốn tầng tọa lạc tại số 45 đường Barker, với tổng diện tích sàn ",
-          "true_label": "REAL",
-          "predicted_label": "FAKE",
-          "correct": false
-        },
-        {
-          "id": 63,
-          "claim": "Chính thức khởi động Giải thưởng Nhiếp ảnh Heritage 2023 từ ngày 1/4 đến hết ngà",
-          "true_label": "REAL",
-          "predicted_label": "FAKE",
-          "correct": false
-        },
-        {
-          "id": 64,
-          "claim": "Thời tiết tại Thổ Nhĩ Kỳ khắc nghiệt hơn so với Việt Nam gây ra không ít khó khă",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
           "correct": true
         },
         {
-          "id": 65,
-          "claim": "Giám đốc Đài Khí tượng thủy văn khu vực Nam Bộ ông Lê Ngọc Quyền năm nay 60 tuổi",
-          "true_label": "REAL",
-          "predicted_label": "UNKNOWN",
-          "correct": false
-        },
-        {
-          "id": 67,
-          "claim": "Sử dụng Chat GPT giúp việc học tập hiệu quả hơn nhưng một số bạn trẻ lại đang lạ",
-          "true_label": "REAL",
-          "predicted_label": "UNKNOWN",
-          "correct": false
-        },
-        {
-          "id": 68,
-          "claim": "Trước đây, khi Anh rời khỏi khối EU khiến người dân nước này hoang mang, nên sau",
-          "true_label": "REAL",
-          "predicted_label": "UNKNOWN",
-          "correct": false
-        },
-        {
-          "id": 70,
-          "claim": "Áp lực thi tuyển sinh, nhiều học sinh ăn uống, ngủ nghỉ không điều độ, căng thẳn",
-          "true_label": "REAL",
-          "predicted_label": "UNKNOWN",
-          "correct": false
-        },
-        {
-          "id": 71,
-          "claim": "Trương Huệ Vân sinh năm 1980 là tổng giám đốc Công ty CP Tập đoàn quản lý bất độ",
-          "true_label": "REAL",
+          "id": 5,
+          "claim": "Giảm nhẹ công tác tuyên truyền về phòng, chống dịch cúm gia cầm lây lan sang ngư",
+          "true_label": "FAKE",
           "predicted_label": "FAKE",
-          "correct": false
-        },
-        {
-          "id": 72,
-          "claim": "Công trình cầu Nam Lý trên đường Đỗ Xuân Hợp, TP Thủ Đức dài 750 m, trong đó phầ",
-          "true_label": "REAL",
-          "predicted_label": "FAKE",
-          "correct": false
-        },
-        {
-          "id": 73,
-          "claim": "Khi mới thành lập, khách sạn được đặt tên là \"Grand Hotel de Hue\" và nhanh chóng",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
           "correct": true
         },
         {
-          "id": 74,
-          "claim": "Giám đốc Sở Y tế Quảng Nam, ông Mai Văn Mười cho biết các bệnh nhân trong vụ ngộ",
-          "true_label": "REAL",
+          "id": 7,
+          "claim": "Trong phim Everything Everywhere All at Once diễn viên Quan Kế Huy sinh năm 1890",
+          "true_label": "FAKE",
           "predicted_label": "FAKE",
-          "correct": false
-        },
-        {
-          "id": 75,
-          "claim": "Tằng Xỉu Phùng và V.M.K đã ly thân theo thông tin của công an, tuy nhiên khi thấ",
-          "true_label": "REAL",
-          "predicted_label": "FAKE",
-          "correct": false
-        },
-        {
-          "id": 77,
-          "claim": "Tòa án không có khái niệm “tiền công tư vấn để cầu thủ Barcelona khỏi mắc lỗi” n",
-          "true_label": "REAL",
-          "predicted_label": "FAKE",
-          "correct": false
-        },
-        {
-          "id": 78,
-          "claim": "CLB Barcelona liên quan vụ án hối lộ trọng tài khiến người hâm mộ hoang mang, Ch",
-          "true_label": "REAL",
-          "predicted_label": "FAKE",
-          "correct": false
-        },
-        {
-          "id": 80,
-          "claim": "Theo thông tin từ Báo Tuổi trẻ Online, vào ngày 20-3, các thủ lĩnh dân quân châu",
-          "true_label": "REAL",
-          "predicted_label": "UNKNOWN",
-          "correct": false
-        },
-        {
-          "id": 82,
-          "claim": "Nguyễn Thị Tâm sẽ đối đầu với Nikhat Zareen, võ sĩ nước chủ nhà Ấn Độ, trong trậ",
-          "true_label": "REAL",
-          "predicted_label": "FAKE",
-          "correct": false
-        },
-        {
-          "id": 83,
-          "claim": "Pho tượng An Dương Vương có một lịch sử khá đặc biệt. Năm 1790, trong quá trình ",
-          "true_label": "REAL",
-          "predicted_label": "FAKE",
-          "correct": false
-        },
-        {
-          "id": 84,
-          "claim": "Trong bối cảnh xung đột giữa Nga và Ukraine đang diễn biến căng thẳng, Nga cảnh ",
-          "true_label": "REAL",
-          "predicted_label": "FAKE",
-          "correct": false
-        },
-        {
-          "id": 85,
-          "claim": "Theo sửa đổi khoản 1 và khoản 2 Điều 1 về nhân sự tại Quyết định số 596/QĐ-TTg, ",
-          "true_label": "REAL",
-          "predicted_label": "FAKE",
-          "correct": false
-        },
-        {
-          "id": 86,
-          "claim": "Giáo sư Karen Bakker tại Đại học British Columbia (Canada) sinh năm 1970 đã có c",
-          "true_label": "REAL",
-          "predicted_label": "FAKE",
-          "correct": false
-        },
-        {
-          "id": 89,
-          "claim": "Tiếp tục triển khai các biện pháp phòng chống dịch bệnh COVID-19 theo hướng dẫn ",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
           "correct": true
         },
         {
-          "id": 91,
-          "claim": "Trận động đất độ lớn 7,8 có tâm chấn tại Thổ Nhĩ Kỳ đã gây thiệt hại lớn tại nướ",
-          "true_label": "REAL",
-          "predicted_label": "UNKNOWN",
+          "id": 10,
+          "claim": "Chương trình giáo dục song ngữ sẽ tập trung dạy các môn khoa học tự nhiên bằng t",
+          "true_label": "FAKE",
+          "predicted_label": "FAKE",
+          "correct": true
+        },
+        {
+          "id": 11,
+          "claim": "Chân sút Brobbey ở tuổi 23 đã có 12 bàn thắng trên mọi đấu trường mùa này cho Aj",
+          "true_label": "FAKE",
+          "predicted_label": "FAKE",
+          "correct": true
+        },
+        {
+          "id": 12,
+          "claim": "Hầu hết nữ giới sẽ chọn định cư ở quần đảo thay vì tìm nơi khác sinh sống.",
+          "true_label": "FAKE",
+          "predicted_label": "FAKE",
+          "correct": true
+        },
+        {
+          "id": 13,
+          "claim": "Chat GPT sử dụng hệ dữ liệu lớn đến từ hàng tỉ trang tài liệu trên toàn thế giới",
+          "true_label": "FAKE",
+          "predicted_label": "FAKE",
+          "correct": true
+        },
+        {
+          "id": 18,
+          "claim": "Đề xuất của EVN đưa ra sau khi đơn vị tư vấn là Ban quản lý dự án điện 4 (thuộc ",
+          "true_label": "FAKE",
+          "predicted_label": "FAKE",
+          "correct": true
+        },
+        {
+          "id": 20,
+          "claim": "Các thủ thuật phẫu thuật được thực hiện khi trẻ 2 tuổi.",
+          "true_label": "FAKE",
+          "predicted_label": "REAL",
           "correct": false
         },
         {
-          "id": 92,
-          "claim": "Pháp luật đất đai hiện hành theo luật sư Nguyễn Văn Hậu vẫn chưa ghi nhận chính ",
-          "true_label": "REAL",
+          "id": 22,
+          "claim": "Bộ Tài chính Hoa Kỳ đảm bảo rằng hệ thống ngân hàng Hoa Kỳ ổn định và có thể chị",
+          "true_label": "FAKE",
           "predicted_label": "FAKE",
-          "correct": false
-        },
-        {
-          "id": 94,
-          "claim": "Việt Nam được AFD tài trợ 5.000 tỷ phí dự án trong chương trình kêu gọi hỗ trợ.",
-          "true_label": "REAL",
-          "predicted_label": "FAKE",
-          "correct": false
+          "correct": true
         }
       ],
-      "status": "timeout",
-      "error_message": "Timeout after 60s"
+      "status": "completed",
+      "error_message": ""
     },
     {
-      "approach": "Multi-Agent (3-agent pipeline)",
-      "samples": 26,
-      "total_time": 63.10159349441528,
-      "avg_time_per_sample": 2.4269843651698184,
-      "correct": 11,
-      "accuracy": 0.4230769230769231,
+      "approach": "Multi-Agent (openai:openai/gpt-oss-120b)",
+      "samples": 20,
+      "total_time": 242.97065687179565,
+      "avg_time_per_sample": 12.148532843589782,
+      "correct": 19,
+      "accuracy": 0.95,
       "predictions": [
         {
           "id": 1,
           "claim": "Phần vỏ bánh được làm rất công phu, từ giai đoạn xay gạo đến cuốn bánh hết tổng ",
           "true_label": "REAL",
           "predicted_label": "UNVERIFIABLE",
-          "correct": false
+          "correct": true
         },
         {
           "id": 2,
@@ -1916,7 +334,7 @@
           "claim": "Vì lượng mưa khổng lồ do cơn bão tạo ra đã dẫn đến nhiều vụ sạt lở và ngập lụt, ",
           "true_label": "REAL",
           "predicted_label": "UNVERIFIABLE",
-          "correct": false
+          "correct": true
         },
         {
           "id": 4,
@@ -1944,144 +362,102 @@
           "claim": "HĐND TP Thủ Dầu Một sẽ tổ chức phiên họp để bầu chức danh Phó Chủ tịch UBND thàn",
           "true_label": "REAL",
           "predicted_label": "UNVERIFIABLE",
-          "correct": false
+          "correct": true
         },
         {
           "id": 14,
           "claim": "Bụi từ vũ khí chứa urani nghèo có thể đi vào sâu trong các cơ quan nội tạng, gây",
           "true_label": "REAL",
           "predicted_label": "UNVERIFIABLE",
-          "correct": false
+          "correct": true
         },
         {
           "id": 15,
           "claim": "Trong doanh nghiệp và văn phòng thì sử dụng Prompt giúp tiết kiệm thời gian và t",
           "true_label": "REAL",
           "predicted_label": "UNVERIFIABLE",
-          "correct": false
+          "correct": true
         },
         {
           "id": 16,
           "claim": "Câu chuyện về cô gái Tô Thị Sự bị phỏng với việc gom rác vào buổi sáng và tối đế",
           "true_label": "REAL",
           "predicted_label": "UNVERIFIABLE",
-          "correct": false
-        },
-        {
-          "id": 17,
-          "claim": "Trung tâm Dự báo khí tượng thủy văn Quốc gia dự báo miền Bắc có mưa rào rải rác ",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
           "correct": true
         },
         {
-          "id": 19,
-          "claim": "Sự việc 2 thanh niên lạ mặt đi xe máy tiếp cận học sinh ở nhiều trường tại Vinh ",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
+          "id": 0,
+          "claim": "Bộ xương bản sao được đưa đến Lodon bằng cách nghép thành con hoàn chỉnh rồi vận",
+          "true_label": "FAKE",
+          "predicted_label": "FAKE",
           "correct": true
         },
         {
-          "id": 21,
-          "claim": "Tại họp báo thường kỳ Bộ Ngoại giao chiều 23/3, Phó Phát ngôn Bộ Ngoại giao Phạm",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
+          "id": 5,
+          "claim": "Giảm nhẹ công tác tuyên truyền về phòng, chống dịch cúm gia cầm lây lan sang ngư",
+          "true_label": "FAKE",
+          "predicted_label": "FAKE",
           "correct": true
         },
         {
-          "id": 24,
-          "claim": "Bạn của Alex Kwong – chồng cũ Abby Choi bị buộc tội vì hỗ trợ cho chồng cũ của A",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
+          "id": 7,
+          "claim": "Trong phim Everything Everywhere All at Once diễn viên Quan Kế Huy sinh năm 1890",
+          "true_label": "FAKE",
+          "predicted_label": "FAKE",
           "correct": true
         },
         {
-          "id": 25,
-          "claim": "PGS.TS Minh (Học viện Chính trị khu vực 3 - Đà Nẵng) dẫn đoàn học viên lớp cao c",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
+          "id": 10,
+          "claim": "Chương trình giáo dục song ngữ sẽ tập trung dạy các môn khoa học tự nhiên bằng t",
+          "true_label": "FAKE",
+          "predicted_label": "UNVERIFIABLE",
+          "correct": false
+        },
+        {
+          "id": 11,
+          "claim": "Chân sút Brobbey ở tuổi 23 đã có 12 bàn thắng trên mọi đấu trường mùa này cho Aj",
+          "true_label": "FAKE",
+          "predicted_label": "FAKE",
           "correct": true
         },
         {
-          "id": 26,
-          "claim": "Do có sự khác nhau giữa các tỉnh thành nên Bộ vẫn chịu trách nhiệm ban hành quy ",
-          "true_label": "REAL",
-          "predicted_label": "UNVERIFIABLE",
-          "correct": false
-        },
-        {
-          "id": 27,
-          "claim": "Thành phố đã chỉ đạo công an tăng cường theo dõi, giám sát qua camera để phát hi",
-          "true_label": "REAL",
-          "predicted_label": "UNVERIFIABLE",
-          "correct": false
-        },
-        {
-          "id": 30,
-          "claim": "Vinh dự là người Việt Nam giành được học bổng danh giá, Tường Anh mong muốn được",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
+          "id": 12,
+          "claim": "Hầu hết nữ giới sẽ chọn định cư ở quần đảo thay vì tìm nơi khác sinh sống.",
+          "true_label": "FAKE",
+          "predicted_label": "FAKE",
           "correct": true
         },
         {
-          "id": 33,
-          "claim": "Video clip gây xôn xao dư luận những ngày gần đây đang được lan truyền trên mạng",
-          "true_label": "REAL",
-          "predicted_label": "UNVERIFIABLE",
-          "correct": false
-        },
-        {
-          "id": 34,
-          "claim": "NXB Regiospectra ấn hành tại Đức, bìa sách Mùi hương trầm bản tiếng Đức Tập tùy ",
-          "true_label": "REAL",
-          "predicted_label": "UNVERIFIABLE",
-          "correct": false
-        },
-        {
-          "id": 35,
-          "claim": "Giám đốc tài chính của Victoria's Secret - Timothy Johnson cho biết, quyết định ",
-          "true_label": "REAL",
-          "predicted_label": "UNVERIFIABLE",
-          "correct": false
-        },
-        {
-          "id": 36,
-          "claim": "Kết luận của UBKT Trung ương tại Kỳ họp thứ 23 đối với Ban cán sự đảng UBND tỉnh",
-          "true_label": "REAL",
-          "predicted_label": "UNVERIFIABLE",
-          "correct": false
-        },
-        {
-          "id": 37,
-          "claim": "Nhiều bình luận bày tỏ sự mong chờ tác phẩm và kỳ vọng vào sự kết hợp của 2 diễn",
-          "true_label": "REAL",
-          "predicted_label": "UNVERIFIABLE",
-          "correct": false
-        },
-        {
-          "id": 39,
-          "claim": "Theo thông báo của Liên đoàn bóng đá Hà Lan,  trong đội hình của HLV Ronald Koem",
-          "true_label": "REAL",
-          "predicted_label": "UNVERIFIABLE",
-          "correct": false
-        },
-        {
-          "id": 40,
-          "claim": "Dù hiện tại quá trình này vẫn gặp nhiều khó khăn nhưng đẩy mạnh chuyển đổi số tr",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
+          "id": 13,
+          "claim": "Chat GPT sử dụng hệ dữ liệu lớn đến từ hàng tỉ trang tài liệu trên toàn thế giới",
+          "true_label": "FAKE",
+          "predicted_label": "FAKE",
           "correct": true
         },
         {
-          "id": 41,
-          "claim": "Chiều 28/3, tại Văn phòng Cục An ninh Quốc phòng, Bộ Công an tổ chức họp báo thô",
-          "true_label": "REAL",
-          "predicted_label": "UNVERIFIABLE",
-          "correct": false
+          "id": 18,
+          "claim": "Đề xuất của EVN đưa ra sau khi đơn vị tư vấn là Ban quản lý dự án điện 4 (thuộc ",
+          "true_label": "FAKE",
+          "predicted_label": "FAKE",
+          "correct": true
+        },
+        {
+          "id": 20,
+          "claim": "Các thủ thuật phẫu thuật được thực hiện khi trẻ 2 tuổi.",
+          "true_label": "FAKE",
+          "predicted_label": "FAKE",
+          "correct": true
+        },
+        {
+          "id": 22,
+          "claim": "Bộ Tài chính Hoa Kỳ đảm bảo rằng hệ thống ngân hàng Hoa Kỳ ổn định và có thể chị",
+          "true_label": "FAKE",
+          "predicted_label": "FAKE",
+          "correct": true
         }
       ],
-      "status": "timeout",
-      "error_message": "Timeout after 60s"
+      "status": "completed",
+      "error_message": ""
     }
   ]
 }

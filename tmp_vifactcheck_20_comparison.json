@@ -1,0 +1,411 @@
+{
+  "summary": {
+    "count": 20,
+    "trust_successes": 0,
+    "legacy_successes": 20,
+    "trust_matches_expected": 0,
+    "legacy_matches_expected": 20
+  },
+  "results": [
+    {
+      "index": 0,
+      "id": 0,
+      "text": "",
+      "expected_label": "unknown",
+      "trust_error": {
+        "type": "NotImplementedError",
+        "message": "",
+        "traceback": "Traceback (most recent call last):\n  File \"<stdin>\", line 76, in <module>\n  File \"D:\\Work\\project\\mutiAgentfakeNew\\src\\fake_news_detector\\application\\analysis_service.py\", line 26, in analyze_with_trust\n    trust_result = orchestrator.process_text(processed_article)\nNotImplementedError\n"
+      },
+      "legacy": {
+        "overall_verdict": "unknown",
+        "claims_count": 0,
+        "verifiable_claims_count": 0,
+        "evidence_count": 0,
+        "baseline_label": "unknown",
+        "baseline_confidence": 0.0,
+        "summarized": false
+      }
+    },
+    {
+      "index": 1,
+      "id": 1,
+      "text": "",
+      "expected_label": "unknown",
+      "trust_error": {
+        "type": "NotImplementedError",
+        "message": "",
+        "traceback": "Traceback (most recent call last):\n  File \"<stdin>\", line 76, in <module>\n  File \"D:\\Work\\project\\mutiAgentfakeNew\\src\\fake_news_detector\\application\\analysis_service.py\", line 26, in analyze_with_trust\n    trust_result = orchestrator.process_text(processed_article)\nNotImplementedError\n"
+      },
+      "legacy": {
+        "overall_verdict": "unknown",
+        "claims_count": 0,
+        "verifiable_claims_count": 0,
+        "evidence_count": 0,
+        "baseline_label": "unknown",
+        "baseline_confidence": 0.0,
+        "summarized": false
+      }
+    },
+    {
+      "index": 2,
+      "id": 2,
+      "text": "",
+      "expected_label": "unknown",
+      "trust_error": {
+        "type": "NotImplementedError",
+        "message": "",
+        "traceback": "Traceback (most recent call last):\n  File \"<stdin>\", line 76, in <module>\n  File \"D:\\Work\\project\\mutiAgentfakeNew\\src\\fake_news_detector\\application\\analysis_service.py\", line 26, in analyze_with_trust\n    trust_result = orchestrator.process_text(processed_article)\nNotImplementedError\n"
+      },
+      "legacy": {
+        "overall_verdict": "unknown",
+        "claims_count": 0,
+        "verifiable_claims_count": 0,
+        "evidence_count": 0,
+        "baseline_label": "unknown",
+        "baseline_confidence": 0.0,
+        "summarized": false
+      }
+    },
+    {
+      "index": 3,
+      "id": 3,
+      "text": "",
+      "expected_label": "unknown",
+      "trust_error": {
+        "type": "NotImplementedError",
+        "message": "",
+        "traceback": "Traceback (most recent call last):\n  File \"<stdin>\", line 76, in <module>\n  File \"D:\\Work\\project\\mutiAgentfakeNew\\src\\fake_news_detector\\application\\analysis_service.py\", line 26, in analyze_with_trust\n    trust_result = orchestrator.process_text(processed_article)\nNotImplementedError\n"
+      },
+      "legacy": {
+        "overall_verdict": "unknown",
+        "claims_count": 0,
+        "verifiable_claims_count": 0,
+        "evidence_count": 0,
+        "baseline_label": "unknown",
+        "baseline_confidence": 0.0,
+        "summarized": false
+      }
+    },
+    {
+      "index": 4,
+      "id": 4,
+      "text": "",
+      "expected_label": "unknown",
+      "trust_error": {
+        "type": "NotImplementedError",
+        "message": "",
+        "traceback": "Traceback (most recent call last):\n  File \"<stdin>\", line 76, in <module>\n  File \"D:\\Work\\project\\mutiAgentfakeNew\\src\\fake_news_detector\\application\\analysis_service.py\", line 26, in analyze_with_trust\n    trust_result = orchestrator.process_text(processed_article)\nNotImplementedError\n"
+      },
+      "legacy": {
+        "overall_verdict": "unknown",
+        "claims_count": 0,
+        "verifiable_claims_count": 0,
+        "evidence_count": 0,
+        "baseline_label": "unknown",
+        "baseline_confidence": 0.0,
+        "summarized": false
+      }
+    },
+    {
+      "index": 5,
+      "id": 5,
+      "text": "",
+      "expected_label": "unknown",
+      "trust_error": {
+        "type": "NotImplementedError",
+        "message": "",
+        "traceback": "Traceback (most recent call last):\n  File \"<stdin>\", line 76, in <module>\n  File \"D:\\Work\\project\\mutiAgentfakeNew\\src\\fake_news_detector\\application\\analysis_service.py\", line 26, in analyze_with_trust\n    trust_result = orchestrator.process_text(processed_article)\nNotImplementedError\n"
+      },
+      "legacy": {
+        "overall_verdict": "unknown",
+        "claims_count": 0,
+        "verifiable_claims_count": 0,
+        "evidence_count": 0,
+        "baseline_label": "unknown",
+        "baseline_confidence": 0.0,
+        "summarized": false
+      }
+    },
+    {
+      "index": 6,
+      "id": 6,
+      "text": "",
+      "expected_label": "unknown",
+      "trust_error": {
+        "type": "NotImplementedError",
+        "message": "",
+        "traceback": "Traceback (most recent call last):\n  File \"<stdin>\", line 76, in <module>\n  File \"D:\\Work\\project\\mutiAgentfakeNew\\src\\fake_news_detector\\application\\analysis_service.py\", line 26, in analyze_with_trust\n    trust_result = orchestrator.process_text(processed_article)\nNotImplementedError\n"
+      },
+      "legacy": {
+        "overall_verdict": "unknown",
+        "claims_count": 0,
+        "verifiable_claims_count": 0,
+        "evidence_count": 0,
+        "baseline_label": "unknown",
+        "baseline_confidence": 0.0,
+        "summarized": false
+      }
+    },
+    {
+      "index": 7,
+      "id": 7,
+      "text": "",
+      "expected_label": "unknown",
+      "trust_error": {
+        "type": "NotImplementedError",
+        "message": "",
+        "traceback": "Traceback (most recent call last):\n  File \"<stdin>\", line 76, in <module>\n  File \"D:\\Work\\project\\mutiAgentfakeNew\\src\\fake_news_detector\\application\\analysis_service.py\", line 26, in analyze_with_trust\n    trust_result = orchestrator.process_text(processed_article)\nNotImplementedError\n"
+      },
+      "legacy": {
+        "overall_verdict": "unknown",
+        "claims_count": 0,
+        "verifiable_claims_count": 0,
+        "evidence_count": 0,
+        "baseline_label": "unknown",
+        "baseline_confidence": 0.0,
+        "summarized": false
+      }
+    },
+    {
+      "index": 8,
+      "id": 8,
+      "text": "",
+      "expected_label": "unknown",
+      "trust_error": {
+        "type": "NotImplementedError",
+        "message": "",
+        "traceback": "Traceback (most recent call last):\n  File \"<stdin>\", line 76, in <module>\n  File \"D:\\Work\\project\\mutiAgentfakeNew\\src\\fake_news_detector\\application\\analysis_service.py\", line 26, in analyze_with_trust\n    trust_result = orchestrator.process_text(processed_article)\nNotImplementedError\n"
+      },
+      "legacy": {
+        "overall_verdict": "unknown",
+        "claims_count": 0,
+        "verifiable_claims_count": 0,
+        "evidence_count": 0,
+        "baseline_label": "unknown",
+        "baseline_confidence": 0.0,
+        "summarized": false
+      }
+    },
+    {
+      "index": 9,
+      "id": 9,
+      "text": "",
+      "expected_label": "unknown",
+      "trust_error": {
+        "type": "NotImplementedError",
+        "message": "",
+        "traceback": "Traceback (most recent call last):\n  File \"<stdin>\", line 76, in <module>\n  File \"D:\\Work\\project\\mutiAgentfakeNew\\src\\fake_news_detector\\application\\analysis_service.py\", line 26, in analyze_with_trust\n    trust_result = orchestrator.process_text(processed_article)\nNotImplementedError\n"
+      },
+      "legacy": {
+        "overall_verdict": "unknown",
+        "claims_count": 0,
+        "verifiable_claims_count": 0,
+        "evidence_count": 0,
+        "baseline_label": "unknown",
+        "baseline_confidence": 0.0,
+        "summarized": false
+      }
+    },
+    {
+      "index": 10,
+      "id": 10,
+      "text": "",
+      "expected_label": "unknown",
+      "trust_error": {
+        "type": "NotImplementedError",
+        "message": "",
+        "traceback": "Traceback (most recent call last):\n  File \"<stdin>\", line 76, in <module>\n  File \"D:\\Work\\project\\mutiAgentfakeNew\\src\\fake_news_detector\\application\\analysis_service.py\", line 26, in analyze_with_trust\n    trust_result = orchestrator.process_text(processed_article)\nNotImplementedError\n"
+      },
+      "legacy": {
+        "overall_verdict": "unknown",
+        "claims_count": 0,
+        "verifiable_claims_count": 0,
+        "evidence_count": 0,
+        "baseline_label": "unknown",
+        "baseline_confidence": 0.0,
+        "summarized": false
+      }
+    },
+    {
+      "index": 11,
+      "id": 11,
+      "text": "",
+      "expected_label": "unknown",
+      "trust_error": {
+        "type": "NotImplementedError",
+        "message": "",
+        "traceback": "Traceback (most recent call last):\n  File \"<stdin>\", line 76, in <module>\n  File \"D:\\Work\\project\\mutiAgentfakeNew\\src\\fake_news_detector\\application\\analysis_service.py\", line 26, in analyze_with_trust\n    trust_result = orchestrator.process_text(processed_article)\nNotImplementedError\n"
+      },
+      "legacy": {
+        "overall_verdict": "unknown",
+        "claims_count": 0,
+        "verifiable_claims_count": 0,
+        "evidence_count": 0,
+        "baseline_label": "unknown",
+        "baseline_confidence": 0.0,
+        "summarized": false
+      }
+    },
+    {
+      "index": 12,
+      "id": 12,
+      "text": "",
+      "expected_label": "unknown",
+      "trust_error": {
+        "type": "NotImplementedError",
+        "message": "",
+        "traceback": "Traceback (most recent call last):\n  File \"<stdin>\", line 76, in <module>\n  File \"D:\\Work\\project\\mutiAgentfakeNew\\src\\fake_news_detector\\application\\analysis_service.py\", line 26, in analyze_with_trust\n    trust_result = orchestrator.process_text(processed_article)\nNotImplementedError\n"
+      },
+      "legacy": {
+        "overall_verdict": "unknown",
+        "claims_count": 0,
+        "verifiable_claims_count": 0,
+        "evidence_count": 0,
+        "baseline_label": "unknown",
+        "baseline_confidence": 0.0,
+        "summarized": false
+      }
+    },
+    {
+      "index": 13,
+      "id": 13,
+      "text": "",
+      "expected_label": "unknown",
+      "trust_error": {
+        "type": "NotImplementedError",
+        "message": "",
+        "traceback": "Traceback (most recent call last):\n  File \"<stdin>\", line 76, in <module>\n  File \"D:\\Work\\project\\mutiAgentfakeNew\\src\\fake_news_detector\\application\\analysis_service.py\", line 26, in analyze_with_trust\n    trust_result = orchestrator.process_text(processed_article)\nNotImplementedError\n"
+      },
+      "legacy": {
+        "overall_verdict": "unknown",
+        "claims_count": 0,
+        "verifiable_claims_count": 0,
+        "evidence_count": 0,
+        "baseline_label": "unknown",
+        "baseline_confidence": 0.0,
+        "summarized": false
+      }
+    },
+    {
+      "index": 14,
+      "id": 14,
+      "text": "",
+      "expected_label": "unknown",
+      "trust_error": {
+        "type": "NotImplementedError",
+        "message": "",
+        "traceback": "Traceback (most recent call last):\n  File \"<stdin>\", line 76, in <module>\n  File \"D:\\Work\\project\\mutiAgentfakeNew\\src\\fake_news_detector\\application\\analysis_service.py\", line 26, in analyze_with_trust\n    trust_result = orchestrator.process_text(processed_article)\nNotImplementedError\n"
+      },
+      "legacy": {
+        "overall_verdict": "unknown",
+        "claims_count": 0,
+        "verifiable_claims_count": 0,
+        "evidence_count": 0,
+        "baseline_label": "unknown",
+        "baseline_confidence": 0.0,
+        "summarized": false
+      }
+    },
+    {
+      "index": 15,
+      "id": 15,
+      "text": "",
+      "expected_label": "unknown",
+      "trust_error": {
+        "type": "NotImplementedError",
+        "message": "",
+        "traceback": "Traceback (most recent call last):\n  File \"<stdin>\", line 76, in <module>\n  File \"D:\\Work\\project\\mutiAgentfakeNew\\src\\fake_news_detector\\application\\analysis_service.py\", line 26, in analyze_with_trust\n    trust_result = orchestrator.process_text(processed_article)\nNotImplementedError\n"
+      },
+      "legacy": {
+        "overall_verdict": "unknown",
+        "claims_count": 0,
+        "verifiable_claims_count": 0,
+        "evidence_count": 0,
+        "baseline_label": "unknown",
+        "baseline_confidence": 0.0,
+        "summarized": false
+      }
+    },
+    {
+      "index": 16,
+      "id": 16,
+      "text": "",
+      "expected_label": "unknown",
+      "trust_error": {
+        "type": "NotImplementedError",
+        "message": "",
+        "traceback": "Traceback (most recent call last):\n  File \"<stdin>\", line 76, in <module>\n  File \"D:\\Work\\project\\mutiAgentfakeNew\\src\\fake_news_detector\\application\\analysis_service.py\", line 26, in analyze_with_trust\n    trust_result = orchestrator.process_text(processed_article)\nNotImplementedError\n"
+      },
+      "legacy": {
+        "overall_verdict": "unknown",
+        "claims_count": 0,
+        "verifiable_claims_count": 0,
+        "evidence_count": 0,
+        "baseline_label": "unknown",
+        "baseline_confidence": 0.0,
+        "summarized": false
+      }
+    },
+    {
+      "index": 17,
+      "id": 17,
+      "text": "",
+      "expected_label": "unknown",
+      "trust_error": {
+        "type": "NotImplementedError",
+        "message": "",
+        "traceback": "Traceback (most recent call last):\n  File \"<stdin>\", line 76, in <module>\n  File \"D:\\Work\\project\\mutiAgentfakeNew\\src\\fake_news_detector\\application\\analysis_service.py\", line 26, in analyze_with_trust\n    trust_result = orchestrator.process_text(processed_article)\nNotImplementedError\n"
+      },
+      "legacy": {
+        "overall_verdict": "unknown",
+        "claims_count": 0,
+        "verifiable_claims_count": 0,
+        "evidence_count": 0,
+        "baseline_label": "unknown",
+        "baseline_confidence": 0.0,
+        "summarized": false
+      }
+    },
+    {
+      "index": 18,
+      "id": 18,
+      "text": "",
+      "expected_label": "unknown",
+      "trust_error": {
+        "type": "NotImplementedError",
+        "message": "",
+        "traceback": "Traceback (most recent call last):\n  File \"<stdin>\", line 76, in <module>\n  File \"D:\\Work\\project\\mutiAgentfakeNew\\src\\fake_news_detector\\application\\analysis_service.py\", line 26, in analyze_with_trust\n    trust_result = orchestrator.process_text(processed_article)\nNotImplementedError\n"
+      },
+      "legacy": {
+        "overall_verdict": "unknown",
+        "claims_count": 0,
+        "verifiable_claims_count": 0,
+        "evidence_count": 0,
+        "baseline_label": "unknown",
+        "baseline_confidence": 0.0,
+        "summarized": false
+      }
+    },
+    {
+      "index": 19,
+      "id": 19,
+      "text": "",
+      "expected_label": "unknown",
+      "trust_error": {
+        "type": "NotImplementedError",
+        "message": "",
+        "traceback": "Traceback (most recent call last):\n  File \"<stdin>\", line 76, in <module>\n  File \"D:\\Work\\project\\mutiAgentfakeNew\\src\\fake_news_detector\\application\\analysis_service.py\", line 26, in analyze_with_trust\n    trust_result = orchestrator.process_text(processed_article)\nNotImplementedError\n"
+      },
+      "legacy": {
+        "overall_verdict": "unknown",
+        "claims_count": 0,
+        "verifiable_claims_count": 0,
+        "evidence_count": 0,
+        "baseline_label": "unknown",
+        "baseline_confidence": 0.0,
+        "summarized": false
+      }
+    }
+  ]
+}

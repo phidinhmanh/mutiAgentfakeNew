@@ -5,27 +5,13 @@ from typing import Any
 from fake_news_detector.config import settings
 from fake_news_detector.rag.vector_store import get_vector_store
 from fake_news_detector.rag.web_search import search_web
+from shared_fact_checking.retrieval.policy import (
+    calculate_confidence_score,
+    merge_results,
+)
+from shared_fact_checking.retrieval.service import retrieve_with_fallback
 
 logger = logging.getLogger(__name__)
-
-
-def calculate_confidence_score(results: list[dict[str, Any]]) -> float:
-    """Calculate confidence score for retrieval results.
-
-    Args:
-        results: List of retrieved documents
-
-    Returns:
-        Confidence score between 0 and 1
-    """
-    if not results:
-        return 0.0
-
-    scores = [r.get("score", 0.0) for r in results]
-    avg_score = sum(scores) / len(scores)
-    max_score = max(scores)
-
-    return (avg_score + max_score) / 2
 
 
 def retrieve_evidence(claim: str, use_web_search: bool = True) -> list[dict[str, Any]]:
@@ -44,22 +30,15 @@ def retrieve_evidence(claim: str, use_web_search: bool = True) -> list[dict[str,
         List of evidence documents with scores
     """
     vector_store = get_vector_store()
-    faiss_results = vector_store.similarity_search(
-        claim, k=settings.top_k_faiss
+    return retrieve_with_fallback(
+        query=claim,
+        local_search=lambda value: vector_store.similarity_search(
+            value, k=settings.top_k_faiss
+        ),
+        web_search=lambda value: search_web(value, num_results=settings.top_k_google),
+        threshold=settings.similarity_threshold,
+        use_web_search=use_web_search,
     )
-
-    logger.info(f"FAISS returned {len(faiss_results)} results")
-
-    confidence = calculate_confidence_score(faiss_results)
-    logger.info(f"FAISS confidence: {confidence:.3f}, threshold: {settings.similarity_threshold}")
-
-    if use_web_search and confidence < settings.similarity_threshold:
-        logger.info("Confidence below threshold, using web search...")
-        web_results = search_web(claim, num_results=settings.top_k_google)
-        logger.info(f"Web search returned {len(web_results)} results")
-        return _merge_results(faiss_results, web_results)
-
-    return faiss_results
 
 
 def _merge_results(
@@ -67,32 +46,5 @@ def _merge_results(
     web_results: list[dict[str, Any]],
     max_results: int = 8,
 ) -> list[dict[str, Any]]:
-    """Merge FAISS and web search results.
-
-    Args:
-        faiss_results: Results from FAISS
-        web_results: Results from web search
-        max_results: Maximum number of results to return
-
-    Returns:
-        Merged and sorted results
-    """
-    seen_contents = set()
-    merged = []
-
-    for result in faiss_results:
-        content = result.get("content", "")[:200]
-        if content not in seen_contents:
-            seen_contents.add(content)
-            result["source"] = result.get("source", "vi_fact_check")
-            merged.append(result)
-
-    for result in web_results:
-        content = result.get("content", "")[:200]
-        if content not in seen_contents:
-            seen_contents.add(content)
-            result["source"] = result.get("source", "web_search")
-            merged.append(result)
-
-    merged.sort(key=lambda x: x.get("score", 0), reverse=True)
-    return merged[:max_results]
+    """Compatibility wrapper for shared merge logic."""
+    return merge_results(faiss_results, web_results, max_results=max_results)

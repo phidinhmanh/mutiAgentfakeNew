@@ -1,25 +1,74 @@
 """Benchmark comparison: Baseline vs Multi-Agent vs Single-Agent.
 
-Note: LLM-based approaches (Single-Agent, Multi-Agent) require NVIDIA NIM API
-which may timeout in some environments. This benchmark will run what it can
-and provide representative results for comparison.
+Note: LLM-based approaches may timeout in some environments. This benchmark
+runs what it can and reports representative comparison results.
 """
+
 import argparse
 import json
 import logging
 import time
-from dataclasses import dataclass, field, asdict
+from dataclasses import asdict, dataclass, field
 from typing import Any
 
-from datasets import load_dataset
+from trust_agents.config import LLMProvider, get_llm_config
+from trust_agents.llm.factory import create_chat_model
+
+try:
+    from datasets import load_dataset
+except ImportError:  # pragma: no cover - optional at import time for unit tests
+    load_dataset = None  # type: ignore[assignment]
+
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
+def _require_load_dataset() -> Any:
+    if load_dataset is None:
+        raise ImportError("datasets dependency is unavailable in this environment")
+    return load_dataset
+
+
+def normalize_sample_label(raw_label: Any) -> str | None:
+    """Normalize ViFactCheck labels for benchmark comparisons."""
+    if isinstance(raw_label, int):
+        return "FAKE" if raw_label == 1 else "REAL"
+    if isinstance(raw_label, str):
+        label = raw_label.strip().upper()
+        if label == "TRUE":
+            return "REAL"
+        if label == "FALSE":
+            return "FAKE"
+        if label in {"REAL", "FAKE"}:
+            return label
+    return None
+
+
+def extract_vifactcheck_sample(
+    item: dict[str, Any],
+    sample_id: int,
+) -> dict[str, Any] | None:
+    """Extract a normalized benchmark sample from either dataset schema."""
+    label = normalize_sample_label(item.get("labels", item.get("label")))
+    claim_text = (item.get("Statement") or item.get("claim") or "").strip()
+    evidence_text = (item.get("Evidence") or item.get("evidence") or "").strip()
+
+    if not label or not claim_text:
+        return None
+
+    return {
+        "claim": claim_text,
+        "evidence": evidence_text,
+        "label": label,
+        "id": sample_id,
+    }
+
+
 @dataclass
 class BenchmarkResult:
     """Results from a benchmark run."""
+
     approach: str
     samples: int = 0
     total_time: float = 0.0
@@ -27,96 +76,71 @@ class BenchmarkResult:
     correct: int = 0
     accuracy: float = 0.0
     predictions: list[dict[str, Any]] = field(default_factory=list)
-    status: str = "completed"  # "completed", "timeout", "error"
+    status: str = "completed"
     error_message: str = ""
 
 
 def load_test_data(num_samples: int = 20) -> list[dict[str, Any]]:
-    """Load test samples from ViFactCheck."""
-    logger.info(f"Loading {num_samples} test samples...")
-    dataset = load_dataset("tranthaihoa/vifactcheck", split="test")
+    """Load balanced test samples from ViFactCheck."""
+    logger.info("Loading %s test samples...", num_samples)
+    dataset = _require_load_dataset()("tranthaihoa/vifactcheck", split="test")
 
-    real_samples = []
-    fake_samples = []
+    real_samples: list[dict[str, Any]] = []
+    fake_samples: list[dict[str, Any]] = []
 
-    for i, item in enumerate(dataset):
-        raw_label = item.get("labels", item.get("label", "REAL"))
-        if isinstance(raw_label, int):
-            label = "FAKE" if raw_label == 1 else "REAL"
-        elif isinstance(raw_label, str):
-            label = raw_label.upper()
-            if label in ["TRUE", "FALSE"]:
-                label = "FAKE" if label == "TRUE" else "REAL"
-            elif label not in ["REAL", "FAKE"]:
-                continue
-        else:
+    for index, item in enumerate(dataset):
+        sample = extract_vifactcheck_sample(item, sample_id=index)
+        if sample is None:
             continue
 
-        claim_text = item.get("Statement", item.get("claim", ""))
-        evidence_text = item.get("Evidence", item.get("evidence", ""))
-
-        sample = {
-            "claim": claim_text,
-            "evidence": evidence_text,
-            "label": label,
-            "id": i,
-        }
-
-        if label == "REAL":
+        if sample["label"] == "REAL":
             real_samples.append(sample)
         else:
             fake_samples.append(sample)
 
-    # Balance: half REAL, half FAKE
     half = num_samples // 2
-    selected = []
-
-    for s in real_samples[:half]:
-        if len(selected) < num_samples:
-            selected.append(s)
-    for s in fake_samples[:half]:
-        if len(selected) < num_samples:
-            selected.append(s)
+    selected = [*real_samples[:half], *fake_samples[:half]]
 
     if len(selected) < num_samples:
-        for s in real_samples[half:] + fake_samples[half:]:
+        for sample in [*real_samples[half:], *fake_samples[half:]]:
             if len(selected) >= num_samples:
                 break
-            selected.append(s)
+            selected.append(sample)
 
-    logger.info(f"Loaded {len(selected)}: {sum(1 for s in selected if s['label']=='REAL')} REAL, {sum(1 for s in selected if s['label']=='FAKE')} FAKE")
+    real_count = sum(1 for sample in selected if sample["label"] == "REAL")
+    fake_count = sum(1 for sample in selected if sample["label"] == "FAKE")
+    logger.info(
+        "Loaded %s: %s REAL, %s FAKE",
+        len(selected),
+        real_count,
+        fake_count,
+    )
     return selected
 
 
 def load_train_baseline_data(num_samples: int = 500) -> list[dict[str, Any]]:
-    """Load training data for baseline model."""
-    logger.info(f"Loading {num_samples} training samples for baseline...")
-    dataset = load_dataset("tranthaihoa/vifactcheck", split="train")
+    """Load training data for the baseline keyword model."""
+    logger.info("Loading %s training samples for baseline...", num_samples)
+    dataset = _require_load_dataset()("tranthaihoa/vifactcheck", split="train")
 
     samples = []
-    for i, item in enumerate(dataset):
-        if i >= num_samples:
+    for index, item in enumerate(dataset):
+        if index >= num_samples:
             break
 
-        raw_label = item.get("labels", item.get("label", 0))
-        if isinstance(raw_label, int):
-            label = raw_label
-        elif isinstance(raw_label, str):
-            label_map = {"real": 0, "fake": 1, "true": 1, "false": 0, "REAL": 0, "FAKE": 1}
-            label = label_map.get(raw_label.lower(), 0)
-        else:
-            label = 0
+        sample = extract_vifactcheck_sample(item, sample_id=index)
+        if sample is None:
+            continue
 
-        claim_text = item.get("Statement", item.get("claim", ""))
-        evidence_text = item.get("Evidence", item.get("evidence", ""))
+        samples.append(
+            {
+                "claim": sample["claim"],
+                "evidence": sample["evidence"],
+                "label": 1 if sample["label"] == "FAKE" else 0,
+            }
+        )
 
-        samples.append({
-            "claim": claim_text,
-            "evidence": evidence_text,
-            "label": label,
-        })
-
-    logger.info(f"Loaded {len(samples)} training samples")
+    logger.info("Loaded %s training samples", len(samples))
     return samples
 
 
@@ -124,13 +148,12 @@ def run_baseline_benchmark(
     test_data: list[dict[str, Any]],
     train_data: list[dict[str, Any]],
 ) -> BenchmarkResult:
-    """Run baseline (keyword-based) benchmark."""
+    """Run baseline keyword-overlap benchmark."""
     logger.info("Running Baseline benchmark...")
     start_time = time.time()
 
-    # Analyze training data to build keyword model
-    fake_keywords = set()
-    real_keywords = set()
+    fake_keywords: set[str] = set()
+    real_keywords: set[str] = set()
 
     for sample in train_data:
         text = sample["claim"].lower()
@@ -139,8 +162,9 @@ def run_baseline_benchmark(
         else:
             real_keywords.update(text.split())
 
-    # Calculate prior probabilities
-    fake_count = sum(1 for s in train_data if s["label"] == 1 or s["label"] == "FAKE")
+    fake_count = sum(
+        1 for sample in train_data if sample["label"] == 1 or sample["label"] == "FAKE"
+    )
     real_count = len(train_data) - fake_count
     prior_fake = fake_count / len(train_data)
     prior_real = real_count / len(train_data)
@@ -149,35 +173,21 @@ def run_baseline_benchmark(
     correct = 0
 
     for sample in test_data:
-        claim_lower = sample["claim"].lower()
-        words = set(claim_lower.split())
-
+        words = set(sample["claim"].lower().split())
         fake_overlap = len(words & fake_keywords)
         real_overlap = len(words & real_keywords)
 
-        # Score based on keyword overlap with prior
         fake_score = fake_overlap / max(len(words), 1) + prior_fake * 0.3
         real_score = real_overlap / max(len(words), 1) + prior_real * 0.3
-
-        if fake_score > real_score:
-            pred_label = "FAKE"
-        else:
-            pred_label = "REAL"
+        pred_label = "FAKE" if fake_score > real_score else "REAL"
 
         is_correct = pred_label == sample["label"]
         if is_correct:
             correct += 1
 
-        predictions.append({
-            "id": sample["id"],
-            "claim": sample["claim"][:80],
-            "true_label": sample["label"],
-            "predicted_label": pred_label,
-            "correct": is_correct,
-        })
+        predictions.append(_mark_prediction(sample, pred_label, is_correct))
 
     total_time = time.time() - start_time
-
     return BenchmarkResult(
         approach="Baseline (Keyword-based)",
         samples=len(test_data),
@@ -190,139 +200,28 @@ def run_baseline_benchmark(
     )
 
 
-def run_single_agent_benchmark(
-    test_data: list[dict[str, Any]],
-    timeout_seconds: int = 60,
-) -> BenchmarkResult:
-    """Run single-agent (LLM only) benchmark with timeout."""
-    logger.info(f"Running Single-Agent (LLM only) benchmark with {timeout_seconds}s timeout...")
-    start_time = time.time()
+def parse_verdict_label(result_text: str) -> str:
+    """Extract benchmark verdict labels from free-form model text."""
+    upper_text = result_text.upper()
+    if "UNVERIFIABLE" in upper_text or "UNCERTAIN" in upper_text:
+        return "UNVERIFIABLE"
+    if "FAKE" in upper_text:
+        return "FAKE"
+    if "REAL" in upper_text:
+        return "REAL"
+    return "UNKNOWN"
 
-    from openai import OpenAI
-    from fake_news_detector.config import settings
-    import re
 
-    predictions = []
-    correct = 0
-    status = "completed"
-    error_msg = ""
-
-    client = OpenAI(
-        base_url="https://integrate.api.nvidia.com/v1",
-        api_key=settings.nvidia_api_key,
-        timeout=float(timeout_seconds),
+def build_multi_agent_prompt(sample: dict[str, Any]) -> str:
+    """Build the benchmark prompt for the evidence-aware path."""
+    evidence_text = sample.get("evidence", "")
+    evidence_formatted = (
+        f"[0] {evidence_text}"
+        if evidence_text
+        else "[0] Khong co bang chung."
     )
 
-    system_prompt = """Ban la chuyen gia xac thuc tin tuc Viet Nam.
-Tra ve CHI MOT TU: REAL neu tin that, FAKE neu tin gia.
-Khong giai thich, chi tra ve REAL hoac FAKE."""
-
-    for sample in test_data:
-        # Check timeout
-        if time.time() - start_time > timeout_seconds:
-            status = "timeout"
-            error_msg = f"Timeout after {timeout_seconds}s"
-            logger.warning(error_msg)
-            break
-
-        try:
-            response = client.chat.completions.create(
-                model=settings.llm_model,
-                messages=[
-                    {"role": "system", "content": system_prompt},
-                    {"role": "user", "content": f"Tin sau la that hay gia: {sample['claim']}"},
-                ],
-                temperature=0.1,
-                max_tokens=100,  # Increased from 10 for Gemma thinking mode
-            )
-
-            message = response.choices[0].message
-            # Handle content=None (reasoning mode uses reasoning_content instead)
-            result_text = message.content or message.reasoning_content or ""
-            result_text = result_text.strip().upper()
-
-            if "FAKE" in result_text:
-                pred_label = "FAKE"
-            elif "REAL" in result_text:
-                pred_label = "REAL"
-            else:
-                pred_label = "UNKNOWN"
-
-        except Exception as e:
-            logger.warning(f"Single-agent error: {e}")
-            pred_label = "ERROR"
-            status = "error"
-            error_msg = str(e)[:100]
-
-        is_correct = pred_label == sample["label"]
-        if is_correct:
-            correct += 1
-
-        predictions.append({
-            "id": sample["id"],
-            "claim": sample["claim"][:80],
-            "true_label": sample["label"],
-            "predicted_label": pred_label,
-            "correct": is_correct,
-        })
-
-    total_time = time.time() - start_time
-    samples_processed = len(predictions)
-
-    return BenchmarkResult(
-        approach="Single-Agent (LLM only)",
-        samples=samples_processed,
-        total_time=total_time,
-        avg_time_per_sample=total_time / samples_processed if samples_processed > 0 else 0,
-        correct=correct,
-        accuracy=correct / samples_processed if samples_processed > 0 else 0,
-        predictions=predictions,
-        status=status,
-        error_message=error_msg,
-    )
-
-
-def run_multi_agent_benchmark(
-    test_data: list[dict[str, Any]],
-    timeout_seconds: int = 60,
-) -> BenchmarkResult:
-    """Run multi-agent (3-agent pipeline) benchmark with timeout."""
-    logger.info(f"Running Multi-Agent (3-agent pipeline) benchmark with {timeout_seconds}s timeout...")
-    start_time = time.time()
-
-    from openai import OpenAI
-    from fake_news_detector.config import settings
-    import re
-    import json
-
-    predictions = []
-    correct = 0
-    status = "completed"
-    error_msg = ""
-
-    client = OpenAI(
-        base_url="https://integrate.api.nvidia.com/v1",
-        api_key=settings.nvidia_api_key,
-        timeout=float(timeout_seconds),
-    )
-
-    for sample in test_data:
-        # Check timeout
-        if time.time() - start_time > timeout_seconds:
-            status = "timeout"
-            error_msg = f"Timeout after {timeout_seconds}s"
-            logger.warning(error_msg)
-            break
-
-        try:
-            evidence_text = sample.get("evidence", "")
-
-            if evidence_text:
-                evidence_formatted = f"[0] {evidence_text}"
-            else:
-                evidence_formatted = "[0] Khong co bau chung."
-
-            prompt = f"""Claim: {sample['claim']}
+    return f"""Claim: {sample['claim']}
 
 Evidence:
 {evidence_formatted}
@@ -336,82 +235,323 @@ Tra ve JSON voi dinh dang:
 
 Chi su dung thong tin trong Evidence de giai thich."""
 
-            response = client.chat.completions.create(
-                model=settings.llm_model,
-                messages=[
-                    {"role": "system", "content": "Ban la chuyen gia xac thuc tin tuc Viet Nam."},
-                    {"role": "user", "content": prompt},
-                ],
-                temperature=0.3,
-                max_tokens=1000,  # Increased from 500 for Gemma thinking mode
-            )
 
-            message = response.choices[0].message
-            # Handle content=None (reasoning mode uses reasoning_content instead)
-            result_text = message.content or message.reasoning_content or ""
-            result_text = result_text.strip()
+def extract_multi_agent_verdict(result_text: str) -> str:
+    """Extract verdict label from the evidence-aware model response."""
+    import re
 
-            json_match = re.search(r'\{.*\}', result_text, re.DOTALL)
-            if json_match:
-                result = json.loads(json_match.group())
-                pred_label = result.get("verdict", "UNKNOWN")
-            else:
-                if "FAKE" in result_text.upper():
-                    pred_label = "FAKE"
-                elif "REAL" in result_text.upper():
-                    pred_label = "REAL"
-                else:
-                    pred_label = "UNVERIFIABLE"
+    json_match = re.search(r"\{.*\}", result_text, re.DOTALL)
+    if json_match:
+        try:
+            result = json.loads(json_match.group())
+        except json.JSONDecodeError:
+            return parse_verdict_label(result_text)
+        verdict = str(result.get("verdict", "UNKNOWN")).upper()
+        return parse_verdict_label(verdict)
 
-        except Exception as e:
-            logger.warning(f"Multi-agent error: {e}")
-            pred_label = "ERROR"
-            status = "error"
-            error_msg = str(e)[:100]
+    return parse_verdict_label(result_text)
 
-        is_correct = pred_label == sample["label"]
-        if is_correct:
-            correct += 1
 
-        predictions.append({
-            "id": sample["id"],
-            "claim": sample["claim"][:80],
-            "true_label": sample["label"],
-            "predicted_label": pred_label,
-            "correct": is_correct,
-        })
+def get_benchmark_model_name() -> str:
+    """Expose the configured model name for logs and tests."""
+    return get_llm_config().model
 
+
+def get_benchmark_provider_name() -> str:
+    """Expose the configured provider name for logs and tests."""
+    return get_llm_config().provider.value
+
+
+def _normalize_benchmark_target_label(label: str) -> str:
+    """Map non-binary outputs to the closest benchmark target label."""
+    if label == "UNVERIFIABLE":
+        return "REAL"
+    return label
+
+
+def _score_prediction(predicted_label: str, expected_label: str) -> bool:
+    """Score benchmark predictions against binary ViFactCheck labels."""
+    return _normalize_benchmark_target_label(predicted_label) == expected_label
+
+
+def _build_single_agent_approach_name() -> str:
+    provider = get_benchmark_provider_name()
+    model = get_benchmark_model_name()
+    return f"Single-Agent ({provider}:{model})"
+
+
+def _build_multi_agent_approach_name() -> str:
+    provider = get_benchmark_provider_name()
+    model = get_benchmark_model_name()
+    return f"Multi-Agent ({provider}:{model})"
+
+
+def _invoke_multi_agent_model(llm: Any, sample: dict[str, Any]) -> str:
+    return invoke_text_model(
+        llm,
+        system_prompt="Ban la chuyen gia xac thuc tin tuc Viet Nam.",
+        user_prompt=build_multi_agent_prompt(sample),
+    )
+
+
+def _invoke_single_agent_model(
+    llm: Any,
+    sample: dict[str, Any],
+    system_prompt: str,
+) -> str:
+    return invoke_text_model(
+        llm,
+        system_prompt=system_prompt,
+        user_prompt=f"Tin sau la that hay gia: {sample['claim']}",
+    )
+
+
+def _compute_accuracy(correct: int, samples_processed: int) -> float:
+    return correct / samples_processed if samples_processed > 0 else 0
+
+
+def _compute_avg_time(total_time: float, samples_processed: int) -> float:
+    return total_time / samples_processed if samples_processed > 0 else 0
+
+
+def _mark_prediction(
+    sample: dict[str, Any],
+    pred_label: str,
+    is_correct: bool,
+) -> dict[str, Any]:
+    return {
+        "id": sample["id"],
+        "claim": sample["claim"][:80],
+        "true_label": sample["label"],
+        "predicted_label": pred_label,
+        "correct": is_correct,
+    }
+
+
+def _update_error(
+    current_status: str,
+    current_error: str,
+    exc: Exception,
+) -> tuple[str, str]:
+    del current_status
+    logger.warning("Benchmark model error: %s", exc)
+    return "error", current_error or str(exc)[:100]
+
+
+def _prepare_predictions_result(
+    approach: str,
+    start_time: float,
+    predictions: list[dict[str, Any]],
+    correct: int,
+    status: str,
+    error_msg: str,
+) -> BenchmarkResult:
     total_time = time.time() - start_time
     samples_processed = len(predictions)
-
     return BenchmarkResult(
-        approach="Multi-Agent (3-agent pipeline)",
+        approach=approach,
         samples=samples_processed,
         total_time=total_time,
-        avg_time_per_sample=total_time / samples_processed if samples_processed > 0 else 0,
+        avg_time_per_sample=_compute_avg_time(total_time, samples_processed),
         correct=correct,
-        accuracy=correct / samples_processed if samples_processed > 0 else 0,
+        accuracy=_compute_accuracy(correct, samples_processed),
         predictions=predictions,
         status=status,
         error_message=error_msg,
     )
 
 
+def _predict_single_sample(llm: Any, sample: dict[str, Any], system_prompt: str) -> str:
+    result_text = _invoke_single_agent_model(llm, sample, system_prompt).strip().upper()
+    return parse_verdict_label(result_text)
+
+
+def _predict_multi_sample(llm: Any, sample: dict[str, Any]) -> str:
+    result_text = _invoke_multi_agent_model(llm, sample).strip()
+    return extract_multi_agent_verdict(result_text)
+
+
+def _score_and_store_prediction(
+    predictions: list[dict[str, Any]],
+    sample: dict[str, Any],
+    pred_label: str,
+) -> int:
+    is_correct = _score_prediction(pred_label, sample["label"])
+    predictions.append(_mark_prediction(sample, pred_label, is_correct))
+    return 1 if is_correct else 0
+
+
+def _openai_like_model(llm: Any) -> bool:
+    chat = getattr(llm, "chat", None)
+    completions = getattr(chat, "completions", None)
+    create = getattr(completions, "create", None)
+    return callable(create)
+
+
+def _provider_supports_reasoning_content() -> bool:
+    return get_llm_config().provider == LLMProvider.GEMINI_NVIDIA
+
+
+def _extract_openai_message_text(message: Any) -> str:
+    if _provider_supports_reasoning_content():
+        return message.content or getattr(message, "reasoning_content", "") or ""
+    return message.content or ""
+
+
+def invoke_text_model(llm: Any, system_prompt: str, user_prompt: str) -> str:
+    """Invoke either OpenAI-compatible or LangChain-like chat models."""
+    if _openai_like_model(llm):
+        config = get_llm_config()
+        response = llm.chat.completions.create(
+            model=config.model,
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_prompt},
+            ],
+            temperature=config.temperature,
+            max_tokens=min(config.max_tokens, 1000),
+        )
+        return _extract_openai_message_text(response.choices[0].message)
+
+    response = llm.invoke([
+        ("system", system_prompt),
+        ("human", user_prompt),
+    ])
+    return getattr(response, "content", str(response))
+
+
+def create_benchmark_model(timeout_seconds: int) -> Any:
+    """Create the LLM used by benchmark flows from shared TRUST config."""
+    config = get_llm_config().model_copy()
+
+    if config.provider == LLMProvider.OPENAI:
+        import os
+
+        from openai import OpenAI
+
+        api_key = config.get_api_key()
+        if not api_key:
+            raise ValueError("OPENAI_API_KEY environment variable required")
+
+        base_url = os.getenv("OPENAI_BASE_URL") or None
+        return OpenAI(
+            api_key=api_key,
+            base_url=base_url,
+            timeout=float(timeout_seconds),
+        )
+
+    if config.provider == LLMProvider.GEMINI_NVIDIA:
+        import os
+
+        from openai import OpenAI
+
+        api_key = os.getenv("NVIDIA_API_KEY")
+        if not api_key:
+            raise ValueError("NVIDIA_API_KEY environment variable required")
+        return OpenAI(
+            base_url="https://integrate.api.nvidia.com/v1",
+            api_key=api_key,
+            timeout=float(timeout_seconds),
+        )
+
+    return create_chat_model(config)
+
+
+def run_multi_agent_benchmark(
+    test_data: list[dict[str, Any]],
+    timeout_seconds: int = 60,
+) -> BenchmarkResult:
+    """Run multi-agent benchmark with the configured provider."""
+    logger.info(
+        "Running Multi-Agent benchmark with %ss per-request timeout...",
+        timeout_seconds,
+    )
+    start_time = time.time()
+    predictions = []
+    correct = 0
+    status = "completed"
+    error_msg = ""
+    llm = create_benchmark_model(timeout_seconds)
+
+    for sample in test_data:
+        try:
+            pred_label = _predict_multi_sample(llm, sample)
+        except Exception as exc:
+            status, error_msg = _update_error(status, error_msg, exc)
+            pred_label = "ERROR"
+
+        correct += _score_and_store_prediction(predictions, sample, pred_label)
+
+    return _prepare_predictions_result(
+        approach=_build_multi_agent_approach_name(),
+        start_time=start_time,
+        predictions=predictions,
+        correct=correct,
+        status=status,
+        error_msg=error_msg,
+    )
+
+
+def run_single_agent_benchmark(
+    test_data: list[dict[str, Any]],
+    timeout_seconds: int = 60,
+) -> BenchmarkResult:
+    """Run single-agent benchmark with the configured provider."""
+    logger.info(
+        "Running Single-Agent benchmark with %ss per-request timeout...",
+        timeout_seconds,
+    )
+    start_time = time.time()
+    predictions = []
+    correct = 0
+    status = "completed"
+    error_msg = ""
+
+    system_prompt = """Ban la chuyen gia xac thuc tin tuc Viet Nam.
+Tra ve CHI MOT TU: REAL neu tin that, FAKE neu tin gia.
+Khong giai thich, chi tra ve REAL hoac FAKE."""
+    llm = create_benchmark_model(timeout_seconds)
+
+    for sample in test_data:
+        try:
+            pred_label = _predict_single_sample(llm, sample, system_prompt)
+        except Exception as exc:
+            status, error_msg = _update_error(status, error_msg, exc)
+            pred_label = "ERROR"
+
+        correct += _score_and_store_prediction(predictions, sample, pred_label)
+
+    return _prepare_predictions_result(
+        approach=_build_single_agent_approach_name(),
+        start_time=start_time,
+        predictions=predictions,
+        correct=correct,
+        status=status,
+        error_msg=error_msg,
+    )
+
+
 def get_nvidia_client() -> Any:
-    """Get NVIDIA NIM API client."""
+    """Backward-compatible helper for NVIDIA benchmark callers."""
+    import os
+
     from openai import OpenAI
-    from fake_news_detector.config import settings
+
+    api_key = os.getenv("NVIDIA_API_KEY")
+    if not api_key:
+        raise ValueError("NVIDIA_API_KEY environment variable required")
 
     return OpenAI(
         base_url="https://integrate.api.nvidia.com/v1",
-        api_key=settings.nvidia_api_key,
+        api_key=api_key,
     )
 
 
 def print_results(results: list[BenchmarkResult]) -> None:
     """Print benchmark results."""
     import sys
-    sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
     print("\n" + "=" * 80)
     print("BENCHMARK RESULTS: Baseline vs Multi-Agent vs Single-Agent")
@@ -419,30 +559,40 @@ def print_results(results: list[BenchmarkResult]) -> None:
 
     test_samples = results[0].samples if results else 0
     print(f"\nTest samples: {test_samples}")
-    print(f"Training samples for baseline: 500")
+    print("Training samples for baseline: 500")
     print("\n" + "-" * 80)
 
-    for r in results:
-        status_suffix = f" [{r.status.upper()}]" if r.status != "completed" else ""
-        print(f"\n{r.approach}{status_suffix}")
-        print(f"  Accuracy:     {r.accuracy:.1%} ({r.correct}/{r.samples})")
-        print(f"  Total time:   {r.total_time:.2f}s")
-        print(f"  Avg/sample:   {r.avg_time_per_sample:.2f}s")
-        if r.error_message:
-            print(f"  Error:        {r.error_message}")
+    for result in results:
+        status_suffix = (
+            f" [{result.status.upper()}]" if result.status != "completed" else ""
+        )
+        print(f"\n{result.approach}{status_suffix}")
+        print(
+            f"  Accuracy:     {result.accuracy:.1%} "
+            f"({result.correct}/{result.samples})"
+        )
+        print(f"  Total time:   {result.total_time:.2f}s")
+        print(f"  Avg/sample:   {result.avg_time_per_sample:.2f}s")
+        if result.error_message:
+            print(f"  Error:        {result.error_message}")
 
     print("\n" + "-" * 80)
     print("\nDetailed Results:")
     print("-" * 80)
 
-    for r in results:
-        print(f"\n=== {r.approach} ===")
-        for p in r.predictions[:5]:  # Show first 5
-            status = "OK" if p["correct"] else "FAIL"
-            claim_preview = p["claim"][:50] if p["claim"] else "empty"
-            print(f"  [{status}] ID={p['id']:2d} | True={p['true_label']:4s} | Pred={p['predicted_label']:4s} | {claim_preview}...")
-        if len(r.predictions) > 5:
-            print(f"  ... and {len(r.predictions) - 5} more")
+    for result in results:
+        print(f"\n=== {result.approach} ===")
+        for prediction in result.predictions[:5]:
+            status = "OK" if prediction["correct"] else "FAIL"
+            claim_preview = prediction["claim"][:50] if prediction["claim"] else "empty"
+            print(
+                f"  [{status}] ID={prediction['id']:2d} "
+                f"| True={prediction['true_label']:4s} "
+                f"| Pred={prediction['predicted_label']:4s} "
+                f"| {claim_preview}..."
+            )
+        if len(result.predictions) > 5:
+            print(f"  ... and {len(result.predictions) - 5} more")
 
 
 def save_results(results: list[BenchmarkResult], output_path: str) -> None:
@@ -451,54 +601,79 @@ def save_results(results: list[BenchmarkResult], output_path: str) -> None:
         "benchmark": "Baseline vs Multi-Agent vs Single-Agent",
         "test_samples": results[0].samples if results else 0,
         "train_samples_baseline": 500,
-        "results": [asdict(r) for r in results],
+        "results": [asdict(result) for result in results],
     }
 
-    with open(output_path, "w", encoding="utf-8") as f:
-        json.dump(output, f, indent=2, ensure_ascii=False)
+    with open(output_path, "w", encoding="utf-8") as file:
+        json.dump(output, file, indent=2, ensure_ascii=False)
 
-    logger.info(f"Results saved to {output_path}")
+    logger.info("Results saved to %s", output_path)
 
 
 def main() -> None:
     """Main benchmark entry point."""
     parser = argparse.ArgumentParser(description="Benchmark fake news detection")
-    parser.add_argument("--test-samples", type=int, default=20, help="Number of test samples")
-    parser.add_argument("--train-samples", type=int, default=500, help="Number of training samples for baseline")
-    parser.add_argument("--llm-timeout", type=int, default=30, help="Timeout per LLM call in seconds")
-    parser.add_argument("--output", type=str, default="benchmark_results.json", help="Output file")
-    parser.add_argument("--skip-single", action="store_true", help="Skip single-agent benchmark")
-    parser.add_argument("--skip-multi", action="store_true", help="Skip multi-agent benchmark")
-
+    parser.add_argument(
+        "--test-samples",
+        type=int,
+        default=20,
+        help="Number of test samples",
+    )
+    parser.add_argument(
+        "--train-samples",
+        type=int,
+        default=500,
+        help="Number of training samples for baseline",
+    )
+    parser.add_argument(
+        "--llm-timeout",
+        type=int,
+        default=30,
+        help="Per-request timeout in seconds for LLM calls",
+    )
+    parser.add_argument(
+        "--output",
+        type=str,
+        default="benchmark_results.json",
+        help="Output file",
+    )
+    parser.add_argument(
+        "--skip-single",
+        action="store_true",
+        help="Skip single-agent benchmark",
+    )
+    parser.add_argument(
+        "--skip-multi",
+        action="store_true",
+        help="Skip multi-agent benchmark",
+    )
     args = parser.parse_args()
 
-    # Load data
     test_data = load_test_data(args.test_samples)
     train_data = load_train_baseline_data(args.train_samples)
 
-    results = []
+    results = [run_baseline_benchmark(test_data, train_data)]
 
-    # Always run baseline
-    baseline_result = run_baseline_benchmark(test_data, train_data)
-    results.append(baseline_result)
-
-    # Run single-agent if not skipped
     if not args.skip_single:
         try:
-            single_result = run_single_agent_benchmark(test_data, timeout_seconds=args.llm_timeout)
+            single_result = run_single_agent_benchmark(
+                test_data,
+                timeout_seconds=args.llm_timeout,
+            )
             results.append(single_result)
-        except Exception as e:
-            logger.error(f"Single-agent benchmark failed: {e}")
+        except Exception as exc:
+            logger.error("Single-agent benchmark failed: %s", exc)
 
-    # Run multi-agent if not skipped
     if not args.skip_multi:
         try:
-            multi_result = run_multi_agent_benchmark(test_data, timeout_seconds=args.llm_timeout)
+            multi_result = run_multi_agent_benchmark(
+                test_data,
+                timeout_seconds=args.llm_timeout,
+            )
             results.append(multi_result)
-        except Exception as e:
-            logger.error(f"Multi-agent benchmark failed: {e}")
+        except Exception as exc:
+            logger.error("Multi-agent benchmark failed: %s", exc)
 
-    # Print and save results
     print_results(results)
     save_results(results, args.output)
 
