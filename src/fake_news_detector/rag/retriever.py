@@ -6,9 +6,7 @@ from typing import Any
 from fake_news_detector.config import settings
 from fake_news_detector.rag.vector_store import get_vector_store
 from fake_news_detector.rag.web_search import search_web
-from shared_fact_checking.retrieval.policy import (
-    merge_results,
-)
+
 from shared_fact_checking.retrieval.service import retrieve_with_fallback
 
 logger = logging.getLogger(__name__)
@@ -41,10 +39,3 @@ def retrieve_evidence(claim: str, use_web_search: bool = True) -> list[dict[str,
     )
 
 
-def _merge_results(
-    faiss_results: list[dict[str, Any]],
-    web_results: list[dict[str, Any]],
-    max_results: int = 8,
-) -> list[dict[str, Any]]:
-    """Compatibility wrapper for shared merge logic."""
-    return merge_results(faiss_results, web_results, max_results=max_results)

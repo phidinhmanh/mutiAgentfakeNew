@@ -11,9 +11,7 @@ from fake_news_detector.rag.retriever import (
 )
 from shared_fact_checking.retrieval.policy import (
     calculate_confidence_score,
-)
-from shared_fact_checking.retrieval.policy import (
-    merge_results as _merge_results,
+    merge_results,
 )
 from shared_fact_checking.retrieval.service import _retrieval_cache
 
@@ -59,48 +57,48 @@ class TestMergeResults:
 
     def test_merge_empty_inputs(self) -> None:
         """Empty inputs return empty list."""
-        result = _merge_results([], [])
+        result = merge_results([], [])
         assert result == []
 
     def test_merge_only_faiss(self) -> None:
         """Only FAISS results returned."""
         faiss = [{"content": "FAISS result", "score": 0.9}]
-        result = _merge_results(faiss, [])
+        result = merge_results(faiss, [])
         assert len(result) == 1
         assert result[0]["content"] == "FAISS result"
 
     def test_merge_only_web(self) -> None:
         """Only web results returned."""
         web = [{"content": "Web result", "score": 0.8}]
-        result = _merge_results([], web)
+        result = merge_results([], web)
         assert len(result) == 1
 
     def test_merge_no_duplicate_urls(self) -> None:
         """No duplicate content in merged result."""
         faiss = [{"content": "Same content here", "score": 0.9, "url": "http://test"}]
         web = [{"content": "Same content here", "score": 0.8, "url": "http://test"}]
-        result = _merge_results(faiss, web)
+        result = merge_results(faiss, web)
         assert len(result) == 1
 
     def test_merge_sorts_by_score(self) -> None:
         """Results sorted by score descending."""
         faiss = [{"content": "Lower", "score": 0.5}]
         web = [{"content": "Higher", "score": 0.9}]
-        result = _merge_results(faiss, web)
+        result = merge_results(faiss, web)
         assert result[0]["content"] == "Higher"
 
     def test_merge_max_results(self) -> None:
         """Results limited to max_results."""
         faiss = [{"content": f"FAISS {i}", "score": 0.9 - i * 0.01} for i in range(5)]
         web = [{"content": f"Web {i}", "score": 0.8 - i * 0.01} for i in range(5)]
-        result = _merge_results(faiss, web, max_results=3)
+        result = merge_results(faiss, web, max_results=3)
         assert len(result) == 3
 
     def test_merge_sets_source(self) -> None:
         """Source field is set on results."""
         faiss = [{"content": "test", "score": 0.9}]
         web = [{"content": "web test", "score": 0.8}]
-        result = _merge_results(faiss, web)
+        result = merge_results(faiss, web)
         sources = [r.get("source") for r in result]
         assert "vi_fact_check" in sources
         assert "web_search" in sources
