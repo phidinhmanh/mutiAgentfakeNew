@@ -27,6 +27,7 @@ dependencies = [
     "google-genai>=1.73.1",
     "langchain-openai>=0.1.0",
     "langchain-nvidia-ai-endpoints>=0.2.0",
+    "tenacity>=8.2.0",
 ]
 
 [project.optional-dependencies]
@@ -68,4 +69,8 @@ warn_unused_configs = true
 ignore_missing_imports = true
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/fake_news_detector"]
+packages = [
+    "src/fake_news_detector",
+    "src/trust_agents",
+    "src/shared_fact_checking"
+]

@@ -75,19 +75,6 @@ class LLMConfig:
         )
 
 
-# Global config instance
-_config: LLMConfig | None = None
-
-
 def get_llm_config() -> LLMConfig:
-    """Get or create global LLM config."""
-    global _config
-    if _config is None:
-        _config = LLMConfig.from_env()
-    return _config
-
-
-def set_llm_config(config: LLMConfig) -> None:
-    """Set global LLM config."""
-    global _config
-    _config = config
+    """Get LLM config from environment."""
+    return LLMConfig.from_env()

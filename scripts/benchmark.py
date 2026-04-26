@@ -24,7 +24,7 @@ load_dotenv()
 os.environ.setdefault("LLM_PROVIDER", "nvidia")
 os.environ.setdefault("NVIDIA_MODEL", "openai/gpt-oss-120b")
 
-from trust_agents.config import LLMConfig, LLMProvider, get_llm_config, set_llm_config  # noqa: E402
+from trust_agents.config import LLMConfig, LLMProvider, get_llm_config  # noqa: E402
 from trust_agents.llm.factory import create_chat_model  # noqa: E402
 from trust_agents.orchestrator import TRUSTOrchestrator  # noqa: E402
 
@@ -630,7 +630,6 @@ def run_trust_orchestrator_benchmark(
         temperature=0.1,
         max_tokens=2048,
     )
-    set_llm_config(nvidia_config)
 
     start_time = time.time()
     predictions = []
@@ -814,7 +813,6 @@ def main() -> None:
         temperature=0.1,
         max_tokens=2048,
     )
-    set_llm_config(initial_config)
 
     results = [run_baseline_benchmark(test_data, train_data)]
 
