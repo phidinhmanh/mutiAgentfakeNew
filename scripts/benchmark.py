@@ -624,12 +624,6 @@ def run_trust_orchestrator_benchmark(
         timeout_seconds,
     )
 
-    nvidia_config = LLMConfig(
-        provider=LLMProvider.GEMINI_NVIDIA,
-        model=os.getenv("NVIDIA_MODEL", "openai/gpt-oss-120b"),
-        temperature=0.1,
-        max_tokens=2048,
-    )
 
     start_time = time.time()
     predictions = []
@@ -807,12 +801,6 @@ def main() -> None:
     test_data = load_test_data(args.test_samples)
     train_data = load_train_baseline_data(args.train_samples)
 
-    initial_config = LLMConfig(
-        provider=LLMProvider.GEMINI_NVIDIA,
-        model=os.getenv("NVIDIA_MODEL", "openai/gpt-oss-120b"),
-        temperature=0.1,
-        max_tokens=2048,
-    )
 
     results = [run_baseline_benchmark(test_data, train_data)]
 
