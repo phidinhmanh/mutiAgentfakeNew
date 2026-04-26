@@ -24,7 +24,7 @@ load_dotenv()
 os.environ.setdefault("LLM_PROVIDER", "nvidia")
 os.environ.setdefault("NVIDIA_MODEL", "openai/gpt-oss-120b")
 
-from trust_agents.config import LLMConfig, LLMProvider, get_llm_config  # noqa: E402
+from trust_agents.config import LLMProvider, get_llm_config  # noqa: E402
 from trust_agents.llm.factory import create_chat_model  # noqa: E402
 from trust_agents.orchestrator import TRUSTOrchestrator  # noqa: E402
 
