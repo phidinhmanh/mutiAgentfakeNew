@@ -2,7 +2,8 @@
 import json
 import logging
 import re
-from typing import Any, Generator
+from collections.abc import Generator
+from typing import Any
 
 from fake_news_detector.utils.citation_checker import validate_citation
 
@@ -99,8 +100,7 @@ Evidence:
 """
 
         try:
-            for chunk in self.llm.stream(prompt):
-                yield chunk
+            yield from self.llm.stream(prompt)
         except Exception as e:
             logger.error(f"Stream reasoning failed: {e}")
             yield json.dumps(self._unverifiable_result(f"Lỗi xử lý: {str(e)}"))

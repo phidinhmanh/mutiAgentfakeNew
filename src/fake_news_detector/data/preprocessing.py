@@ -1,10 +1,7 @@
 """Text preprocessing for Vietnamese text using underthesea."""
 import re
-from typing import Any
 
 from underthesea import sent_tokenize, word_tokenize
-
-from fake_news_detector.config import settings
 
 
 def clean_text(text: str) -> str:

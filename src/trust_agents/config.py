@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """LLM Configuration for TRUST Agents.
 
 Provides unified configuration for LLM backends supporting:
@@ -10,10 +9,8 @@ Provides unified configuration for LLM backends supporting:
 from __future__ import annotations
 
 import os
+from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any
-
-from pydantic import BaseModel, Field
 
 
 class LLMProvider(str, Enum):
@@ -25,25 +22,25 @@ class LLMProvider(str, Enum):
     GROQ = "groq"
 
 
-class LLMConfig(BaseModel):
+@dataclass
+class LLMConfig:
     """Configuration for LLM provider."""
 
-    provider: LLMProvider = Field(default=LLMProvider.GEMINI_GOOGLE)
-    model: str = Field(default="gemini-2.0-flash")
-    temperature: float = Field(default=0.1)
-    max_tokens: int = Field(default=2048)
+    provider: LLMProvider = field(default=LLMProvider.GEMINI_GOOGLE)
+    model: str = field(default="gemini-2.0-flash")
+    temperature: float = field(default=0.1)
+    max_tokens: int = field(default=2048)
 
     @classmethod
-    def from_env(cls) -> "LLMConfig":
+    def from_env(cls) -> LLMConfig:
         """Load configuration from environment variables."""
         provider_str = os.getenv("LLM_PROVIDER", "google").lower()
         provider = LLMProvider(provider_str)
 
-        # Map provider string to model defaults
         model_map = {
             LLMProvider.OPENAI: os.getenv("OPENAI_MODEL", "gpt-4o-mini"),
             LLMProvider.GEMINI_GOOGLE: os.getenv("GEMINI_MODEL", "gemini-2.0-flash"),
-            LLMProvider.GEMINI_NVIDIA: os.getenv("GEMINI_MODEL", "google/gemma-4-26b-a4b-it"),
+            LLMProvider.GEMINI_NVIDIA: os.getenv("NVIDIA_MODEL", "qwen/qwen3.5-122b-a10b"),
             LLMProvider.GROQ: os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile"),
         }
 
@@ -58,11 +55,22 @@ class LLMConfig(BaseModel):
         """Get API key for current provider."""
         if self.provider == LLMProvider.OPENAI:
             return os.getenv("OPENAI_API_KEY")
-        elif self.provider in (LLMProvider.GEMINI_GOOGLE, LLMProvider.GEMINI_NVIDIA):
+        elif self.provider == LLMProvider.GEMINI_GOOGLE:
             return os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
+        elif self.provider == LLMProvider.GEMINI_NVIDIA:
+            return os.getenv("NVIDIA_API_KEY")
         elif self.provider == LLMProvider.GROQ:
             return os.getenv("GROQ_API_KEY") or os.getenv("GROQ_KEY")
         return None
+
+    def model_copy(self) -> LLMConfig:
+        """Return a shallow copy (compatible with existing code)."""
+        return LLMConfig(
+            provider=self.provider,
+            model=self.model,
+            temperature=self.temperature,
+            max_tokens=self.max_tokens,
+        )
 
 
 # Global config instance

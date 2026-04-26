@@ -4,8 +4,6 @@ from __future__ import annotations
 from typing import Any
 from unittest.mock import Mock
 
-import pytest
-
 from fake_news_detector.agents.reasoning import (
     ReasoningAgent,
     aggregate_verdicts,

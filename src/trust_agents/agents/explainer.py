@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 
 """
 Explainer Agent - ReAct Agent for generating explanations.

@@ -14,22 +14,25 @@ class TestSearchSerper:
 
     def test_search_serper_success(self, mock_serper_api: Mock) -> None:
         """Successful search returns results."""
-        results = search_serper("Vietnam GDP growth")
+        results, reason = search_serper("Vietnam GDP growth")
+        assert reason is None
         assert len(results) >= 1
         assert "content" in results[0]
 
     def test_search_serper_no_api_key(
         self, monkeypatch: pytest.MonkeyPatch
     ) -> None:
-        """Missing API key returns empty list."""
-        monkeypatch.delenv("SERPER_API_KEY", raising=False)
-        results = search_serper("test query")
+        """Missing API key returns empty list with missing_api_key reason."""
+        from fake_news_detector.config import settings
+        monkeypatch.setattr(settings, "serper_api_key", None)
+        results, reason = search_serper("test query")
         assert results == []
+        assert reason == "missing_api_key"
 
     def test_search_serper_api_error(
         self, monkeypatch: pytest.MonkeyPatch
     ) -> None:
-        """API error returns empty list."""
+        """API error returns empty list with failure reason."""
         def mock_post(*args: Any, **kwargs: Any) -> Mock:
             response = Mock()
             response.status_code = 500
@@ -37,13 +40,14 @@ class TestSearchSerper:
             return response
 
         monkeypatch.setattr("requests.post", mock_post)
-        results = search_serper("test query")
+        results, reason = search_serper("test query")
         assert results == []
+        assert reason is not None
 
     def test_search_serper_empty_results(
         self, monkeypatch: pytest.MonkeyPatch
     ) -> None:
-        """Empty results return empty list."""
+        """Empty results return empty list with None reason."""
         mock_response = Mock()
         mock_response.status_code = 200
         mock_response.json = Mock(return_value={"organic": []})
@@ -53,8 +57,9 @@ class TestSearchSerper:
             return mock_response
 
         monkeypatch.setattr("requests.post", mock_post)
-        results = search_serper("nonexistent query")
+        results, reason = search_serper("nonexistent query")
         assert results == []
+        assert reason is None
 
 
 class TestSearchTavily:
@@ -119,7 +124,8 @@ class TestSearchWeb:
         self, monkeypatch: pytest.MonkeyPatch
     ) -> None:
         """No API keys returns empty list."""
-        monkeypatch.delenv("SERPER_API_KEY", raising=False)
-        monkeypatch.delenv("TAVILY_API_KEY", raising=False)
+        from fake_news_detector.config import settings
+        monkeypatch.setattr(settings, "serper_api_key", None)
+        monkeypatch.setattr(settings, "tavily_api_key", None)
         results = search_web("test query")
         assert results == []

@@ -3,13 +3,14 @@ import logging
 from typing import Any
 
 import requests
+from requests import HTTPError
 
 from fake_news_detector.config import settings
 
 logger = logging.getLogger(__name__)
 
 
-def search_serper(query: str, num_results: int = 3) -> list[dict[str, Any]]:
+def search_serper(query: str, num_results: int = 3) -> tuple[list[dict[str, Any]], str | None]:
     """Search using Serper.dev (Google Search API).
 
     Args:
@@ -17,11 +18,11 @@ def search_serper(query: str, num_results: int = 3) -> list[dict[str, Any]]:
         num_results: Number of results to return
 
     Returns:
-        List of search results
+        Tuple of (results, failure_reason)
     """
     if not settings.serper_api_key:
         logger.warning("SERPER_API_KEY not set, skipping search")
-        return []
+        return [], "missing_api_key"
 
     url = "https://google.serper.dev/search"
     headers = {
@@ -45,10 +46,62 @@ def search_serper(query: str, num_results: int = 3) -> list[dict[str, Any]]:
                 "score": 0.8,
             })
 
+        return results, None
+    except HTTPError as error:
+        status_code = error.response.status_code if error.response is not None else None
+        if status_code == 403:
+            logger.error("Serper search failed with 403 Forbidden; check SERPER_API_KEY or provider access")
+            return [], "http_403"
+        logger.error("Serper search failed with HTTP %s: %s", status_code, error)
+        return [], f"http_{status_code}" if status_code is not None else "http_error"
+    except Exception as error:
+        logger.error("Serper search failed: %s", error)
+        return [], type(error).__name__
+
+
+def _should_fallback_to_tavily(failure_reason: str | None, results: list[dict[str, Any]]) -> bool:
+    """Return whether Tavily should be used after Serper attempt."""
+    if results:
+        return False
+    if not settings.tavily_api_key:
+        return False
+    return failure_reason is not None
+
+
+def _log_tavily_fallback_reason(failure_reason: str | None) -> None:
+    """Log why Tavily fallback is being used."""
+    if failure_reason == "http_403":
+        logger.warning("Falling back to Tavily because Serper returned 403 Forbidden")
+    elif failure_reason == "missing_api_key":
+        logger.warning("Falling back to Tavily because SERPER_API_KEY is unavailable")
+    elif failure_reason:
+        logger.warning("Falling back to Tavily because Serper failed: %s", failure_reason)
+
+
+def search_web(query: str, num_results: int = 3) -> list[dict[str, Any]]:
+    """Search the web using configured provider.
+
+    Args:
+        query: Search query
+        num_results: Number of results to return
+
+    Returns:
+        List of search results
+    """
+    if settings.search_provider == "tavily":
+        return search_tavily(query, num_results)
+
+    results, failure_reason = search_serper(query, num_results)
+    if results:
         return results
-    except Exception as e:
-        logger.error(f"Serper search failed: {e}")
+
+    if not _should_fallback_to_tavily(failure_reason, results):
         return []
+
+    _log_tavily_fallback_reason(failure_reason)
+    return search_tavily(query, num_results)
+
+
 
 
 def search_tavily(query: str, num_results: int = 3) -> list[dict[str, Any]]:
@@ -96,22 +149,6 @@ def search_tavily(query: str, num_results: int = 3) -> list[dict[str, Any]]:
     except Exception as e:
         logger.error(f"Tavily search failed: {e}")
         return []
-
-
-def search_web(query: str, num_results: int = 3) -> list[dict[str, Any]]:
-    """Search the web using configured provider.
-
-    Args:
-        query: Search query
-        num_results: Number of results to return
-
-    Returns:
-        List of search results
-    """
-    if settings.search_provider == "tavily":
-        return search_tavily(query, num_results)
-    else:
-        return search_serper(query, num_results)
 
 
 def check_semantic_consistency(

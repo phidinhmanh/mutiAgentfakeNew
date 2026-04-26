@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 
 """
 Retrieval Agent Tools - Tools for evidence retrieval using hybrid search.
@@ -14,7 +13,7 @@ Supports OpenAI, Google Gemini (AI Studio), and NVIDIA NIM backends.
 
 import json
 import logging
-from typing import Any, Optional
+from typing import Any
 
 from langchain_core.tools import tool
 
@@ -33,8 +32,8 @@ def _get_rag_components():
         Tuple of (vector_store_fn, retrieve_evidence_function)
     """
     try:
-        from fake_news_detector.rag.vector_store import get_vector_store
         from fake_news_detector.rag.retriever import retrieve_evidence
+        from fake_news_detector.rag.vector_store import get_vector_store
 
         return get_vector_store, retrieve_evidence
     except ImportError as e:

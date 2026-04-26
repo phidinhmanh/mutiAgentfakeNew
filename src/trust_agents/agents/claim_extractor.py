@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 
 """
 Claim Extractor Agent - ReAct Agent with NLP tools.
@@ -88,6 +87,23 @@ When all tools have been used, combine all results, remove duplicates, and retur
     if claims:
         logger.info("[AGENT] Successfully extracted %d claims", len(claims))
         return claims
+
+    recovered_claims: list[str] = []
+    seen_claims: set[str] = set()
+    for msg in reversed(msgs):
+        message_claims = parse_claims_payload(extract_last_message_text([msg]))
+        for claim in message_claims:
+            normalized_claim = claim.strip()
+            if normalized_claim and normalized_claim not in seen_claims:
+                seen_claims.add(normalized_claim)
+                recovered_claims.append(normalized_claim)
+
+    if recovered_claims:
+        logger.info(
+            "[AGENT] Recovered %d claims from intermediate messages",
+            len(recovered_claims),
+        )
+        return recovered_claims
 
     logger.warning("[AGENT] No claims found")
     return []

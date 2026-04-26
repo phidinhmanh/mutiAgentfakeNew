@@ -2,11 +2,7 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Any
 from unittest.mock import Mock, patch
-
-import numpy as np
-import pytest
 
 from fake_news_detector.rag.vector_store import VectorStore, get_vector_store
 
@@ -166,7 +162,7 @@ class TestGetVectorStore:
         mock_vs_instance = Mock()
         mock_vs_class.return_value = mock_vs_instance
 
-        result = get_vector_store()
+        get_vector_store()
         mock_vs_class.assert_called_once()
 
     @patch("fake_news_detector.rag.vector_store._vector_store")

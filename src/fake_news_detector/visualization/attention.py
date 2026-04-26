@@ -5,8 +5,6 @@ from typing import Any
 import matplotlib.pyplot as plt
 import numpy as np
 
-from fake_news_detector.data.preprocessing import tokenize_words
-
 logger = logging.getLogger(__name__)
 
 

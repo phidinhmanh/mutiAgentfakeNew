@@ -90,7 +90,7 @@ def analyze_text_length(text: str) -> dict[str, Any]:
         }
 
     tokens = tokenize_words(text)
-    words = text.split()
+    text.split()
 
     from fake_news_detector.data.preprocessing import split_sentences
     sentences = split_sentences(text)

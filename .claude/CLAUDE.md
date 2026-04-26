@@ -46,6 +46,9 @@ uv run pytest tests/integration/test_orchestrator.py -k process_text_with_multip
 # Run only integration tests
 uv run pytest tests/integration/ -v
 
+# Run the system smoke test (Quick verification of environment/imports)
+uv run scripts/smoke_test.py
+
 # Lint and format
 uv run ruff check .
 uv run ruff format .
@@ -177,3 +180,15 @@ Read the rules in `.claude/rules/` before making non-trivial changes:
 - `testing.md`: pytest conventions, markers, AAA structure
 - `security.md`: input validation, secrets handling, OWASP-oriented guidance
 - `git-version-control.md`: branch/commit/PR conventions used by this project
+- `development-workflow.md`: mandatory stabilization and verification steps
+
+## Stability & Reliability Guidelines
+
+To avoid recurring errors and long fix cycles:
+
+1.  **Mandatory Smoke Test**: Run `uv run scripts/smoke_test.py` after adding any new dependency or changing core imports. This catches platform-specific DLL issues on Windows.
+2.  **Test Before Commit**: Run at least the relevant unit tests (`uv run pytest tests/unit/test_FILENAME.py`) before considering a task "done".
+3.  **Mock Early**: All LLM and API calls MUST be mocked in unit tests. Use the factory patterns in `src/trust_agents/llm/factory.py` to ensure consistent mocking.
+4.  **Lazy Imports**: Keep `google-genai` and `langgraph` imports lazy or behind guards if they are not used globally, to avoid DLL load hangs on Windows.
+5.  **Clean State**: Tests that use global caches (e.g., `shared_fact_checking.retrieval.service._retrieval_cache`) must clear them in a teardown or fixture to prevent test leakage.
+6.  **Label Consistency**: Use normalized verdict labels (`REAL`, `FAKE`, `UNCERTAIN`, `UNKNOWN`) across the entire pipeline.

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Acceptance tests for end-to-end fact-checking flow.
 
 Tests the complete system behavior using golden samples with known expected outcomes.
@@ -10,10 +9,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import Any
-from unittest.mock import Mock
-from unittest.mock import patch
-
-import pytest
+from unittest.mock import Mock, patch
 
 
 @dataclass
@@ -337,12 +333,13 @@ class TestFactCheckPerformance:
     ) -> None:
         """Test that pipeline completes within reasonable time."""
         import time
+
         from trust_agents.orchestrator import TRUSTOrchestrator
 
         orchestrator = TRUSTOrchestrator()
 
         start_time = time.time()
-        result = orchestrator.process_text("Test text")
+        orchestrator.process_text("Test text")
         elapsed_time = time.time() - start_time
 
         # Should complete in less than 5 seconds with mocks

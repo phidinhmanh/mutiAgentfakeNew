@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Integration tests for ResearchTRUSTOrchestrator.
 
 Tests the research pipeline: Decomposition -> Delphi Jury -> Logic Aggregation.
@@ -8,8 +7,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import Any
-from unittest.mock import Mock
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 
 import pytest
 
@@ -141,7 +139,7 @@ class TestResearchOrchestratorIntegration:
                 "trust_agents.orchestrator_research.run_explainer_agent_sync",
                 return_value={"summary": "Test", "explanation": "Test"}
             ):
-                result = orchestrator.process_text("Test text")
+                orchestrator.process_text("Test text")
 
         # Verify jury was called for each atomic claim
         assert mock_delphi_jury.verify_with_jury.call_count >= 1

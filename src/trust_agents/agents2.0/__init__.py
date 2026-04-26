@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 TRUST Agents 2.0 - Research-Grade Components
 
@@ -11,8 +10,8 @@ Based on 2024-2025 research papers.
 """
 
 from .decomposer_agent import DecomposerAgent, decompose_claim_sync
-from .logic_aggregator import LogicAggregator
 from .delphi_jury import DelphiJury, verify_with_delphi_jury_sync
+from .logic_aggregator import LogicAggregator
 
 __all__ = [
     'DecomposerAgent',

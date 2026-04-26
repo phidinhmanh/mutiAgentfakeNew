@@ -1,4 +1,7 @@
-"""Benchmark comparison: Baseline vs Multi-Agent vs Single-Agent.
+"""Benchmark comparison: Baseline vs Single-Agent vs Multi-Agent (Fake) vs TRUST.
+
+TRUST Orchestrator benchmark runs the real 4-agent pipeline:
+1. Claim Extractor -> 2. Evidence Retriever -> 3. Verifier -> 4. Explainer
 
 Note: LLM-based approaches may timeout in some environments. This benchmark
 runs what it can and reports representative comparison results.
@@ -7,12 +10,19 @@ runs what it can and reports representative comparison results.
 import argparse
 import json
 import logging
+import os
 import time
 from dataclasses import asdict, dataclass, field
 from typing import Any
 
-from trust_agents.config import LLMProvider, get_llm_config
+# Set Groq API key for TRUST orchestrator
+os.environ["LLM_PROVIDER"] = "nvidia"
+os.environ["NVIDIA_API_KEY"] = "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"
+os.environ["NVIDIA_MODEL"] = "openai/gpt-oss-120b"
+
+from trust_agents.config import LLMConfig, LLMProvider, get_llm_config, set_llm_config
 from trust_agents.llm.factory import create_chat_model
+from trust_agents.orchestrator import TRUSTOrchestrator
 
 try:
     from datasets import load_dataset
@@ -75,6 +85,8 @@ class BenchmarkResult:
     avg_time_per_sample: float = 0.0
     correct: int = 0
     accuracy: float = 0.0
+    undecided: int = 0
+    undecided_rate: float = 0.0
     predictions: list[dict[str, Any]] = field(default_factory=list)
     status: str = "completed"
     error_message: str = ""
@@ -204,7 +216,7 @@ def parse_verdict_label(result_text: str) -> str:
     """Extract benchmark verdict labels from free-form model text."""
     upper_text = result_text.upper()
     if "UNVERIFIABLE" in upper_text or "UNCERTAIN" in upper_text:
-        return "UNVERIFIABLE"
+        return "UNCERTAIN"
     if "FAKE" in upper_text:
         return "FAKE"
     if "REAL" in upper_text:
@@ -263,15 +275,48 @@ def get_benchmark_provider_name() -> str:
 
 
 def _normalize_benchmark_target_label(label: str) -> str:
-    """Map non-binary outputs to the closest benchmark target label."""
-    if label == "UNVERIFIABLE":
-        return "REAL"
+    """Keep benchmark labels literal so undecided outputs remain visible."""
     return label
 
 
-def _score_prediction(predicted_label: str, expected_label: str) -> bool:
-    """Score benchmark predictions against binary ViFactCheck labels."""
-    return _normalize_benchmark_target_label(predicted_label) == expected_label
+def _select_best_trust_result(
+    results: list[dict[str, Any]],
+    source_claim: str,
+) -> dict[str, Any]:
+    """Pick the claim result most lexically similar to the source benchmark claim.
+
+    Falls back to index 0 if no results are available.
+    """
+    if not results:
+        return {}
+
+    source_words = set(source_claim.lower().split())
+    best_idx = 0
+    best_overlap = -1
+
+    for idx, result in enumerate(results):
+        claim_text = result.get("claim", "")
+        claim_words = set(claim_text.lower().split())
+        overlap = len(source_words & claim_words)
+        if overlap > best_overlap:
+            best_overlap = overlap
+            best_idx = idx
+
+    return results[best_idx]
+
+
+def _score_prediction(predicted_label: str, expected_label: str) -> tuple[bool, bool]:
+    """Score benchmark predictions against binary ViFactCheck labels.
+
+    Returns:
+        (is_correct, is_undecided). is_undecided is True when the prediction
+        was UNCERTAIN so it can be tracked separately from wrong predictions.
+    """
+    pred = _normalize_benchmark_target_label(predicted_label)
+    exp = _normalize_benchmark_target_label(expected_label)
+    if pred == "UNCERTAIN" or exp == "UNCERTAIN":
+        return (False, pred == "UNCERTAIN")
+    return (pred == exp, False)
 
 
 def _build_single_agent_approach_name() -> str:
@@ -343,6 +388,7 @@ def _prepare_predictions_result(
     start_time: float,
     predictions: list[dict[str, Any]],
     correct: int,
+    undecided: int,
     status: str,
     error_msg: str,
 ) -> BenchmarkResult:
@@ -355,6 +401,8 @@ def _prepare_predictions_result(
         avg_time_per_sample=_compute_avg_time(total_time, samples_processed),
         correct=correct,
         accuracy=_compute_accuracy(correct, samples_processed),
+        undecided=undecided,
+        undecided_rate=_compute_accuracy(undecided, samples_processed),
         predictions=predictions,
         status=status,
         error_message=error_msg,
@@ -375,10 +423,10 @@ def _score_and_store_prediction(
     predictions: list[dict[str, Any]],
     sample: dict[str, Any],
     pred_label: str,
-) -> int:
-    is_correct = _score_prediction(pred_label, sample["label"])
+) -> tuple[int, int]:
+    is_correct, is_undecided = _score_prediction(pred_label, sample["label"])
     predictions.append(_mark_prediction(sample, pred_label, is_correct))
-    return 1 if is_correct else 0
+    return (1 if is_correct else 0, 1 if is_undecided else 0)
 
 
 def _openai_like_model(llm: Any) -> bool:
@@ -413,12 +461,15 @@ def invoke_text_model(llm: Any, system_prompt: str, user_prompt: str) -> str:
         )
         return _extract_openai_message_text(response.choices[0].message)
 
-    response = llm.invoke([
-        ("system", system_prompt),
-        ("human", user_prompt),
-    ])
-    return getattr(response, "content", str(response))
+    invoke = getattr(llm, "invoke", None)
+    if callable(invoke):
+        response = invoke([
+            ("system", system_prompt),
+            ("human", user_prompt),
+        ])
+        return getattr(response, "content", str(response))
 
+    raise TypeError(f"Unsupported benchmark model type: {type(llm).__name__}")
 
 def create_benchmark_model(timeout_seconds: int) -> Any:
     """Create the LLM used by benchmark flows from shared TRUST config."""
@@ -469,6 +520,7 @@ def run_multi_agent_benchmark(
     start_time = time.time()
     predictions = []
     correct = 0
+    undecided = 0
     status = "completed"
     error_msg = ""
     llm = create_benchmark_model(timeout_seconds)
@@ -480,13 +532,19 @@ def run_multi_agent_benchmark(
             status, error_msg = _update_error(status, error_msg, exc)
             pred_label = "ERROR"
 
-        correct += _score_and_store_prediction(predictions, sample, pred_label)
+        c, u = _score_and_store_prediction(predictions, sample, pred_label)
+        correct += c
+        undecided += u
+        # Rate limit protection for Groq (8,000 TPM is tight)
+        if get_benchmark_provider_name() == "groq":
+            time.sleep(5)
 
     return _prepare_predictions_result(
         approach=_build_multi_agent_approach_name(),
         start_time=start_time,
         predictions=predictions,
         correct=correct,
+        undecided=undecided,
         status=status,
         error_msg=error_msg,
     )
@@ -504,6 +562,7 @@ def run_single_agent_benchmark(
     start_time = time.time()
     predictions = []
     correct = 0
+    undecided = 0
     status = "completed"
     error_msg = ""
 
@@ -519,13 +578,95 @@ Khong giai thich, chi tra ve REAL hoac FAKE."""
             status, error_msg = _update_error(status, error_msg, exc)
             pred_label = "ERROR"
 
-        correct += _score_and_store_prediction(predictions, sample, pred_label)
+        c, u = _score_and_store_prediction(predictions, sample, pred_label)
+        correct += c
+        undecided += u
+        if get_benchmark_provider_name() == "groq":
+            time.sleep(5)
 
     return _prepare_predictions_result(
         approach=_build_single_agent_approach_name(),
         start_time=start_time,
         predictions=predictions,
         correct=correct,
+        undecided=undecided,
+        status=status,
+        error_msg=error_msg,
+    )
+
+
+def _normalize_trust_label(trust_label: str) -> str:
+    """Normalize TRUST verdict label to benchmark format (REAL/FAKE).
+
+    Only decisive verdicts are mapped. Uncertain/unverifiable pass through as
+    "UNCERTAIN" so benchmark reporting can track abstention separately.
+    """
+    label_upper = trust_label.upper()
+    if label_upper == "TRUE":
+        return "REAL"
+    elif label_upper == "FALSE":
+        return "FAKE"
+    return "UNCERTAIN"
+
+
+def run_trust_orchestrator_benchmark(
+    test_data: list[dict[str, Any]],
+    timeout_seconds: int = 60,
+) -> BenchmarkResult:
+    """Run TRUST Orchestrator benchmark with real multi-agent pipeline."""
+    logger.info(
+        "Running TRUST Orchestrator benchmark with %ss per-request timeout...",
+        timeout_seconds,
+    )
+
+    nvidia_config = LLMConfig(
+        provider=LLMProvider.GEMINI_NVIDIA,
+        model=os.getenv("NVIDIA_MODEL", "openai/gpt-oss-120b"),
+        temperature=0.1,
+        max_tokens=2048,
+    )
+    set_llm_config(nvidia_config)
+
+    start_time = time.time()
+    predictions = []
+    correct = 0
+    undecided = 0
+    status = "completed"
+    error_msg = ""
+
+    orchestrator = TRUSTOrchestrator(top_k_evidence=5)
+
+    for sample in test_data:
+        try:
+            # Benchmark fairness: keep input as the source claim only.
+            text = sample["claim"]
+
+            result = orchestrator.process_text(text, skip_evidence=False)
+
+            # Extract verdict from best-matching claim, not blindly index 0.
+            pred_label = "UNKNOWN"
+            if result.results:
+                best_result = _select_best_trust_result(result.results, sample["claim"])
+                trust_verdict = best_result.get("verdict", "uncertain")
+                pred_label = _normalize_trust_label(trust_verdict)
+
+        except Exception as exc:
+            status, error_msg = _update_error(status, error_msg, exc)
+            pred_label = "ERROR"
+
+        c, u = _score_and_store_prediction(predictions, sample, pred_label)
+        correct += c
+        undecided += u
+        # Rate limit protection for Groq (8,000 TPM is tight)
+        if get_benchmark_provider_name() == "groq":
+            time.sleep(5)
+
+    return _prepare_predictions_result(
+        approach="TRUST Orchestrator (Real Multi-Agent)",
+        start_time=start_time,
+        predictions=predictions,
+        correct=correct,
+        undecided=undecided,
         status=status,
         error_msg=error_msg,
     )
@@ -554,7 +695,7 @@ def print_results(results: list[BenchmarkResult]) -> None:
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
     print("\n" + "=" * 80)
-    print("BENCHMARK RESULTS: Baseline vs Multi-Agent vs Single-Agent")
+    print("BENCHMARK RESULTS: Baseline vs Single-Agent vs Multi-Agent (Fake) vs TRUST")
     print("=" * 80)
 
     test_samples = results[0].samples if results else 0
@@ -571,6 +712,8 @@ def print_results(results: list[BenchmarkResult]) -> None:
             f"  Accuracy:     {result.accuracy:.1%} "
             f"({result.correct}/{result.samples})"
         )
+        print(f"  Undecided:    {result.undecided_rate:.1%} "
+              f"({result.undecided}/{result.samples})")
         print(f"  Total time:   {result.total_time:.2f}s")
         print(f"  Avg/sample:   {result.avg_time_per_sample:.2f}s")
         if result.error_message:
@@ -598,7 +741,9 @@ def print_results(results: list[BenchmarkResult]) -> None:
 def save_results(results: list[BenchmarkResult], output_path: str) -> None:
     """Save results to JSON file."""
     output = {
-        "benchmark": "Baseline vs Multi-Agent vs Single-Agent",
+        "benchmark": (
+            "Baseline vs Single-Agent vs Multi-Agent (Fake) vs TRUST Orchestrator"
+        ),
         "test_samples": results[0].samples if results else 0,
         "train_samples_baseline": 500,
         "results": [asdict(result) for result in results],
@@ -645,12 +790,25 @@ def main() -> None:
     parser.add_argument(
         "--skip-multi",
         action="store_true",
-        help="Skip multi-agent benchmark",
+        help="Skip multi-agent (fake) benchmark",
+    )
+    parser.add_argument(
+        "--skip-trust",
+        action="store_true",
+        help="Skip real TRUST orchestrator benchmark",
     )
     args = parser.parse_args()
 
     test_data = load_test_data(args.test_samples)
     train_data = load_train_baseline_data(args.train_samples)
+
+    initial_config = LLMConfig(
+        provider=LLMProvider.GEMINI_NVIDIA,
+        model=os.getenv("NVIDIA_MODEL", "openai/gpt-oss-120b"),
+        temperature=0.1,
+        max_tokens=2048,
+    )
+    set_llm_config(initial_config)
 
     results = [run_baseline_benchmark(test_data, train_data)]
 
@@ -672,7 +830,17 @@ def main() -> None:
             )
             results.append(multi_result)
         except Exception as exc:
-            logger.error("Multi-agent benchmark failed: %s", exc)
+            logger.error("Multi-agent (fake) benchmark failed: %s", exc)
+
+    if not args.skip_trust:
+        try:
+            trust_result = run_trust_orchestrator_benchmark(
+                test_data,
+                timeout_seconds=args.llm_timeout,
+            )
+            results.append(trust_result)
+        except Exception as exc:
+            logger.error("TRUST orchestrator benchmark failed: %s", exc)
 
     print_results(results)
     save_results(results, args.output)

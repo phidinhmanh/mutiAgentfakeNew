@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 
 """
 Improved Retrieval Agent Core
@@ -12,35 +11,39 @@ FIXED: load_index() now properly initializes _dense_model for query encoding
 """
 
 from __future__ import annotations
-import os
+
 import json
-import math
 import logging
+import math
+import os
 import pathlib
-from dataclasses import dataclass, asdict
-from typing import List, Dict, Any, Optional, Tuple, Callable, Iterable
-from tqdm import tqdm
+from collections.abc import Callable, Iterable
+from dataclasses import asdict, dataclass
+from typing import Any
 
 # Text processing
 import nltk
 from nltk.tokenize import sent_tokenize, word_tokenize
+from tqdm import tqdm
+
 nltk.download("punkt", quiet=True)
 nltk.download("punkt_tab", quiet=True)
 
 # BM25
+import numpy as np
 from rank_bm25 import BM25Okapi
 
 # Dense retrieval
 from sentence_transformers import SentenceTransformer
-import numpy as np
+
 try:
     import faiss
 except Exception:
     faiss = None
 
 # Parsing
-from PyPDF2 import PdfReader
 from bs4 import BeautifulSoup
+from PyPDF2 import PdfReader
 
 # Optional re-ranker
 try:
@@ -58,18 +61,18 @@ class Passage:
     doc_id: str
     title: str
     text: str
-    metadata: Dict[str, Any]
+    metadata: dict[str, Any]
 
 # ---------------- Utilities ----------------
 def safe_read_text(path: str) -> str:
     encodings = ["utf-8", "latin-1", "utf-16"]
     for e in encodings:
         try:
-            with open(path, "r", encoding=e, errors="ignore") as f:
+            with open(path, encoding=e, errors="ignore") as f:
                 return f.read()
         except Exception:
             continue
-    raise IOError(f"Cannot read {path} with known encodings")
+    raise OSError(f"Cannot read {path} with known encodings")
 
 def read_pdf_text(path: str) -> str:
     text = []
@@ -85,7 +88,7 @@ def read_pdf_text(path: str) -> str:
 
 def read_html_text(path_or_str: str, is_path: bool = True) -> str:
     if is_path:
-        with open(path_or_str, "r", encoding="utf-8", errors="ignore") as f:
+        with open(path_or_str, encoding="utf-8", errors="ignore") as f:
             raw = f.read()
     else:
         raw = path_or_str
@@ -95,7 +98,7 @@ def read_html_text(path_or_str: str, is_path: bool = True) -> str:
         s.extract()
     return soup.get_text(separator="\n")
 
-def chunk_by_sentences(text: str, max_words: int = 160, overlap: int = 20) -> List[str]:
+def chunk_by_sentences(text: str, max_words: int = 160, overlap: int = 20) -> list[str]:
     sents = sent_tokenize(text)
     if not sents:
         return []
@@ -146,8 +149,8 @@ def cosine_normalize(arr: np.ndarray) -> np.ndarray:
     norms[norms == 0] = 1.0
     return arr / norms
 
-def mmr_rerank(query_emb: np.ndarray, candidate_embs: np.ndarray, candidate_scores: List[float],
-               diversity: float = 0.7, top_k: int = 5) -> List[int]:
+def mmr_rerank(query_emb: np.ndarray, candidate_embs: np.ndarray, candidate_scores: list[float],
+               diversity: float = 0.7, top_k: int = 5) -> list[int]:
     """
     Simple MMR: chooses indices of candidates balancing score and diversity.
     Returns ordered list of selected indices (into candidate_embs).
@@ -181,9 +184,9 @@ class RetrievalAgent:
         self,
         index_dir: str = "retrieval_index",
         dense_model_name: str = "sentence-transformers/all-MiniLM-L6-v2",
-        cross_encoder_name: Optional[str] = None,
+        cross_encoder_name: str | None = None,
         faiss_index_type: str = "Flat",  # options: Flat, HNSW, IVF
-        faiss_dim: Optional[int] = None,
+        faiss_dim: int | None = None,
         device: str = "cpu",
     ):
         self.index_dir = pathlib.Path(index_dir)
@@ -193,12 +196,12 @@ class RetrievalAgent:
         self.faiss_index_type = faiss_index_type
         self.device = device
 
-        self.passages: List[Passage] = []
-        self._bm25: Optional[BM25Okapi] = None
-        self._bm25_tokenized: List[List[str]] = []
-        self._dense_model: Optional[SentenceTransformer] = None
+        self.passages: list[Passage] = []
+        self._bm25: BM25Okapi | None = None
+        self._bm25_tokenized: list[list[str]] = []
+        self._dense_model: SentenceTransformer | None = None
         self._faiss_index = None
-        self._embeddings: Optional[np.ndarray] = None
+        self._embeddings: np.ndarray | None = None
         self._cross_encoder = None
 
     # ---------- ingestion ----------
@@ -240,9 +243,10 @@ class RetrievalAgent:
             self.build_dense(batch_size=batch_size)
 
     # ---------- BM25 ----------
-    def build_bm25(self, tokenizer: Callable[[str], List[str]] = None):
+    def build_bm25(self, tokenizer: Callable[[str], list[str]] = None):
         if tokenizer is None:
-            tokenizer = lambda s: word_tokenize(s.lower())
+            def tokenizer(s):
+                return word_tokenize(s.lower())
         texts = [p.text for p in self.passages]
         tokenized = [tokenizer(t) for t in texts]
         self._bm25_tokenized = tokenized
@@ -312,7 +316,7 @@ class RetrievalAgent:
     def load_index(self, prefix: str = "index", load_faiss: bool = True):
         """
         Load pre-built retrieval index from disk.
-        
+
         FIXED: Now properly initializes _dense_model for query encoding.
         """
         meta_path = self.index_dir / f"{prefix}_meta.json"
@@ -321,7 +325,7 @@ class RetrievalAgent:
 
         if not meta_path.exists():
             raise FileNotFoundError(meta_path)
-        with open(meta_path, "r", encoding="utf-8") as f:
+        with open(meta_path, encoding="utf-8") as f:
             meta = json.load(f)
         self.passages = [Passage(**m) for m in meta]
         logger.info("Loaded %d passages metadata", len(self.passages))
@@ -331,22 +335,22 @@ class RetrievalAgent:
             if os.path.exists(emb_path):
                 self._embeddings = np.load(str(emb_path))
             logger.info("Loaded FAISS index and embeddings (if present)")
-            
+
             # ============================================================
             # CRITICAL FIX: Initialize dense model for query encoding
             # ============================================================
-            # Without this, _dense_search() will return [] because 
+            # Without this, _dense_search() will return [] because
             # _dense_model is None, causing 0 evidence to be retrieved.
             if self._dense_model is None:
                 logger.info("Initializing dense model for query encoding: %s", self.dense_model_name)
                 self._dense_model = SentenceTransformer(self.dense_model_name, device=self.device)
                 logger.info("✓ Dense model initialized successfully")
-        
+
         # rebuild BM25
         self.build_bm25()
 
     # ---------- internal searches ----------
-    def _bm25_search(self, query: str, k: int = 50) -> List[Tuple[int, float]]:
+    def _bm25_search(self, query: str, k: int = 50) -> list[tuple[int, float]]:
         if self._bm25 is None:
             return []
         tokens = word_tokenize(query.lower())
@@ -354,7 +358,7 @@ class RetrievalAgent:
         idxs = np.argsort(scores)[::-1][:k]
         return [(int(i), float(scores[int(i)])) for i in idxs if scores[int(i)] > 0]
 
-    def _dense_search(self, query: str, k: int = 50) -> List[Tuple[int, float]]:
+    def _dense_search(self, query: str, k: int = 50) -> list[tuple[int, float]]:
         if self._faiss_index is None or self._dense_model is None:
             return []
         q_emb = self._dense_model.encode([query], convert_to_numpy=True)
@@ -362,12 +366,12 @@ class RetrievalAgent:
         D, I = self._faiss_index.search(q_emb, k)
         idxs = I[0].tolist()
         scores = D[0].tolist()
-        return [(int(i), float(s)) for i, s in zip(idxs, scores) if i >= 0]
+        return [(int(i), float(s)) for i, s in zip(idxs, scores, strict=False) if i >= 0]
 
     # ---------- public retrieve ----------
     def retrieve(self, query: str, top_k: int = 5, bm25_weight: float = 0.6,
                  candidate_k: int = 50, rerank_with_cross: bool = False,
-                 mmr: bool = False, mmr_diversity: float = 0.7) -> List[Dict[str, Any]]:
+                 mmr: bool = False, mmr_diversity: float = 0.7) -> list[dict[str, Any]]:
         """
         Returns list of dicts:
         {passage_id, doc_id, title, text, metadata, bm25_score, dense_score, hybrid_score, cross_score}
@@ -419,7 +423,7 @@ class RetrievalAgent:
         if rerank_with_cross and self._cross_encoder is not None:
             pairs = [(query, self.passages[m["idx"]].text) for m in merged]
             scores = self._cross_encoder.predict(pairs)
-            for m, s in zip(merged, scores):
+            for m, s in zip(merged, scores, strict=False):
                 m["cross_score"] = float(s)
             merged = sorted(merged, key=lambda x: x.get("cross_score", x["hybrid_score"]), reverse=True)
 

@@ -1,4 +1,4 @@
-# Vietnamese Fake News Detection
+﻿# Vietnamese Fake News Detection
 
 Hệ thống **Multi-Agent RAG** phát hiện tin giả tiếng Việt, sử dụng PhoBERT + TRUST Agents (Multi-Agent) + NVIDIA NIM/Gemini.
 
@@ -116,6 +116,9 @@ uv sync
 
 # Với dev dependencies (testing, linting)
 uv sync --all-extras
+
+# Nếu dùng NVIDIA NIM provider, cài thêm:
+uv add langchain-nvidia-ai-endpoints
 ```
 
 ### Bước 3: Cấu hình Environment Variables
@@ -546,3 +549,4 @@ uv pip install torch torchvision torchaudio --index-url https://download.pytorch
 ## License
 
 MIT
+

@@ -1,15 +1,17 @@
 {
-  "benchmark": "Baseline vs Multi-Agent vs Single-Agent",
-  "test_samples": 20,
+  "benchmark": "Baseline vs Single-Agent vs Multi-Agent (Fake) vs TRUST Orchestrator",
+  "test_samples": 8,
   "train_samples_baseline": 500,
   "results": [
     {
       "approach": "Baseline (Keyword-based)",
-      "samples": 20,
-      "total_time": 0.0034759044647216797,
-      "avg_time_per_sample": 0.000173795223236084,
-      "correct": 10,
+      "samples": 8,
+      "total_time": 0.003199338912963867,
+      "avg_time_per_sample": 0.0003999173641204834,
+      "correct": 4,
       "accuracy": 0.5,
+      "undecided": 0,
+      "undecided_rate": 0.0,
       "predictions": [
         {
           "id": 1,
@@ -35,48 +37,6 @@
         {
           "id": 4,
           "claim": "Tại một địa điểm trên địa bàn huyện Củ Chi, TPHCM, Công an đã phát hiện hai nghi",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 6,
-          "claim": "Những yếu tố xã hội cần thiết cho sự phát triển ổn định và bền vững của mỗi quốc",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 8,
-          "claim": "Chuỗi sự kiện “UEH Sharing - Career Fair” là hoạt động khởi đầu cho chương trình",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 9,
-          "claim": "HĐND TP Thủ Dầu Một sẽ tổ chức phiên họp để bầu chức danh Phó Chủ tịch UBND thàn",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 14,
-          "claim": "Bụi từ vũ khí chứa urani nghèo có thể đi vào sâu trong các cơ quan nội tạng, gây",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 15,
-          "claim": "Trong doanh nghiệp và văn phòng thì sử dụng Prompt giúp tiết kiệm thời gian và t",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 16,
-          "claim": "Câu chuyện về cô gái Tô Thị Sự bị phỏng với việc gom rác vào buổi sáng và tối đế",
           "true_label": "REAL",
           "predicted_label": "REAL",
           "correct": true
@@ -108,66 +68,26 @@
           "true_label": "FAKE",
           "predicted_label": "REAL",
           "correct": false
-        },
-        {
-          "id": 11,
-          "claim": "Chân sút Brobbey ở tuổi 23 đã có 12 bàn thắng trên mọi đấu trường mùa này cho Aj",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 12,
-          "claim": "Hầu hết nữ giới sẽ chọn định cư ở quần đảo thay vì tìm nơi khác sinh sống.",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 13,
-          "claim": "Chat GPT sử dụng hệ dữ liệu lớn đến từ hàng tỉ trang tài liệu trên toàn thế giới",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 18,
-          "claim": "Đề xuất của EVN đưa ra sau khi đơn vị tư vấn là Ban quản lý dự án điện 4 (thuộc ",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 20,
-          "claim": "Các thủ thuật phẫu thuật được thực hiện khi trẻ 2 tuổi.",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
-        },
-        {
-          "id": 22,
-          "claim": "Bộ Tài chính Hoa Kỳ đảm bảo rằng hệ thống ngân hàng Hoa Kỳ ổn định và có thể chị",
-          "true_label": "FAKE",
-          "predicted_label": "REAL",
-          "correct": false
         }
       ],
       "status": "completed",
       "error_message": ""
     },
     {
-      "approach": "Single-Agent (openai:openai/gpt-oss-120b)",
-      "samples": 20,
-      "total_time": 186.4967005252838,
-      "avg_time_per_sample": 9.324835026264191,
-      "correct": 12,
-      "accuracy": 0.6,
+      "approach": "Single-Agent (nvidia:openai/gpt-oss-120b)",
+      "samples": 8,
+      "total_time": 17.214170694351196,
+      "avg_time_per_sample": 2.1517713367938995,
+      "correct": 3,
+      "accuracy": 0.375,
+      "undecided": 0,
+      "undecided_rate": 0.0,
       "predictions": [
         {
           "id": 1,
           "claim": "Phần vỏ bánh được làm rất công phu, từ giai đoạn xay gạo đến cuốn bánh hết tổng ",
           "true_label": "REAL",
-          "predicted_label": "FAKE",
+          "predicted_label": "UNKNOWN",
           "correct": false
         },
         {
@@ -188,49 +108,7 @@
           "id": 4,
           "claim": "Tại một địa điểm trên địa bàn huyện Củ Chi, TPHCM, Công an đã phát hiện hai nghi",
           "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 6,
-          "claim": "Những yếu tố xã hội cần thiết cho sự phát triển ổn định và bền vững của mỗi quốc",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 8,
-          "claim": "Chuỗi sự kiện “UEH Sharing - Career Fair” là hoạt động khởi đầu cho chương trình",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 9,
-          "claim": "HĐND TP Thủ Dầu Một sẽ tổ chức phiên họp để bầu chức danh Phó Chủ tịch UBND thàn",
-          "true_label": "REAL",
-          "predicted_label": "FAKE",
-          "correct": false
-        },
-        {
-          "id": 14,
-          "claim": "Bụi từ vũ khí chứa urani nghèo có thể đi vào sâu trong các cơ quan nội tạng, gây",
-          "true_label": "REAL",
-          "predicted_label": "FAKE",
-          "correct": false
-        },
-        {
-          "id": 15,
-          "claim": "Trong doanh nghiệp và văn phòng thì sử dụng Prompt giúp tiết kiệm thời gian và t",
-          "true_label": "REAL",
-          "predicted_label": "FAKE",
-          "correct": false
-        },
-        {
-          "id": 16,
-          "claim": "Câu chuyện về cô gái Tô Thị Sự bị phỏng với việc gom rác vào buổi sáng và tối đế",
-          "true_label": "REAL",
-          "predicted_label": "FAKE",
+          "predicted_label": "UNKNOWN",
           "correct": false
         },
         {
@@ -258,69 +136,29 @@
           "id": 10,
           "claim": "Chương trình giáo dục song ngữ sẽ tập trung dạy các môn khoa học tự nhiên bằng t",
           "true_label": "FAKE",
-          "predicted_label": "FAKE",
-          "correct": true
-        },
-        {
-          "id": 11,
-          "claim": "Chân sút Brobbey ở tuổi 23 đã có 12 bàn thắng trên mọi đấu trường mùa này cho Aj",
-          "true_label": "FAKE",
-          "predicted_label": "FAKE",
-          "correct": true
-        },
-        {
-          "id": 12,
-          "claim": "Hầu hết nữ giới sẽ chọn định cư ở quần đảo thay vì tìm nơi khác sinh sống.",
-          "true_label": "FAKE",
-          "predicted_label": "FAKE",
-          "correct": true
-        },
-        {
-          "id": 13,
-          "claim": "Chat GPT sử dụng hệ dữ liệu lớn đến từ hàng tỉ trang tài liệu trên toàn thế giới",
-          "true_label": "FAKE",
-          "predicted_label": "FAKE",
-          "correct": true
-        },
-        {
-          "id": 18,
-          "claim": "Đề xuất của EVN đưa ra sau khi đơn vị tư vấn là Ban quản lý dự án điện 4 (thuộc ",
-          "true_label": "FAKE",
-          "predicted_label": "FAKE",
-          "correct": true
-        },
-        {
-          "id": 20,
-          "claim": "Các thủ thuật phẫu thuật được thực hiện khi trẻ 2 tuổi.",
-          "true_label": "FAKE",
           "predicted_label": "REAL",
           "correct": false
-        },
-        {
-          "id": 22,
-          "claim": "Bộ Tài chính Hoa Kỳ đảm bảo rằng hệ thống ngân hàng Hoa Kỳ ổn định và có thể chị",
-          "true_label": "FAKE",
-          "predicted_label": "FAKE",
-          "correct": true
         }
       ],
       "status": "completed",
       "error_message": ""
     },
     {
-      "approach": "Multi-Agent (openai:openai/gpt-oss-120b)",
-      "samples": 20,
-      "total_time": 242.97065687179565,
-      "avg_time_per_sample": 12.148532843589782,
-      "correct": 19,
-      "accuracy": 0.95,
+      "approach": "Multi-Agent (nvidia:openai/gpt-oss-120b)",
+      "samples": 8,
+      "total_time": 22.815608739852905,
+      "avg_time_per_sample": 2.851951092481613,
+      "correct": 5,
+      "accuracy": 0.625,
+      "undecided": 0,
+      "undecided_rate": 0.0,
       "predictions": [
         {
           "id": 1,
           "claim": "Phần vỏ bánh được làm rất công phu, từ giai đoạn xay gạo đến cuốn bánh hết tổng ",
           "true_label": "REAL",
           "predicted_label": "UNVERIFIABLE",
-          "correct": true
+          "correct": false
         },
         {
           "id": 2,
@@ -334,55 +172,13 @@
           "claim": "Vì lượng mưa khổng lồ do cơn bão tạo ra đã dẫn đến nhiều vụ sạt lở và ngập lụt, ",
           "true_label": "REAL",
           "predicted_label": "UNVERIFIABLE",
-          "correct": true
+          "correct": false
         },
         {
           "id": 4,
           "claim": "Tại một địa điểm trên địa bàn huyện Củ Chi, TPHCM, Công an đã phát hiện hai nghi",
           "true_label": "REAL",
           "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 6,
-          "claim": "Những yếu tố xã hội cần thiết cho sự phát triển ổn định và bền vững của mỗi quốc",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 8,
-          "claim": "Chuỗi sự kiện “UEH Sharing - Career Fair” là hoạt động khởi đầu cho chương trình",
-          "true_label": "REAL",
-          "predicted_label": "REAL",
-          "correct": true
-        },
-        {
-          "id": 9,
-          "claim": "HĐND TP Thủ Dầu Một sẽ tổ chức phiên họp để bầu chức danh Phó Chủ tịch UBND thàn",
-          "true_label": "REAL",
-          "predicted_label": "UNVERIFIABLE",
-          "correct": true
-        },
-        {
-          "id": 14,
-          "claim": "Bụi từ vũ khí chứa urani nghèo có thể đi vào sâu trong các cơ quan nội tạng, gây",
-          "true_label": "REAL",
-          "predicted_label": "UNVERIFIABLE",
-          "correct": true
-        },
-        {
-          "id": 15,
-          "claim": "Trong doanh nghiệp và văn phòng thì sử dụng Prompt giúp tiết kiệm thời gian và t",
-          "true_label": "REAL",
-          "predicted_label": "UNVERIFIABLE",
-          "correct": true
-        },
-        {
-          "id": 16,
-          "claim": "Câu chuyện về cô gái Tô Thị Sự bị phỏng với việc gom rác vào buổi sáng và tối đế",
-          "true_label": "REAL",
-          "predicted_label": "UNVERIFIABLE",
           "correct": true
         },
         {
@@ -412,48 +208,76 @@
           "true_label": "FAKE",
           "predicted_label": "UNVERIFIABLE",
           "correct": false
+        }
+      ],
+      "status": "completed",
+      "error_message": ""
+    },
+    {
+      "approach": "TRUST Orchestrator (Real Multi-Agent)",
+      "samples": 8,
+      "total_time": 841.13379073143,
+      "avg_time_per_sample": 105.14172384142876,
+      "correct": 1,
+      "accuracy": 0.125,
+      "undecided": 4,
+      "undecided_rate": 0.5,
+      "predictions": [
+        {
+          "id": 1,
+          "claim": "Phần vỏ bánh được làm rất công phu, từ giai đoạn xay gạo đến cuốn bánh hết tổng ",
+          "true_label": "REAL",
+          "predicted_label": "FAKE",
+          "correct": false
         },
         {
-          "id": 11,
-          "claim": "Chân sút Brobbey ở tuổi 23 đã có 12 bàn thắng trên mọi đấu trường mùa này cho Aj",
-          "true_label": "FAKE",
-          "predicted_label": "FAKE",
+          "id": 2,
+          "claim": "Đối tượng cố gắng bỏ chạy sau khi lực lượng công an đón dừng xe để kiểm tra.",
+          "true_label": "REAL",
+          "predicted_label": "REAL",
           "correct": true
         },
         {
-          "id": 12,
-          "claim": "Hầu hết nữ giới sẽ chọn định cư ở quần đảo thay vì tìm nơi khác sinh sống.",
-          "true_label": "FAKE",
+          "id": 3,
+          "claim": "Vì lượng mưa khổng lồ do cơn bão tạo ra đã dẫn đến nhiều vụ sạt lở và ngập lụt, ",
+          "true_label": "REAL",
           "predicted_label": "FAKE",
-          "correct": true
+          "correct": false
         },
         {
-          "id": 13,
-          "claim": "Chat GPT sử dụng hệ dữ liệu lớn đến từ hàng tỉ trang tài liệu trên toàn thế giới",
-          "true_label": "FAKE",
-          "predicted_label": "FAKE",
-          "correct": true
+          "id": 4,
+          "claim": "Tại một địa điểm trên địa bàn huyện Củ Chi, TPHCM, Công an đã phát hiện hai nghi",
+          "true_label": "REAL",
+          "predicted_label": "UNCERTAIN",
+          "correct": false
         },
         {
-          "id": 18,
-          "claim": "Đề xuất của EVN đưa ra sau khi đơn vị tư vấn là Ban quản lý dự án điện 4 (thuộc ",
+          "id": 0,
+          "claim": "Bộ xương bản sao được đưa đến Lodon bằng cách nghép thành con hoàn chỉnh rồi vận",
           "true_label": "FAKE",
-          "predicted_label": "FAKE",
-          "correct": true
+          "predicted_label": "UNCERTAIN",
+          "correct": false
         },
         {
-          "id": 20,
-          "claim": "Các thủ thuật phẫu thuật được thực hiện khi trẻ 2 tuổi.",
+          "id": 5,
+          "claim": "Giảm nhẹ công tác tuyên truyền về phòng, chống dịch cúm gia cầm lây lan sang ngư",
           "true_label": "FAKE",
-          "predicted_label": "FAKE",
-          "correct": true
+          "predicted_label": "UNCERTAIN",
+          "correct": false
         },
         {
-          "id": 22,
-          "claim": "Bộ Tài chính Hoa Kỳ đảm bảo rằng hệ thống ngân hàng Hoa Kỳ ổn định và có thể chị",
+          "id": 7,
+          "claim": "Trong phim Everything Everywhere All at Once diễn viên Quan Kế Huy sinh năm 1890",
           "true_label": "FAKE",
-          "predicted_label": "FAKE",
-          "correct": true
+          "predicted_label": "REAL",
+          "correct": false
+        },
+        {
+          "id": 10,
+          "claim": "Chương trình giáo dục song ngữ sẽ tập trung dạy các môn khoa học tự nhiên bằng t",
+          "true_label": "FAKE",
+          "predicted_label": "UNCERTAIN",
+          "correct": false
         }
       ],
       "status": "completed",

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 
 """
 Verifier Agent - ReAct Agent for claim verification.
@@ -101,6 +100,46 @@ After verification, return JSON: {{"verdict": "true|false|uncertain", "confidenc
     if parsed and "verdict" in parsed:
         logger.info("[AGENT] Successfully extracted verdict: %s", parsed.get("verdict"))
         return parsed
+
+    for msg in reversed(msgs):
+        message_text = extract_last_message_text([msg])
+        parsed = parse_dict_payload(message_text)
+        if parsed and "verdict" in parsed:
+            logger.info(
+                "[AGENT] Recovered verdict from intermediate message: %s",
+                parsed.get("verdict"),
+            )
+            return parsed
+        if parsed and "overall_verdict" in parsed:
+            overall_verdict = str(parsed.get("overall_verdict", "insufficient")).lower()
+            verdict_map = {
+                "supported": "true",
+                "contradicted": "false",
+                "insufficient": "uncertain",
+                "error": "uncertain",
+            }
+            verdict = verdict_map.get(overall_verdict, "uncertain")
+            recovered = {
+                "claim": claim,
+                "verdict": verdict,
+                "confidence": float(parsed.get("confidence", 0.3)),
+                "label": verdict,
+                "reasoning": parsed.get(
+                    "reasoning", "Recovered from aggregated assessment"
+                ),
+                "evidence_summary": {
+                    "overall_verdict": overall_verdict,
+                    "supporting_count": parsed.get("supporting_count", 0),
+                    "contradicting_count": parsed.get("contradicting_count", 0),
+                    "key_points": parsed.get("key_points", []),
+                    "conflicts": parsed.get("conflicts", []),
+                },
+            }
+            logger.info(
+                "[AGENT] Recovered verdict from aggregated assessment: %s",
+                recovered.get("verdict"),
+            )
+            return recovered
 
     logger.warning("[AGENT] No verdict found, returning uncertain")
     return {
