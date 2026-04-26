@@ -15,10 +15,14 @@ import time
 from dataclasses import asdict, dataclass, field
 from typing import Any
 
-# Set Groq API key for TRUST orchestrator
-os.environ["LLM_PROVIDER"] = "nvidia"
-os.environ["NVIDIA_API_KEY"] = "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"
-os.environ["NVIDIA_MODEL"] = "openai/gpt-oss-120b"
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
+
+# Set defaults if not in .env
+os.environ.setdefault("LLM_PROVIDER", "nvidia")
+os.environ.setdefault("NVIDIA_MODEL", "openai/gpt-oss-120b")
 
 from trust_agents.config import LLMConfig, LLMProvider, get_llm_config, set_llm_config
 from trust_agents.llm.factory import create_chat_model
