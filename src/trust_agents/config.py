@@ -40,7 +40,9 @@ class LLMConfig:
         model_map = {
             LLMProvider.OPENAI: os.getenv("OPENAI_MODEL", "gpt-4o-mini"),
             LLMProvider.GEMINI_GOOGLE: os.getenv("GEMINI_MODEL", "gemini-2.0-flash"),
-            LLMProvider.GEMINI_NVIDIA: os.getenv("NVIDIA_MODEL", "qwen/qwen3.5-122b-a10b"),
+            LLMProvider.GEMINI_NVIDIA: os.getenv(
+                "NVIDIA_MODEL", "qwen/qwen3.5-122b-a10b"
+            ),
             LLMProvider.GROQ: os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile"),
         }
 

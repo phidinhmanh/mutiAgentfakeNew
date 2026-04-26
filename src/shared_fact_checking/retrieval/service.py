@@ -1,4 +1,5 @@
 """Shared retrieval orchestration service."""
+
 from __future__ import annotations
 
 import hashlib
@@ -17,9 +18,9 @@ logger = logging.getLogger(__name__)
 # Bounded LRU cache for retrieval results — avoids unbounded memory growth.
 # Key: normalized query text. Value: (final_results, confidence, local_results).
 _CACHE_MAX_SIZE = 200
-_retrieval_cache: OrderedDict[str, tuple[list[dict[str, Any]], float, list[dict[str, Any]]]] = (
-    OrderedDict()
-)
+_retrieval_cache: OrderedDict[
+    str, tuple[list[dict[str, Any]], float, list[dict[str, Any]]]
+] = OrderedDict()
 
 
 def _normalize_query_for_cache(query: str) -> str:
@@ -27,7 +28,9 @@ def _normalize_query_for_cache(query: str) -> str:
     return query.strip().lower()
 
 
-def _cache_key(query: str, threshold: float, use_web_search: bool, max_results: int) -> str:
+def _cache_key(
+    query: str, threshold: float, use_web_search: bool, max_results: int
+) -> str:
     """Build a cache key from query and retrieval parameters."""
     normalized = _normalize_query_for_cache(query)
     return hashlib.md5(
@@ -60,7 +63,9 @@ def retrieve_with_fallback(
     logger.info("Local retrieval returned %d results", len(local_results))
 
     confidence = calculate_confidence_score(local_results)
-    logger.info("Local retrieval confidence: %.3f, threshold: %.3f", confidence, threshold)
+    logger.info(
+        "Local retrieval confidence: %.3f, threshold: %.3f", confidence, threshold
+    )
 
     if use_web_search and confidence < threshold:
         logger.info("Confidence below threshold, using web search")

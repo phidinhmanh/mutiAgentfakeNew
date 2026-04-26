@@ -1,4 +1,3 @@
-
 """
 Explainer Agent Tools - Tools for generating explanations of verification results.
 
@@ -45,7 +44,9 @@ def safe_json_parse(data: str | dict | list | Any, default: Any = None) -> Any:
 
 
 @tool()
-async def summarize_verification_tool(claim: str, verdict: str, confidence: float, evidence_summary: str) -> str:
+async def summarize_verification_tool(
+    claim: str, verdict: str, confidence: float, evidence_summary: str
+) -> str:
     """
     Summarize the verification process and key findings.
 
@@ -64,7 +65,7 @@ async def summarize_verification_tool(claim: str, verdict: str, confidence: floa
         if not isinstance(confidence, (int, float)):
             try:
                 confidence = float(confidence)
-            except:
+            except:  # noqa: E722
                 confidence = 0.5
 
         prompt = f"""Summarize this fact-checking verification in 2-3 clear sentences.
@@ -91,7 +92,9 @@ Create a concise summary that:
             "verdict": verdict,
             "confidence": confidence,
             "summary": summary,
-            "evidence_count": len(evidence_summary.split("Evidence")) - 1 if evidence_summary else 0
+            "evidence_count": len(evidence_summary.split("Evidence")) - 1
+            if evidence_summary
+            else 0,
         }
 
         logger.info("summarize_verification_tool completed")
@@ -99,17 +102,21 @@ Create a concise summary that:
 
     except Exception as e:
         logger.error(f"Error in summarize_verification_tool: {e}")
-        return json.dumps({
-            "claim": claim,
-            "verdict": verdict,
-            "confidence": confidence,
-            "summary": f"Verification result: {verdict} with {confidence:.1%} confidence",
-            "error": str(e)
-        })
+        return json.dumps(
+            {
+                "claim": claim,
+                "verdict": verdict,
+                "confidence": confidence,
+                "summary": f"Verification result: {verdict} with {confidence:.1%} confidence",
+                "error": str(e),
+            }
+        )
 
 
 @tool()
-async def generate_explanation_tool(claim: str, verdict_data: str, evidence_list: str) -> str:
+async def generate_explanation_tool(
+    claim: str, verdict_data: str, evidence_list: str
+) -> str:
     """
     Generate detailed natural language explanation with evidence citations.
 
@@ -124,7 +131,9 @@ async def generate_explanation_tool(claim: str, verdict_data: str, evidence_list
     logger.info("[DEBUG] generate_explanation_tool called")
 
     try:
-        verdict = safe_json_parse(verdict_data, {"verdict": "uncertain", "confidence": 0.5})
+        verdict = safe_json_parse(
+            verdict_data, {"verdict": "uncertain", "confidence": 0.5}
+        )
         evidence = safe_json_parse(evidence_list, [])
 
         verdict_str = verdict.get("verdict", "uncertain")
@@ -135,9 +144,9 @@ async def generate_explanation_tool(claim: str, verdict_data: str, evidence_list
         evidence_texts = []
         for i, ev in enumerate(evidence[:3]):
             if isinstance(ev, dict):
-                evidence_texts.append(f"[{i+1}] {ev.get('text', str(ev))[:200]}...")
+                evidence_texts.append(f"[{i + 1}] {ev.get('text', str(ev))[:200]}...")
             else:
-                evidence_texts.append(f"[{i+1}] {str(ev)[:200]}...")
+                evidence_texts.append(f"[{i + 1}] {str(ev)[:200]}...")
 
         evidence_str = "\n\n".join(evidence_texts)
 
@@ -169,7 +178,7 @@ Write a clear explanation that:
             "verdict": verdict_str,
             "confidence": confidence,
             "explanation": explanation,
-            "evidence_used": len(evidence)
+            "evidence_used": len(evidence),
         }
 
         logger.info("generate_explanation_tool completed")
@@ -177,11 +186,13 @@ Write a clear explanation that:
 
     except Exception as e:
         logger.error(f"Error in generate_explanation_tool: {e}")
-        return json.dumps({
-            "claim": claim,
-            "explanation": f"Unable to generate detailed explanation: {str(e)}",
-            "error": str(e)
-        })
+        return json.dumps(
+            {
+                "claim": claim,
+                "explanation": f"Unable to generate detailed explanation: {str(e)}",
+                "error": str(e),
+            }
+        )
 
 
 @tool()
@@ -205,28 +216,29 @@ async def cite_evidence_tool(evidence_list: str) -> str:
             if isinstance(ev, dict):
                 source = ev.get("source", ev.get("url", "Unknown source"))
                 text = ev.get("text", str(ev))[:150]
-                citations.append(f"[{i+1}] {text}... (Source: {source})")
+                citations.append(f"[{i + 1}] {text}... (Source: {source})")
             else:
-                citations.append(f"[{i+1}] {str(ev)[:150]}...")
+                citations.append(f"[{i + 1}] {str(ev)[:150]}...")
 
-        result = {
-            "citations": citations,
-            "count": len(citations)
-        }
+        result = {"citations": citations, "count": len(citations)}
 
         logger.info(f"cite_evidence_tool completed: {len(citations)} citations")
         return json.dumps(result)
 
     except Exception as e:
         logger.error(f"Error in cite_evidence_tool: {e}")
-        return json.dumps({
-            "citations": [],
-            "error": str(e)
-        })
+        return json.dumps({"citations": [], "error": str(e)})
 
 
 @tool()
-async def create_report_tool(claim: str, verdict: str, confidence: float, summary: str, explanation: str, citations: str) -> str:
+async def create_report_tool(
+    claim: str,
+    verdict: str,
+    confidence: float,
+    summary: str,
+    explanation: str,
+    citations: str,
+) -> str:
     """
     Compile comprehensive fact-check report from all components.
 
@@ -250,8 +262,12 @@ async def create_report_tool(claim: str, verdict: str, confidence: float, summar
 
         verdict_str = verdict if isinstance(verdict, str) else str(verdict)
         summary_str = summary if isinstance(summary, str) else str(summary)
-        explanation_str = explanation if isinstance(explanation, str) else str(explanation)
-        confidence_value = float(confidence) if isinstance(confidence, (int, float)) else 0.5
+        explanation_str = (
+            explanation if isinstance(explanation, str) else str(explanation)
+        )
+        confidence_value = (
+            float(confidence) if isinstance(confidence, (int, float)) else 0.5
+        )
 
         report = {
             "claim": claim,
@@ -261,7 +277,7 @@ async def create_report_tool(claim: str, verdict: str, confidence: float, summar
             "summary": summary_str,
             "explanation": explanation_str,
             "citations": parsed_citations.get("citations", []),
-            "evidence_count": parsed_citations.get("count", 0)
+            "evidence_count": parsed_citations.get("count", 0),
         }
 
         logger.info("create_report_tool completed")
@@ -269,12 +285,14 @@ async def create_report_tool(claim: str, verdict: str, confidence: float, summar
 
     except Exception as e:
         logger.error(f"Error in create_report_tool: {e}")
-        return json.dumps({
-            "claim": claim,
-            "verdict": verdict,
-            "confidence": confidence,
-            "label": verdict,
-            "summary": summary,
-            "explanation": explanation,
-            "error": str(e)
-        })
+        return json.dumps(
+            {
+                "claim": claim,
+                "verdict": verdict,
+                "confidence": confidence,
+                "label": verdict,
+                "summary": summary,
+                "explanation": explanation,
+                "error": str(e),
+            }
+        )

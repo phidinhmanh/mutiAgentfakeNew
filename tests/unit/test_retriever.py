@@ -1,4 +1,5 @@
 """Tests for hybrid retriever."""
+
 from __future__ import annotations
 
 from unittest.mock import Mock, patch
@@ -10,6 +11,8 @@ from fake_news_detector.rag.retriever import (
 )
 from shared_fact_checking.retrieval.policy import (
     calculate_confidence_score,
+)
+from shared_fact_checking.retrieval.policy import (
     merge_results as _merge_results,
 )
 from shared_fact_checking.retrieval.service import _retrieval_cache
@@ -146,9 +149,7 @@ class TestRetrieveEvidence:
         assert len(result) == 2
 
     @patch("fake_news_detector.rag.retriever.get_vector_store")
-    def test_retrieve_web_search_disabled(
-        self, mock_get: Mock
-    ) -> None:
+    def test_retrieve_web_search_disabled(self, mock_get: Mock) -> None:
         """use_web_search=False skips web search."""
         mock_vs = Mock()
         mock_vs.similarity_search.return_value = [{"content": "low", "score": 0.3}]

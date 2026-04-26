@@ -35,7 +35,9 @@ class TestCreateChatModel:
         gemini_ctor = Mock(return_value="gemini-model")
         monkeypatch.setattr("trust_agents.llm.factory.ChatOpenAI", Mock())
         # Patch the lazy import getter and reset the cached class
-        monkeypatch.setattr("trust_agents.llm.factory._get_chat_gemini", Mock(return_value=gemini_ctor))
+        monkeypatch.setattr(
+            "trust_agents.llm.factory._get_chat_gemini", Mock(return_value=gemini_ctor)
+        )
         monkeypatch.setattr("trust_agents.llm.factory._ChatGemini", None)
 
         monkeypatch.setenv("GEMINI_API_KEY", "gem-key")

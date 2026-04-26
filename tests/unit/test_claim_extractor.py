@@ -1,4 +1,5 @@
 """Tests for claim_extractor agent."""
+
 from __future__ import annotations
 
 from unittest.mock import Mock
@@ -39,7 +40,9 @@ class TestExtractClaims:
         with pytest.MonkeyPatch.context() as mp:
             mp.setattr(
                 "fake_news_detector.data.preprocessing.sent_tokenize",
-                Mock(return_value=["Short.", "This is a longer sentence that matters."]),
+                Mock(
+                    return_value=["Short.", "This is a longer sentence that matters."]
+                ),
             )
             result = extract_claims("Short. This is a longer sentence that matters.")
             assert len(result) == 1
@@ -56,18 +59,20 @@ class TestExtractClaims:
         assert all("type" in c for c in result)
         assert all("verifiable" in c for c in result)
 
-    def test_extract_claims_fact_classification(
-        self, mock_underthesea: Mock
-    ) -> None:
+    def test_extract_claims_fact_classification(self, mock_underthesea: Mock) -> None:
         """FACT claims have verifiable=True."""
         with pytest.MonkeyPatch.context() as mp:
             mp.setattr(
                 "fake_news_detector.data.preprocessing.sent_tokenize",
-                Mock(return_value=[
-                    "Theo báo cáo của Bộ Y tế, số ca mắc COVID-19 giảm 30%.",
-                ]),
+                Mock(
+                    return_value=[
+                        "Theo báo cáo của Bộ Y tế, số ca mắc COVID-19 giảm 30%.",
+                    ]
+                ),
             )
-            result = extract_claims("Theo báo cáo của Bộ Y tế, số ca mắc COVID-19 giảm 30%.")
+            result = extract_claims(
+                "Theo báo cáo của Bộ Y tế, số ca mắc COVID-19 giảm 30%."
+            )
             assert len(result) == 1
             assert result[0]["type"] == "FACT"
             assert result[0]["verifiable"] is True
@@ -158,9 +163,7 @@ class TestVerifyFactsWithLLM:
         result = verify_facts_with_llm([], mock_nvidia_client)
         assert result == []
 
-    def test_verify_facts_single_fact_claim(
-        self, mock_nvidia_client: Mock
-    ) -> None:
+    def test_verify_facts_single_fact_claim(self, mock_nvidia_client: Mock) -> None:
         """Single FACT claim gets verified."""
         claims = [{"text": "GDP tăng 8%", "type": "FACT", "verifiable": True}]
         result = verify_facts_with_llm(claims, mock_nvidia_client)
@@ -177,9 +180,7 @@ class TestVerifyFactsWithLLM:
         assert len(result) == 1
         assert result[0]["verified"] is None
 
-    def test_verify_facts_mixed_claims(
-        self, mock_nvidia_client: Mock
-    ) -> None:
+    def test_verify_facts_mixed_claims(self, mock_nvidia_client: Mock) -> None:
         """Mixed FACT/OPINION claims are handled correctly."""
         claims = [
             {"text": "GDP tăng 8%", "type": "FACT", "verifiable": True},

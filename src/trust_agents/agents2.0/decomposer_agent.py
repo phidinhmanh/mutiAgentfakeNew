@@ -1,4 +1,3 @@
-
 """
 Decomposer Agent - LoCal-inspired claim decomposition.
 
@@ -27,6 +26,7 @@ logger = logging.getLogger("TRUST_agents.agents.decomposer")
 @dataclass
 class DecomposedClaim:
     """Result of claim decomposition"""
+
     original_claim: str
     atomic_claims: list[str]
     logic_structure: str
@@ -55,20 +55,25 @@ class DecomposerAgent:
         """Generate response using configured LLM provider."""
         if self.config.provider.value == "openai":
             from openai import OpenAI
+
             client = OpenAI(api_key=self.config.get_api_key())
             response = client.chat.completions.create(
                 model=self.model,
                 messages=[
-                    {"role": "system", "content": "You are an expert at logical claim decomposition."},
-                    {"role": "user", "content": prompt}
+                    {
+                        "role": "system",
+                        "content": "You are an expert at logical claim decomposition.",
+                    },
+                    {"role": "user", "content": prompt},
                 ],
                 temperature=0.1,
-                max_tokens=800
+                max_tokens=800,
             )
             return response.choices[0].message.content.strip()
         else:
             # Use Gemini
             from google import genai
+
             genai.configure(api_key=self.config.get_api_key())
             client = genai.GenerativeModel(self.model)
             response = client.generate_content(prompt)
@@ -135,7 +140,12 @@ Now decompose the given claim:"""
 
         try:
             content = self._generate_with_llm(prompt)
-            content = content.replace('```json\n', '').replace('```\n', '').replace('```', '').strip()
+            content = (
+                content.replace("```json\n", "")
+                .replace("```\n", "")
+                .replace("```", "")
+                .strip()
+            )
 
             parsed = json.loads(content)
 
@@ -144,10 +154,12 @@ Now decompose the given claim:"""
                 atomic_claims=parsed.get("atomic_claims", [claim]),
                 logic_structure=parsed.get("logic_structure", "C1"),
                 causal_edges=parsed.get("causal_edges", []),
-                complexity_score=parsed.get("complexity_score", 0.5)
+                complexity_score=parsed.get("complexity_score", 0.5),
             )
 
-            logger.info(f"[DECOMPOSER] Decomposed into {len(result.atomic_claims)} atomic claims")
+            logger.info(
+                f"[DECOMPOSER] Decomposed into {len(result.atomic_claims)} atomic claims"
+            )
             logger.info(f"[DECOMPOSER] Logic structure: {result.logic_structure}")
             logger.info(f"[DECOMPOSER] Causal edges: {len(result.causal_edges)}")
 
@@ -161,7 +173,7 @@ Now decompose the given claim:"""
                 atomic_claims=[claim],
                 logic_structure="C1",
                 causal_edges=[],
-                complexity_score=0.5
+                complexity_score=0.5,
             )
 
 
@@ -176,13 +188,13 @@ if __name__ == "__main__":
     test_claims = [
         "Biden won the 2020 election and became president in 2021",
         "After the policy passed in 2020, unemployment decreased by 5%",
-        "If inflation rises above 5%, then either the Fed will raise rates or the economy will slow down"
+        "If inflation rises above 5%, then either the Fed will raise rates or the economy will slow down",
     ]
 
     for claim in test_claims:
-        print(f"\n{'='*70}")
+        print(f"\n{'=' * 70}")
         print(f"Claim: {claim}")
-        print('='*70)
+        print("=" * 70)
 
         result = decompose_claim_sync(claim)
 

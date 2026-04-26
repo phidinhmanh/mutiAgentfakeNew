@@ -24,9 +24,9 @@ load_dotenv()
 os.environ.setdefault("LLM_PROVIDER", "nvidia")
 os.environ.setdefault("NVIDIA_MODEL", "openai/gpt-oss-120b")
 
-from trust_agents.config import LLMConfig, LLMProvider, get_llm_config, set_llm_config
-from trust_agents.llm.factory import create_chat_model
-from trust_agents.orchestrator import TRUSTOrchestrator
+from trust_agents.config import LLMConfig, LLMProvider, get_llm_config, set_llm_config  # noqa: E402
+from trust_agents.llm.factory import create_chat_model  # noqa: E402
+from trust_agents.orchestrator import TRUSTOrchestrator  # noqa: E402
 
 try:
     from datasets import load_dataset
@@ -232,12 +232,10 @@ def build_multi_agent_prompt(sample: dict[str, Any]) -> str:
     """Build the benchmark prompt for the evidence-aware path."""
     evidence_text = sample.get("evidence", "")
     evidence_formatted = (
-        f"[0] {evidence_text}"
-        if evidence_text
-        else "[0] Khong co bang chung."
+        f"[0] {evidence_text}" if evidence_text else "[0] Khong co bang chung."
     )
 
-    return f"""Claim: {sample['claim']}
+    return f"""Claim: {sample["claim"]}
 
 Evidence:
 {evidence_formatted}
@@ -467,13 +465,16 @@ def invoke_text_model(llm: Any, system_prompt: str, user_prompt: str) -> str:
 
     invoke = getattr(llm, "invoke", None)
     if callable(invoke):
-        response = invoke([
-            ("system", system_prompt),
-            ("human", user_prompt),
-        ])
+        response = invoke(
+            [
+                ("system", system_prompt),
+                ("human", user_prompt),
+            ]
+        )
         return getattr(response, "content", str(response))
 
     raise TypeError(f"Unsupported benchmark model type: {type(llm).__name__}")
+
 
 def create_benchmark_model(timeout_seconds: int) -> Any:
     """Create the LLM used by benchmark flows from shared TRUST config."""
@@ -713,11 +714,12 @@ def print_results(results: list[BenchmarkResult]) -> None:
         )
         print(f"\n{result.approach}{status_suffix}")
         print(
-            f"  Accuracy:     {result.accuracy:.1%} "
-            f"({result.correct}/{result.samples})"
+            f"  Accuracy:     {result.accuracy:.1%} ({result.correct}/{result.samples})"
         )
-        print(f"  Undecided:    {result.undecided_rate:.1%} "
-              f"({result.undecided}/{result.samples})")
+        print(
+            f"  Undecided:    {result.undecided_rate:.1%} "
+            f"({result.undecided}/{result.samples})"
+        )
         print(f"  Total time:   {result.total_time:.2f}s")
         print(f"  Avg/sample:   {result.avg_time_per_sample:.2f}s")
         if result.error_message:

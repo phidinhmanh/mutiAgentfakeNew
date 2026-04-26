@@ -1,4 +1,5 @@
 """Application service for sample data and vector index flows."""
+
 from __future__ import annotations
 
 from fake_news_detector.config import settings

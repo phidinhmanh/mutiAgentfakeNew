@@ -1,4 +1,5 @@
 """Citation checker to validate quotes against evidence."""
+
 from typing import Any
 
 
@@ -33,6 +34,7 @@ def validate_citation(quote_text: str, evidence_list: list[dict[str, Any]]) -> b
 def _normalize_text(text: str) -> str:
     """Normalize text for comparison."""
     import re
+
     text = text.lower()
     text = re.sub(r"\s+", " ", text)
     text = text.strip(".,!?;:'\"-()[]{}")
@@ -111,18 +113,18 @@ def verify_citation_evidence_pairs(
         quote = citation.get("quote", "")
         is_valid = validate_citation(quote, evidence)
 
-        results.append({
-            "quote": quote,
-            "is_valid": is_valid,
-            "matched_evidence": _find_matching_evidence(quote, evidence),
-        })
+        results.append(
+            {
+                "quote": quote,
+                "is_valid": is_valid,
+                "matched_evidence": _find_matching_evidence(quote, evidence),
+            }
+        )
 
     return results
 
 
-def _find_matching_evidence(
-    quote: str, evidence: list[dict[str, Any]]
-) -> list[int]:
+def _find_matching_evidence(quote: str, evidence: list[dict[str, Any]]) -> list[int]:
     """Find indices of evidence containing the quote."""
     indices = []
     quote_normalized = _normalize_text(quote)

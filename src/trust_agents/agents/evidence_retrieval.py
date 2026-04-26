@@ -1,4 +1,3 @@
-
 """
 Evidence Retrieval Agent - ReAct Agent with hybrid search tools.
 
@@ -79,28 +78,38 @@ After retrieving evidence, return JSON: {{"evidence": [list of passages with tex
     content = extract_last_message_text(msgs)
     evidence = parse_evidence_payload(content)
     if evidence:
-        logger.info("[AGENT] Successfully extracted %d evidence passages", len(evidence))
+        logger.info(
+            "[AGENT] Successfully extracted %d evidence passages", len(evidence)
+        )
         return evidence
 
     parsed = parse_dict_payload(content)
     if parsed and isinstance(parsed.get("evidence"), list):
         evidence = [item for item in parsed["evidence"] if isinstance(item, dict)]
         if evidence:
-            logger.info("[AGENT] Successfully extracted %d evidence passages", len(evidence))
+            logger.info(
+                "[AGENT] Successfully extracted %d evidence passages", len(evidence)
+            )
             return evidence
 
     for msg in reversed(msgs):
         message_text = extract_last_message_text([msg])
         evidence = parse_evidence_payload(message_text)
         if evidence:
-            logger.info("[AGENT] Recovered %d evidence passages from intermediate message", len(evidence))
+            logger.info(
+                "[AGENT] Recovered %d evidence passages from intermediate message",
+                len(evidence),
+            )
             return evidence
 
         parsed = parse_dict_payload(message_text)
         if parsed and isinstance(parsed.get("evidence"), list):
             evidence = [item for item in parsed["evidence"] if isinstance(item, dict)]
             if evidence:
-                logger.info("[AGENT] Recovered %d evidence passages from intermediate message", len(evidence))
+                logger.info(
+                    "[AGENT] Recovered %d evidence passages from intermediate message",
+                    len(evidence),
+                )
                 return evidence
 
     logger.warning("[AGENT] No evidence found")
@@ -116,7 +125,9 @@ def run_evidence_retrieval_agent_sync(
     return asyncio.run(run_evidence_retrieval_agent(query, top_k))
 
 
-async def index_documents_async(corpus_path: str, chunk_size: int = 160) -> dict[str, Any]:
+async def index_documents_async(
+    corpus_path: str, chunk_size: int = 160
+) -> dict[str, Any]:
     """Index documents for retrieval."""
     model = create_chat_model()
 

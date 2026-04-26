@@ -1,4 +1,3 @@
-
 """
 Claim Extractor Agent - ReAct Agent with NLP tools.
 
@@ -54,7 +53,7 @@ Your GOAL:
 Extract all factual claims from the text using all available tools.
 
 When all tools have been used, combine all results, remove duplicates, and return JSON: {{"claims": ["claim1", "claim2", ...]}}.
-""".strip()
+""".strip()  # noqa: E501
 
     tools = [
         ner_claim_extraction_tool,

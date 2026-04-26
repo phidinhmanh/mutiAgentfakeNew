@@ -1,4 +1,5 @@
 """Retriever for hybrid RAG (FAISS + web search)."""
+
 import logging
 from typing import Any
 

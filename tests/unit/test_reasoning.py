@@ -1,4 +1,5 @@
 """Tests for reasoning agent."""
+
 from __future__ import annotations
 
 from typing import Any
@@ -22,9 +23,7 @@ class TestReasoningAgentInit:
 class TestReasoningAgentAnalyze:
     """Test ReasoningAgent.analyze method."""
 
-    def test_analyze_empty_evidence(
-        self, mock_nvidia_client: Mock
-    ) -> None:
+    def test_analyze_empty_evidence(self, mock_nvidia_client: Mock) -> None:
         """Empty evidence returns UNVERIFIABLE."""
         agent = ReasoningAgent(mock_nvidia_client)
         result = agent.analyze("Some claim", [])
@@ -67,9 +66,7 @@ class TestReasoningAgentAnalyze:
 class TestReasoningAgentStreamAnalysis:
     """Test ReasoningAgent.stream_analysis method."""
 
-    def test_stream_empty_evidence(
-        self, mock_nvidia_client: Mock
-    ) -> None:
+    def test_stream_empty_evidence(self, mock_nvidia_client: Mock) -> None:
         """Empty evidence yields unverifiable result."""
         agent = ReasoningAgent(mock_nvidia_client)
         chunks = list(agent.stream_analysis("Some claim", []))
@@ -104,9 +101,7 @@ class TestReasoningAgentFormatEvidence:
         result = agent._format_evidence([])
         assert result == ""
 
-    def test_format_evidence_single_item(
-        self, mock_nvidia_client: Mock
-    ) -> None:
+    def test_format_evidence_single_item(self, mock_nvidia_client: Mock) -> None:
         """Single evidence formats with index and source."""
         agent = ReasoningAgent(mock_nvidia_client)
         evidence = [{"content": "Test content", "source": "test"}]
@@ -115,9 +110,7 @@ class TestReasoningAgentFormatEvidence:
         assert "Test content" in result
         assert "test" in result
 
-    def test_format_evidence_multiple_items(
-        self, mock_nvidia_client: Mock
-    ) -> None:
+    def test_format_evidence_multiple_items(self, mock_nvidia_client: Mock) -> None:
         """Multiple evidence items format correctly."""
         agent = ReasoningAgent(mock_nvidia_client)
         evidence = [
@@ -128,9 +121,7 @@ class TestReasoningAgentFormatEvidence:
         assert "[0]" in result
         assert "[1]" in result
 
-    def test_format_evidence_missing_source(
-        self, mock_nvidia_client: Mock
-    ) -> None:
+    def test_format_evidence_missing_source(self, mock_nvidia_client: Mock) -> None:
         """Evidence without source uses 'unknown'."""
         agent = ReasoningAgent(mock_nvidia_client)
         evidence = [{"content": "Test"}]
@@ -223,12 +214,16 @@ class TestAggregateVerdicts:
         assert result["verdict"] == "UNVERIFIABLE"
         assert result["confidence"] == 0.0
 
-    def test_aggregate_real_majority(self, sample_verdicts: list[dict[str, Any]]) -> None:
+    def test_aggregate_real_majority(
+        self, sample_verdicts: list[dict[str, Any]]
+    ) -> None:
         """More REAL than FAKE returns REAL."""
         result = aggregate_verdicts(sample_verdicts)
         assert result["verdict"] == "REAL"
 
-    def test_aggregate_fake_majority(self, sample_verdicts: list[dict[str, Any]]) -> None:
+    def test_aggregate_fake_majority(
+        self, sample_verdicts: list[dict[str, Any]]
+    ) -> None:
         """More FAKE than REAL returns FAKE."""
         verdicts = [
             {"verdict": "FAKE", "confidence": 0.8, "reasoning": "Contradicts"},
@@ -274,7 +269,9 @@ class TestAggregateVerdicts:
         result = aggregate_verdicts(verdicts)
         assert len(result["reasoning"]) <= 1000
 
-    def test_aggregate_stats_included(self, sample_verdicts: list[dict[str, Any]]) -> None:
+    def test_aggregate_stats_included(
+        self, sample_verdicts: list[dict[str, Any]]
+    ) -> None:
         """Stats are included in result."""
         result = aggregate_verdicts(sample_verdicts)
         assert "stats" in result

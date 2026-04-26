@@ -1,4 +1,5 @@
 """Agent 2: Evidence Retriever - Hybrid RAG for evidence gathering."""
+
 import logging
 from typing import Any
 
@@ -29,13 +30,17 @@ def retrieve_evidence_for_claims(
             continue
 
         evidence = retrieve_evidence(claim_text, use_web_search=use_web_search)
-        logger.info(f"Retrieved {len(evidence)} evidence items for claim: {claim_text[:50]}...")
+        logger.info(
+            f"Retrieved {len(evidence)} evidence items for claim: {claim_text[:50]}..."
+        )
 
-        results.append({
-            **claim,
-            "evidence": evidence,
-            "num_evidence": len(evidence),
-        })
+        results.append(
+            {
+                **claim,
+                "evidence": evidence,
+                "num_evidence": len(evidence),
+            }
+        )
 
     return results
 
@@ -65,10 +70,12 @@ def merge_evidence_from_multiple_claims(
                 continue
 
             seen_urls.add(url or content_preview)
-            merged_evidence.append({
-                **evidence,
-                "from_claim": claim_data.get("text", "")[:100],
-            })
+            merged_evidence.append(
+                {
+                    **evidence,
+                    "from_claim": claim_data.get("text", "")[:100],
+                }
+            )
 
     merged_evidence.sort(key=lambda x: x.get("score", 0), reverse=True)
     return merged_evidence
@@ -88,8 +95,7 @@ def get_weak_claims(
         List of claims with weak evidence
     """
     return [
-        c for c in claims_with_evidence
-        if c.get("num_evidence", 0) < min_evidence_count
+        c for c in claims_with_evidence if c.get("num_evidence", 0) < min_evidence_count
     ]
 
 
@@ -115,12 +121,14 @@ def enrich_evidence_with_context(
         relevance_keywords = _find_relevant_keywords(claim, content)
         context_overlap = _calculate_context_overlap(claim, content)
 
-        enriched.append({
-            **item,
-            "relevance_keywords": relevance_keywords,
-            "context_overlap": context_overlap,
-            "final_score": (score + context_overlap) / 2,
-        })
+        enriched.append(
+            {
+                **item,
+                "relevance_keywords": relevance_keywords,
+                "context_overlap": context_overlap,
+                "final_score": (score + context_overlap) / 2,
+            }
+        )
 
     enriched.sort(key=lambda x: x.get("final_score", 0), reverse=True)
     return enriched

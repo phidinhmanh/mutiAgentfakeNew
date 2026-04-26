@@ -1,4 +1,3 @@
-
 """
 Verifier Agent - ReAct Agent for claim verification.
 
@@ -66,7 +65,7 @@ Your PROCESS:
 3. Return the final verdict
 
 After verification, return JSON: {{"verdict": "true|false|uncertain", "confidence": 0.0-1.0, "reasoning": "explanation"}}.
-""".strip()
+""".strip()  # noqa: E501
 
     tools = [
         compare_claim_evidence_tool,

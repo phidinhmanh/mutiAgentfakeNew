@@ -1,4 +1,3 @@
-
 """
 Explainer Agent - ReAct Agent for generating explanations.
 
@@ -63,7 +62,7 @@ Your PROCESS:
 4. Use create_report_tool to compile everything
 
 After creating the report, return JSON with the complete fact-check report.
-""".strip()
+""".strip()  # noqa: E501
 
     tools = [
         summarize_verification_tool,

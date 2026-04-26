@@ -1,8 +1,10 @@
 """Smoke test to verify environment, imports, and basic connectivity."""
+
 import logging
 import os
 import sys
 from pathlib import Path
+
 from dotenv import load_dotenv
 
 # Load environment variables from .env
@@ -12,14 +14,19 @@ load_dotenv()
 logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 logger = logging.getLogger("smoke_test")
 
+
 def check_env():
     """Check critical environment variables."""
     logger.info("--- Checking Environment Variables ---")
-    
+
     # Check for Google/Gemini keys (either one is sufficient)
     google_key = os.getenv("GOOGLE_API_KEY") or os.getenv("GEMINI_API_KEY")
     if google_key:
-        masked = google_key[:4] + "*" * (len(google_key) - 8) + google_key[-4:] if len(google_key) > 8 else "***"
+        masked = (
+            google_key[:4] + "*" * (len(google_key) - 8) + google_key[-4:]
+            if len(google_key) > 8
+            else "***"
+        )
         logger.info(f"✅ GOOGLE_API_KEY/GEMINI_API_KEY: {masked}")
     else:
         logger.warning("❌ GOOGLE_API_KEY/GEMINI_API_KEY: Missing")
@@ -31,12 +38,14 @@ def check_env():
         ("TAVILY_API_KEY", True),
         ("OPENAI_API_KEY", False),  # Optional
     ]
-    
+
     all_critical_present = google_key is not None
     for var, is_critical in other_vars:
         val = os.getenv(var)
         if val:
-            masked = val[:4] + "*" * (len(val) - 8) + val[-4:] if len(val) > 8 else "***"
+            masked = (
+                val[:4] + "*" * (len(val) - 8) + val[-4:] if len(val) > 8 else "***"
+            )
             logger.info(f"✅ {var}: {masked}")
         else:
             if is_critical:
@@ -44,8 +53,9 @@ def check_env():
                 all_critical_present = False
             else:
                 logger.info(f"ℹ️ {var}: Missing (Optional)")
-                
+
     return all_critical_present
+
 
 def check_imports():
     """Check if critical dependencies can be imported without errors."""
@@ -73,6 +83,7 @@ def check_imports():
 
     return all_success
 
+
 def check_model_factory():
     """Check if the model factory can initialize without hitting real APIs."""
     logger.info("\n--- Checking Model Factory (Dry Run) ---")
@@ -92,12 +103,15 @@ def check_model_factory():
             model = create_chat_model()
             logger.info(f"✅ Model factory successfully created {type(model).__name__}")
         except Exception as e:
-            logger.warning(f"⚠️ Model creation failed (expected if API keys missing): {e}")
+            logger.warning(
+                f"⚠️ Model creation failed (expected if API keys missing): {e}"
+            )
 
         return True
     except Exception as e:
         logger.error(f"❌ Model factory logic error: {e}")
         return False
+
 
 def main():
     logger.info("=== Multi-Agent Fake News Pipeline Smoke Test ===")
@@ -112,10 +126,15 @@ def main():
     if env_ok and imports_ok and factory_ok:
         logger.info("✅ All core checks passed! System is ready for development.")
     elif imports_ok and factory_ok:
-        logger.info("⚠️ Core code is healthy, but some API keys are missing. Real runs may fail.")
+        logger.info(
+            "⚠️ Core code is healthy, but some API keys are missing. Real runs may fail."
+        )
     else:
-        logger.error("❌ Critical system issues detected. Please fix imports/logic before proceeding.")
+        logger.error(
+            "❌ Critical system issues detected. Please fix imports/logic before proceeding."
+        )
         sys.exit(1)
+
 
 if __name__ == "__main__":
     main()

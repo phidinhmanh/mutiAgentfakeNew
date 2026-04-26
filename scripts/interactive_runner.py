@@ -14,15 +14,15 @@ SRC_DIR = ROOT_DIR / "src"
 if str(SRC_DIR) not in sys.path:
     sys.path.insert(0, str(SRC_DIR))
 
-from fake_news_detector.config import settings
-from fake_news_detector.data.preprocessing import summarize_for_long_text
-from fake_news_detector.models.baseline import get_baseline_model
-from fake_news_detector.models.stylistic import extract_stylistic_features
-from trust_agents.agents.claim_extractor import run_claim_extractor_agent_sync
-from trust_agents.agents.evidence_retrieval import run_evidence_retrieval_agent_sync
-from trust_agents.agents.explainer import run_explainer_agent_sync
-from trust_agents.agents.verifier import run_verifier_agent_sync
-from trust_agents.orchestrator import TRUSTOrchestrator
+from fake_news_detector.config import settings  # noqa: E402
+from fake_news_detector.data.preprocessing import summarize_for_long_text  # noqa: E402
+from fake_news_detector.models.baseline import get_baseline_model  # noqa: E402
+from fake_news_detector.models.stylistic import extract_stylistic_features  # noqa: E402
+from trust_agents.agents.claim_extractor import run_claim_extractor_agent_sync  # noqa: E402
+from trust_agents.agents.evidence_retrieval import run_evidence_retrieval_agent_sync  # noqa: E402
+from trust_agents.agents.explainer import run_explainer_agent_sync  # noqa: E402
+from trust_agents.agents.verifier import run_verifier_agent_sync  # noqa: E402
+from trust_agents.orchestrator import TRUSTOrchestrator  # noqa: E402
 
 logger = logging.getLogger("interactive_runner")
 
@@ -39,12 +39,12 @@ GOLDEN_SAMPLES = [
     },
     {
         "id": "real_news_gdp_wb",
-        "text": "Theo báo cáo của World Bank, Việt Nam đạt tăng trưởng GDP 5.6% trong năm 2023, thuộc nhóm cao nhất ASEAN.",
+        "text": "Theo báo cáo của World Bank, Việt Nam đạt tăng trưởng GDP 5.6% trong năm 2023, thuộc nhóm cao nhất ASEAN.",  # noqa: E501
         "expected_verdict": "true",
     },
     {
         "id": "unverifiable_generic",
-        "text": "Một nguồn tin cho biết lãnh đạo đất nước sẽ có cuộc họp quan trọng vào tuần tới nhưng không tiết lộ chi tiết.",
+        "text": "Một nguồn tin cho biết lãnh đạo đất nước sẽ có cuộc họp quan trọng vào tuần tới nhưng không tiết lộ chi tiết.",  # noqa: E501
         "expected_verdict": "uncertain",
     },
 ]
@@ -53,7 +53,9 @@ GOLDEN_SAMPLES = [
 def configure_logging(verbose: bool) -> None:
     """Configure logging for the interactive runner."""
     level = logging.DEBUG if verbose else logging.INFO
-    logging.basicConfig(level=level, format="%(asctime)s | %(levelname)-8s | %(name)s | %(message)s")
+    logging.basicConfig(
+        level=level, format="%(asctime)s | %(levelname)-8s | %(name)s | %(message)s"
+    )
 
 
 def print_header(title: str) -> None:
@@ -151,7 +153,9 @@ def run_trust_only(article: str, skip_evidence: bool, top_k_evidence: int) -> An
     return orchestrator.process_text(article, skip_evidence=skip_evidence)
 
 
-def run_full_analysis(article: str, skip_evidence: bool, top_k_evidence: int) -> dict[str, Any]:
+def run_full_analysis(
+    article: str, skip_evidence: bool, top_k_evidence: int
+) -> dict[str, Any]:
     """Run the full article analysis flow."""
     processed_article = article
     summarized = False
@@ -160,7 +164,9 @@ def run_full_analysis(article: str, skip_evidence: bool, top_k_evidence: int) ->
         summarized = True
 
     baseline_result = run_baseline_only(processed_article)
-    trust_result = run_trust_only(processed_article, skip_evidence=skip_evidence, top_k_evidence=top_k_evidence)
+    trust_result = run_trust_only(
+        processed_article, skip_evidence=skip_evidence, top_k_evidence=top_k_evidence
+    )
     stylistic_result = extract_stylistic_features(processed_article)
 
     return {
@@ -229,6 +235,7 @@ def print_stylistic_result(result: dict[str, Any]) -> None:
 def build_documents_from_dataset(limit: int) -> list[dict[str, Any]]:
     """Build vector-store documents from the dataset."""
     from fake_news_detector.data.loader import load_vifactcheck
+
     dataset = load_vifactcheck("train")
     documents: list[dict[str, Any]] = []
     for item in dataset[:limit]:
@@ -250,6 +257,7 @@ def build_documents_from_dataset(limit: int) -> list[dict[str, Any]]:
 def browse_dataset_samples() -> None:
     """Browse samples from ViFactCheck."""
     from fake_news_detector.data.loader import load_vifactcheck
+
     print_header("Dataset Browser")
     split = prompt("Dataset split", "train")
     dataset = load_vifactcheck(split)
@@ -279,7 +287,9 @@ def browse_dataset_samples() -> None:
         print(f"Claim date : {sample.get('claim_date', '')}")
 
         if prompt_yes_no("Chạy full analysis với claim này?", default=False):
-            analysis = run_full_analysis(sample.get("claim", ""), skip_evidence=False, top_k_evidence=5)
+            analysis = run_full_analysis(
+                sample.get("claim", ""), skip_evidence=False, top_k_evidence=5
+            )
             print_baseline_result(analysis["baseline"])
             print_trust_result(analysis["trust"])
             print_stylistic_result(analysis["stylistic_features"])
@@ -288,6 +298,7 @@ def browse_dataset_samples() -> None:
 def build_faiss_index_interactive() -> None:
     """Build the FAISS index interactively."""
     from fake_news_detector.rag.vector_store import get_vector_store
+
     print_header("Build FAISS Index")
     limit = prompt_int("Số lượng mẫu train để index", 1000)
     documents = build_documents_from_dataset(limit)
@@ -306,6 +317,7 @@ def build_faiss_index_interactive() -> None:
 def query_faiss_index_interactive() -> None:
     """Query the FAISS vector store."""
     from fake_news_detector.rag.vector_store import get_vector_store
+
     print_header("Query FAISS Index")
     query = prompt("Nhập query")
     k = prompt_int("Số kết quả", 5)
@@ -408,7 +420,9 @@ def full_analysis_interactive() -> None:
 
     skip_evidence = prompt_yes_no("Bỏ qua evidence retrieval?", default=False)
     top_k_evidence = prompt_int("Top-k evidence", 5)
-    analysis = run_full_analysis(article, skip_evidence=skip_evidence, top_k_evidence=top_k_evidence)
+    analysis = run_full_analysis(
+        article, skip_evidence=skip_evidence, top_k_evidence=top_k_evidence
+    )
 
     if analysis["summarized"]:
         print("Nội dung dài đã được rút gọn trước khi phân tích.")
@@ -438,7 +452,9 @@ def trust_only_interactive() -> None:
         return
     skip_evidence = prompt_yes_no("Bỏ qua evidence retrieval?", default=False)
     top_k_evidence = prompt_int("Top-k evidence", 5)
-    result = run_trust_only(article, skip_evidence=skip_evidence, top_k_evidence=top_k_evidence)
+    result = run_trust_only(
+        article, skip_evidence=skip_evidence, top_k_evidence=top_k_evidence
+    )
     print_trust_result(
         {
             "claims": result.claims,
@@ -509,10 +525,16 @@ def parse_args() -> argparse.Namespace:
     """Parse command-line arguments."""
     parser = argparse.ArgumentParser(description="Interactive fake news project runner")
     parser.add_argument("--text", help="Run full analysis directly for a text input")
-    parser.add_argument("--skip-evidence", action="store_true", help="Skip evidence retrieval in TRUST")
-    parser.add_argument("--top-k", type=int, default=5, help="Top-k evidence for TRUST retrieval")
+    parser.add_argument(
+        "--skip-evidence", action="store_true", help="Skip evidence retrieval in TRUST"
+    )
+    parser.add_argument(
+        "--top-k", type=int, default=5, help="Top-k evidence for TRUST retrieval"
+    )
     parser.add_argument("--verbose", action="store_true", help="Enable debug logging")
-    parser.add_argument("--print-json", action="store_true", help="Print raw JSON for direct analysis")
+    parser.add_argument(
+        "--print-json", action="store_true", help="Print raw JSON for direct analysis"
+    )
     return parser.parse_args()
 
 

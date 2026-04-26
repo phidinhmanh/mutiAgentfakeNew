@@ -1,4 +1,5 @@
 """Tests for PhoBERT baseline model."""
+
 from __future__ import annotations
 
 from unittest.mock import Mock, patch
@@ -134,9 +135,7 @@ class TestGetBaselineModel:
         """Returns PhoBERTBaseline instance."""
         from fake_news_detector.models.baseline import get_baseline_model
 
-        with patch(
-            "fake_news_detector.models.baseline._baseline_model", None
-        ):
+        with patch("fake_news_detector.models.baseline._baseline_model", None):
             with patch(
                 "fake_news_detector.models.baseline.PhoBERTBaseline.__init__",
                 return_value=None,
@@ -149,8 +148,6 @@ class TestGetBaselineModel:
         from fake_news_detector.models.baseline import get_baseline_model
 
         mock_model = Mock(spec=PhoBERTBaseline)
-        with patch(
-            "fake_news_detector.models.baseline._baseline_model", mock_model
-        ):
+        with patch("fake_news_detector.models.baseline._baseline_model", mock_model):
             result = get_baseline_model()
             assert result is mock_model

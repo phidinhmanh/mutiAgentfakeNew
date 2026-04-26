@@ -1,4 +1,5 @@
 """Word cloud visualization for text analysis."""
+
 import logging
 from typing import Any
 
@@ -57,9 +58,27 @@ def get_top_words(text: str, n: int = 20) -> list[tuple[str, int]]:
     tokens = tokenize_words(text)
 
     stopwords = {
-        "và", "của", "là", "có", "được", "trong", "cho", "với",
-        "theo", "này", "đã", "không", "tại", "về", "sau",
-        "các", "những", "một", "cũng", "như", "đến",
+        "và",
+        "của",
+        "là",
+        "có",
+        "được",
+        "trong",
+        "cho",
+        "với",
+        "theo",
+        "này",
+        "đã",
+        "không",
+        "tại",
+        "về",
+        "sau",
+        "các",
+        "những",
+        "một",
+        "cũng",
+        "như",
+        "đến",
     }
 
     filtered = [t for t in tokens if t.lower() not in stopwords and len(t) > 2]
@@ -93,6 +112,7 @@ def analyze_text_length(text: str) -> dict[str, Any]:
     text.split()
 
     from fake_news_detector.data.preprocessing import split_sentences
+
     sentences = split_sentences(text)
 
     char_count = len(text)

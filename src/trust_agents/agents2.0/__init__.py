@@ -14,9 +14,9 @@ from .delphi_jury import DelphiJury, verify_with_delphi_jury_sync
 from .logic_aggregator import LogicAggregator
 
 __all__ = [
-    'DecomposerAgent',
-    'decompose_claim_sync',
-    'LogicAggregator',
-    'DelphiJury',
-    'verify_with_delphi_jury_sync',
+    "DecomposerAgent",
+    "decompose_claim_sync",
+    "LogicAggregator",
+    "DelphiJury",
+    "verify_with_delphi_jury_sync",
 ]

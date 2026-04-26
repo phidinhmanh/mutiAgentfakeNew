@@ -55,7 +55,7 @@ markers = [
 addopts = ["--strict-markers", "--tb=short", "-v"]
 
 [tool.ruff]
-line-length = 88
+line-length = 120
 target-version = "py310"
 
 [tool.ruff.lint]

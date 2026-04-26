@@ -1,4 +1,5 @@
 """Centralized factory for TRUST chat models."""
+
 from __future__ import annotations
 
 import os
@@ -66,7 +67,7 @@ def create_chat_model(config: LLMConfig | None = None) -> Any:
                 nvidia_api_key=nvidia_key,
                 max_completion_tokens=resolved_config.max_tokens,
             )
-        ChatGemini_cls = _get_chat_gemini()
+        ChatGemini_cls = _get_chat_gemini()  # noqa: N806
         return ChatGemini_cls(
             model_name=resolved_config.model,
             provider="nvidia",
@@ -75,7 +76,7 @@ def create_chat_model(config: LLMConfig | None = None) -> Any:
             google_api_key=None,
         )
 
-    ChatGemini_cls = _get_chat_gemini()
+    ChatGemini_cls = _get_chat_gemini()  # noqa: N806
     return ChatGemini_cls(
         model_name=resolved_config.model,
         provider=provider_val,

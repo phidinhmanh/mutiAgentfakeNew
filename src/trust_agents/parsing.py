@@ -1,4 +1,5 @@
 """Shared parsing helpers for TRUST agent outputs."""
+
 from __future__ import annotations
 
 from typing import Any

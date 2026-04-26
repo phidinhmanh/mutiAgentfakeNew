@@ -1,4 +1,3 @@
-
 """
 Retrieval Agent Tools - Tools for evidence retrieval using hybrid search.
 
@@ -61,7 +60,9 @@ async def search_evidence_tool(
             vector_store = vector_store_fn()
             results = retrieve_with_fallback(
                 query=query,
-                local_search=lambda value: vector_store.similarity_search(value, k=top_k),
+                local_search=lambda value: vector_store.similarity_search(
+                    value, k=top_k
+                ),
                 web_search=lambda value: search_web(value, num_results=top_k),
                 threshold=settings.similarity_threshold,
                 use_web_search=use_web_search,
@@ -143,7 +144,10 @@ async def get_passage_tool(passage_id: str) -> str:
             vector_store = vector_store_fn()
             passage = None
             for index, doc in enumerate(vector_store.documents):
-                if doc.get("id") == passage_id or index == int(passage_id.split("_")[-1]) - 1:
+                if (
+                    doc.get("id") == passage_id
+                    or index == int(passage_id.split("_")[-1]) - 1
+                ):
                     passage = doc.copy()
                     passage["id"] = passage_id
                     break

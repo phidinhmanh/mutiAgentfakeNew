@@ -224,12 +224,8 @@ class LogicAggregator:
             verdict_label = str(verdict.get("verdict", "uncertain")).lower()
             confidence = float(verdict.get("confidence", 0.5))
 
-            if (
-                final_verdict == "true"
-                and verdict_label in ["true", "supported"]
-            ) or (
-                final_verdict == "false"
-                and verdict_label in ["false", "contradicted"]
+            if (final_verdict == "true" and verdict_label in ["true", "supported"]) or (
+                final_verdict == "false" and verdict_label in ["false", "contradicted"]
             ):
                 agreeing_confidences.append(confidence)
 
@@ -274,7 +270,9 @@ class LogicAggregator:
                 votes["uncertain"] += 1
 
         final_verdict = max(votes, key=votes.get)
-        confidence = votes[final_verdict] / len(atomic_verdicts) if atomic_verdicts else 0.0
+        confidence = (
+            votes[final_verdict] / len(atomic_verdicts) if atomic_verdicts else 0.0
+        )
 
         return {
             "verdict": final_verdict,
@@ -290,7 +288,11 @@ if __name__ == "__main__":
 
     verdicts = [
         {"claim": "Biden won 2020 election", "verdict": "true", "confidence": 0.9},
-        {"claim": "Biden became president in 2021", "verdict": "true", "confidence": 0.95},
+        {
+            "claim": "Biden became president in 2021",
+            "verdict": "true",
+            "confidence": 0.95,
+        },
     ]
     print(aggregator.aggregate(verdicts, "C1 AND C2"))
 

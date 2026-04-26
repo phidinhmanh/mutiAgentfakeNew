@@ -146,7 +146,7 @@ def _extract_balanced_json(text: str) -> str | None:
         elif char == closing:
             depth -= 1
             if depth == 0:
-                return text[start:index + 1]
+                return text[start : index + 1]
 
     return None
 
@@ -198,5 +198,9 @@ def call_llm_json(
     try:
         return _parse_json_response(retry_response)
     except ValueError as error:
-        logger.warning("Failed to parse JSON after retry: %s, response: %s", error, retry_response[:200])
+        logger.warning(
+            "Failed to parse JSON after retry: %s, response: %s",
+            error,
+            retry_response[:200],
+        )
         raise

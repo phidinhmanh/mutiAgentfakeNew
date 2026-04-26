@@ -15,6 +15,7 @@ from unittest.mock import Mock, patch
 @dataclass
 class GoldenSample:
     """A golden sample for acceptance testing."""
+
     id: str
     text: str
     expected_verdict: str  # "true", "false", or "uncertain"
@@ -25,6 +26,7 @@ class GoldenSample:
 @dataclass
 class AcceptanceResult:
     """Result of acceptance test for a sample."""
+
     sample_id: str
     passed: bool
     actual_verdict: str | None
@@ -40,55 +42,55 @@ VIETNAMESE_FAKE_NEWS_SAMPLES = [
         text="Việt Nam đã phát hiện người ngoài hành tinh tại Hà Nội và chính phủ đang che giấu thông tin này.",
         expected_verdict="false",
         expected_claims=1,
-        description="Tin giả với thông tin vô lý về UFO"
+        description="Tin giả với thông tin vô lý về UFO",
     ),
     GoldenSample(
         id="fake_news_gdp_exaggerated",
         text="Việt Nam đạt tăng trưởng GDP 50% trong quý 1 năm 2024, cao nhất thế giới.",
         expected_verdict="false",
         expected_claims=1,
-        description="Tin giả với số liệu GDP phi lý"
+        description="Tin giả với số liệu GDP phi lý",
     ),
     GoldenSample(
         id="fake_news_health_false",
         text="Uống nước đá có thể chữa khỏi ung thư trong vòng 1 tuần. Bác sĩ nổi tiếng xác nhận.",
         expected_verdict="false",
         expected_claims=1,
-        description="Tin giả về y tế"
+        description="Tin giả về y tế",
     ),
 ]
 
 VIETNAMESE_REAL_NEWS_SAMPLES = [
     GoldenSample(
         id="real_news_gdp_wb",
-        text="Theo báo cáo của World Bank, Việt Nam đạt tăng trưởng GDP 5.6% trong năm 2023, thuộc nhóm cao nhất ASEAN.",
+        text="Theo báo cáo của World Bank, Việt Nam đạt tăng trưởng GDP 5.6% trong năm 2023, thuộc nhóm cao nhất ASEAN.",  # noqa: E501
         expected_verdict="true",
         expected_claims=1,
-        description="Tin thật với số liệu cụ thể từ WB"
+        description="Tin thật với số liệu cụ thể từ WB",
     ),
     GoldenSample(
         id="real_news_covid_moh",
         text="Bộ Y tế công bố số ca mắc COVID-19 ngày 15/3/2024 giảm 30% so với tuần trước, xuống còn 1,500 ca.",
         expected_verdict="true",
         expected_claims=1,
-        description="Tin thật với số liệu chính thức từ Bộ Y tế"
+        description="Tin thật với số liệu chính thức từ Bộ Y tế",
     ),
 ]
 
 VIETNAMESE_UNVERIFIABLE_SAMPLES = [
     GoldenSample(
         id="unverifiable_generic",
-        text="Một nguồn tin cho biết lãnh đạo đất nước sẽ có cuộc họp quan trọng vào tuần tới nhưng không tiết lộ chi tiết.",
+        text="Một nguồn tin cho biết lãnh đạo đất nước sẽ có cuộc họp quan trọng vào tuần tới nhưng không tiết lộ chi tiết.",  # noqa: E501
         expected_verdict="uncertain",
         expected_claims=1,
-        description="Tin không thể xác minh do thiếu chi tiết cụ thể"
+        description="Tin không thể xác minh do thiếu chi tiết cụ thể",
     ),
     GoldenSample(
         id="unverifiable_rumor",
         text="Có tin đồn rằng một công ty lớn sẽ thay đổi chính sách nhưng chưa có thông tin chính thức.",
         expected_verdict="uncertain",
         expected_claims=1,
-        description="Tin đồn chưa được xác minh"
+        description="Tin đồn chưa được xác minh",
     ),
 ]
 
@@ -125,7 +127,9 @@ class TestFactCheckFlowAcceptance:
                 passed=passed,
                 actual_verdict=actual_verdict,
                 expected_verdict=sample.expected_verdict,
-                error_message=None if passed else f"Expected {sample.expected_verdict}, got {actual_verdict}"
+                error_message=None
+                if passed
+                else f"Expected {sample.expected_verdict}, got {actual_verdict}",
             )
         except Exception as e:
             return AcceptanceResult(
@@ -133,7 +137,7 @@ class TestFactCheckFlowAcceptance:
                 passed=False,
                 actual_verdict=None,
                 expected_verdict=sample.expected_verdict,
-                error_message=str(e)
+                error_message=str(e),
             )
 
     def _run_pipeline_with_evidence(
@@ -151,7 +155,7 @@ class TestFactCheckFlowAcceptance:
             # Patch evidence retrieval to return our evidence
             with patch(
                 "trust_agents.orchestrator.run_evidence_retrieval_agent_sync",
-                return_value=evidence
+                return_value=evidence,
             ):
                 with patch(
                     "trust_agents.orchestrator.run_verifier_agent_sync",
@@ -159,15 +163,15 @@ class TestFactCheckFlowAcceptance:
                         "verdict": expected_verdict,
                         "confidence": 0.85,
                         "label": expected_verdict,
-                        "reasoning": f"Evidence {'supports' if expected_verdict == 'true' else 'contradicts'} claim"
-                    }
+                        "reasoning": f"Evidence {'supports' if expected_verdict == 'true' else 'contradicts'} claim",
+                    },
                 ):
                     with patch(
                         "trust_agents.orchestrator.run_explainer_agent_sync",
                         return_value={
                             "summary": f"Claim verified as {expected_verdict}",
-                            "explanation": f"Evidence {'supports' if expected_verdict == 'true' else 'contradicts'} the claim"
-                        }
+                            "explanation": f"Evidence {'supports' if expected_verdict == 'true' else 'contradicts'} the claim",  # noqa: E501
+                        },
                     ):
                         result = orchestrator.process_text(sample.text)
 
@@ -184,7 +188,9 @@ class TestFactCheckFlowAcceptance:
                 passed=passed,
                 actual_verdict=actual_verdict,
                 expected_verdict=expected_verdict,
-                error_message=None if passed else f"Expected {expected_verdict}, got {actual_verdict}"
+                error_message=None
+                if passed
+                else f"Expected {expected_verdict}, got {actual_verdict}",
             )
         except Exception as e:
             return AcceptanceResult(
@@ -192,7 +198,7 @@ class TestFactCheckFlowAcceptance:
                 passed=False,
                 actual_verdict=None,
                 expected_verdict=expected_verdict,
-                error_message=str(e)
+                error_message=str(e),
             )
 
     def test_fake_news_samples_return_false(
@@ -202,7 +208,11 @@ class TestFactCheckFlowAcceptance:
         """Test that fake news samples return 'false' verdict."""
         for sample in VIETNAMESE_FAKE_NEWS_SAMPLES:
             evidence = [
-                {"content": f"Evidence contradicting: {sample.text}", "source": "test", "score": 0.9}
+                {
+                    "content": f"Evidence contradicting: {sample.text}",
+                    "source": "test",
+                    "score": 0.9,
+                }
             ]
             result = self._run_pipeline_with_evidence(
                 sample, evidence, expected_verdict="false"
@@ -218,7 +228,11 @@ class TestFactCheckFlowAcceptance:
         """Test that real news samples return 'true' verdict."""
         for sample in VIETNAMESE_REAL_NEWS_SAMPLES:
             evidence = [
-                {"content": f"Evidence supporting: {sample.text}", "source": "test", "score": 0.9}
+                {
+                    "content": f"Evidence supporting: {sample.text}",
+                    "source": "test",
+                    "score": 0.9,
+                }
             ]
             result = self._run_pipeline_with_evidence(
                 sample, evidence, expected_verdict="true"
@@ -235,7 +249,7 @@ class TestFactCheckFlowAcceptance:
         for sample in VIETNAMESE_UNVERIFIABLE_SAMPLES:
             with patch(
                 "trust_agents.orchestrator.run_evidence_retrieval_agent_sync",
-                return_value=[]  # No evidence
+                return_value=[],  # No evidence
             ):
                 with patch(
                     "trust_agents.orchestrator.run_verifier_agent_sync",
@@ -243,15 +257,15 @@ class TestFactCheckFlowAcceptance:
                         "verdict": "uncertain",
                         "confidence": 0.3,
                         "label": "uncertain",
-                        "reasoning": "Not enough evidence"
-                    }
+                        "reasoning": "Not enough evidence",
+                    },
                 ):
                     with patch(
                         "trust_agents.orchestrator.run_explainer_agent_sync",
                         return_value={
                             "summary": "Cannot verify - insufficient evidence",
-                            "explanation": "Not enough evidence to make a determination"
-                        }
+                            "explanation": "Not enough evidence to make a determination",
+                        },
                     ):
                         result = self._run_pipeline_for_sample(
                             sample,

@@ -1,4 +1,5 @@
 """Web search integration for real-time evidence."""
+
 import logging
 from typing import Any
 
@@ -10,7 +11,9 @@ from fake_news_detector.config import settings
 logger = logging.getLogger(__name__)
 
 
-def search_serper(query: str, num_results: int = 3) -> tuple[list[dict[str, Any]], str | None]:
+def search_serper(
+    query: str, num_results: int = 3
+) -> tuple[list[dict[str, Any]], str | None]:
     """Search using Serper.dev (Google Search API).
 
     Args:
@@ -38,19 +41,23 @@ def search_serper(query: str, num_results: int = 3) -> tuple[list[dict[str, Any]
 
         results = []
         for item in data.get("organic", [])[:num_results]:
-            results.append({
-                "content": item.get("snippet", ""),
-                "title": item.get("title", ""),
-                "url": item.get("link", ""),
-                "source": "serper",
-                "score": 0.8,
-            })
+            results.append(
+                {
+                    "content": item.get("snippet", ""),
+                    "title": item.get("title", ""),
+                    "url": item.get("link", ""),
+                    "source": "serper",
+                    "score": 0.8,
+                }
+            )
 
         return results, None
     except HTTPError as error:
         status_code = error.response.status_code if error.response is not None else None
         if status_code == 403:
-            logger.error("Serper search failed with 403 Forbidden; check SERPER_API_KEY or provider access")
+            logger.error(
+                "Serper search failed with 403 Forbidden; check SERPER_API_KEY or provider access"
+            )
             return [], "http_403"
         logger.error("Serper search failed with HTTP %s: %s", status_code, error)
         return [], f"http_{status_code}" if status_code is not None else "http_error"
@@ -59,7 +66,9 @@ def search_serper(query: str, num_results: int = 3) -> tuple[list[dict[str, Any]
         return [], type(error).__name__
 
 
-def _should_fallback_to_tavily(failure_reason: str | None, results: list[dict[str, Any]]) -> bool:
+def _should_fallback_to_tavily(
+    failure_reason: str | None, results: list[dict[str, Any]]
+) -> bool:
     """Return whether Tavily should be used after Serper attempt."""
     if results:
         return False
@@ -75,7 +84,9 @@ def _log_tavily_fallback_reason(failure_reason: str | None) -> None:
     elif failure_reason == "missing_api_key":
         logger.warning("Falling back to Tavily because SERPER_API_KEY is unavailable")
     elif failure_reason:
-        logger.warning("Falling back to Tavily because Serper failed: %s", failure_reason)
+        logger.warning(
+            "Falling back to Tavily because Serper failed: %s", failure_reason
+        )
 
 
 def search_web(query: str, num_results: int = 3) -> list[dict[str, Any]]:
@@ -100,8 +111,6 @@ def search_web(query: str, num_results: int = 3) -> list[dict[str, Any]]:
 
     _log_tavily_fallback_reason(failure_reason)
     return search_tavily(query, num_results)
-
-
 
 
 def search_tavily(query: str, num_results: int = 3) -> list[dict[str, Any]]:
@@ -137,13 +146,15 @@ def search_tavily(query: str, num_results: int = 3) -> list[dict[str, Any]]:
 
         results = []
         for item in data.get("results", [])[:num_results]:
-            results.append({
-                "content": item.get("content", ""),
-                "title": item.get("title", ""),
-                "url": item.get("url", ""),
-                "source": "tavily",
-                "score": 0.8,
-            })
+            results.append(
+                {
+                    "content": item.get("content", ""),
+                    "title": item.get("title", ""),
+                    "url": item.get("url", ""),
+                    "source": "tavily",
+                    "score": 0.8,
+                }
+            )
 
         return results
     except Exception as e:
@@ -180,10 +191,12 @@ def check_semantic_consistency(
             entities_trusted = _extract_key_entities(results[0].get("content", ""))
             diff = entities_article - entities_trusted
             if diff:
-                inconsistencies.append({
-                    "source": source,
-                    "diff": list(diff),
-                })
+                inconsistencies.append(
+                    {
+                        "source": source,
+                        "diff": list(diff),
+                    }
+                )
 
     return {
         "consistent": len(inconsistencies) == 0,
@@ -194,5 +207,6 @@ def check_semantic_consistency(
 def _extract_key_entities(text: str) -> set[str]:
     """Extract key entities from text."""
     import re
+
     words = re.findall(r"\b[A-ZÀ-Ỹ][a-zà-ỹ]+(?:\s+[A-ZÀ-Ỹ][a-zà-ỹ]+)*\b", text)
     return set(words[:20])

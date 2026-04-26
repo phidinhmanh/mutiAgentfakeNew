@@ -1,4 +1,5 @@
 """Async utilities for parallel execution."""
+
 import asyncio
 import logging
 from collections.abc import Callable, Coroutine
@@ -59,12 +60,8 @@ async def parallel_analysis(
     Returns:
         Tuple of (baseline_result, claims)
     """
-    baseline_task = asyncio.create_task(
-        run_in_thread(baseline_func, article)
-    )
-    claim_task = asyncio.create_task(
-        run_in_thread(claim_func, article)
-    )
+    baseline_task = asyncio.create_task(run_in_thread(baseline_func, article))
+    claim_task = asyncio.create_task(run_in_thread(claim_func, article))
 
     baseline_result, claims = await gather_with_timeout(
         baseline_task, claim_task, timeout=60.0
@@ -93,6 +90,7 @@ def create_task_with_retry(
     Returns:
         Task object
     """
+
     async def retry_wrapper() -> T:
         last_error = None
         for attempt in range(max_retries):
@@ -133,6 +131,7 @@ class AsyncBatch:
         Returns:
             List of results
         """
+
         async def limited_process(item: Any) -> T:
             async with self.semaphore:
                 return await func(item)

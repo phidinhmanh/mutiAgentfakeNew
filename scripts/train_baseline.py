@@ -1,4 +1,5 @@
 """Train baseline model (PhoBERT fine-tuning placeholder)."""
+
 import argparse
 import logging
 from pathlib import Path
@@ -19,7 +20,9 @@ DATASET_NAME = "tranthaihoa/vifactcheck"
 MODEL_NAME = "vinai/phobert-base"
 
 
-def prepare_dataset(tokenizer: AutoTokenizer, max_length: int = 256) -> tuple[Dataset, Dataset]:
+def prepare_dataset(
+    tokenizer: AutoTokenizer, max_length: int = 256
+) -> tuple[Dataset, Dataset]:
     """Prepare dataset for training.
 
     Args:

@@ -1,4 +1,5 @@
 """Tests for vector store (FAISS)."""
+
 from __future__ import annotations
 
 from pathlib import Path
@@ -25,17 +26,13 @@ class TestVectorStoreInit:
 class TestVectorStoreAddDocuments:
     """Test VectorStore.add_documents method."""
 
-    def test_add_documents_empty_list(
-        self, mock_sentence_transformer: Mock
-    ) -> None:
+    def test_add_documents_empty_list(self, mock_sentence_transformer: Mock) -> None:
         """Adding empty list does nothing."""
         vs = VectorStore()
         vs.add_documents([])
         assert vs.index is None
 
-    def test_add_documents_single(
-        self, mock_sentence_transformer: Mock
-    ) -> None:
+    def test_add_documents_single(self, mock_sentence_transformer: Mock) -> None:
         """Single document is added correctly."""
         vs = VectorStore()
         documents = [{"content": "Test content", "id": "1"}]
@@ -43,9 +40,7 @@ class TestVectorStoreAddDocuments:
         assert vs.index is not None
         assert len(vs.documents) == 1
 
-    def test_add_documents_multiple(
-        self, mock_sentence_transformer: Mock
-    ) -> None:
+    def test_add_documents_multiple(self, mock_sentence_transformer: Mock) -> None:
         """Multiple documents are added correctly."""
         vs = VectorStore()
         documents = [
@@ -55,9 +50,7 @@ class TestVectorStoreAddDocuments:
         vs.add_documents(documents)
         assert len(vs.documents) == 2
 
-    def test_add_documents_twice(
-        self, mock_sentence_transformer: Mock
-    ) -> None:
+    def test_add_documents_twice(self, mock_sentence_transformer: Mock) -> None:
         """Documents can be added in batches."""
         vs = VectorStore()
         vs.add_documents([{"content": "First", "id": "1"}])
@@ -92,9 +85,7 @@ class TestVectorStoreSimilaritySearch:
     ) -> None:
         """k parameter limits results."""
         vs = VectorStore()
-        vs.add_documents([
-            {"content": f"Content {i}", "id": str(i)} for i in range(5)
-        ])
+        vs.add_documents([{"content": f"Content {i}", "id": str(i)} for i in range(5)])
         results = vs.similarity_search("test", k=2)
         assert len(results) <= 2
 
@@ -103,10 +94,12 @@ class TestVectorStoreSimilaritySearch:
     ) -> None:
         """Results include rank field."""
         vs = VectorStore()
-        vs.add_documents([
-            {"content": "First", "id": "1"},
-            {"content": "Second", "id": "2"},
-        ])
+        vs.add_documents(
+            [
+                {"content": "First", "id": "1"},
+                {"content": "Second", "id": "2"},
+            ]
+        )
         results = vs.similarity_search("test", k=2)
         assert all("rank" in r for r in results)
 
@@ -166,9 +159,7 @@ class TestGetVectorStore:
         mock_vs_class.assert_called_once()
 
     @patch("fake_news_detector.rag.vector_store._vector_store")
-    def test_singleton_returns_same_instance(
-        self, mock_vs: Mock
-    ) -> None:
+    def test_singleton_returns_same_instance(self, mock_vs: Mock) -> None:
         """Called multiple times returns same instance."""
         result = get_vector_store()
         assert result is mock_vs

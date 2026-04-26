@@ -1,4 +1,3 @@
-
 """
 Improved Retrieval Agent Core
 - BM25 hybrid with Dense retrieval (Sentence-Transformers + FAISS)
@@ -30,11 +29,11 @@ nltk.download("punkt", quiet=True)
 nltk.download("punkt_tab", quiet=True)
 
 # BM25
-import numpy as np
-from rank_bm25 import BM25Okapi
+import numpy as np  # noqa: E402
+from rank_bm25 import BM25Okapi  # noqa: E402
 
 # Dense retrieval
-from sentence_transformers import SentenceTransformer
+from sentence_transformers import SentenceTransformer  # noqa: E402
 
 try:
     import faiss
@@ -42,8 +41,8 @@ except Exception:
     faiss = None
 
 # Parsing
-from bs4 import BeautifulSoup
-from PyPDF2 import PdfReader
+from bs4 import BeautifulSoup  # noqa: E402
+from PyPDF2 import PdfReader  # noqa: E402
 
 # Optional re-ranker
 try:
@@ -54,6 +53,7 @@ except Exception:
 # Logging
 logger = logging.getLogger("retrieval_agent_core")
 
+
 # ---------------- Data classes ----------------
 @dataclass
 class Passage:
@@ -62,6 +62,7 @@ class Passage:
     title: str
     text: str
     metadata: dict[str, Any]
+
 
 # ---------------- Utilities ----------------
 def safe_read_text(path: str) -> str:
@@ -73,6 +74,7 @@ def safe_read_text(path: str) -> str:
         except Exception:
             continue
     raise OSError(f"Cannot read {path} with known encodings")
+
 
 def read_pdf_text(path: str) -> str:
     text = []
@@ -86,6 +88,7 @@ def read_pdf_text(path: str) -> str:
             text.append(ptext)
     return "\n".join(text)
 
+
 def read_html_text(path_or_str: str, is_path: bool = True) -> str:
     if is_path:
         with open(path_or_str, encoding="utf-8", errors="ignore") as f:
@@ -97,6 +100,7 @@ def read_html_text(path_or_str: str, is_path: bool = True) -> str:
     for s in soup(["script", "style", "header", "footer", "nav", "aside"]):
         s.extract()
     return soup.get_text(separator="\n")
+
 
 def chunk_by_sentences(text: str, max_words: int = 160, overlap: int = 20) -> list[str]:
     sents = sent_tokenize(text)
@@ -134,6 +138,7 @@ def chunk_by_sentences(text: str, max_words: int = 160, overlap: int = 20) -> li
         chunks.append(" ".join(cur))
     return chunks
 
+
 def batch_iter(iterable: Iterable, batch_size: int):
     batch = []
     for x in iterable:
@@ -144,13 +149,20 @@ def batch_iter(iterable: Iterable, batch_size: int):
     if batch:
         yield batch
 
+
 def cosine_normalize(arr: np.ndarray) -> np.ndarray:
     norms = np.linalg.norm(arr, axis=1, keepdims=True)
     norms[norms == 0] = 1.0
     return arr / norms
 
-def mmr_rerank(query_emb: np.ndarray, candidate_embs: np.ndarray, candidate_scores: list[float],
-               diversity: float = 0.7, top_k: int = 5) -> list[int]:
+
+def mmr_rerank(
+    query_emb: np.ndarray,
+    candidate_embs: np.ndarray,
+    candidate_scores: list[float],
+    diversity: float = 0.7,
+    top_k: int = 5,
+) -> list[int]:
     """
     Simple MMR: chooses indices of candidates balancing score and diversity.
     Returns ordered list of selected indices (into candidate_embs).
@@ -171,12 +183,19 @@ def mmr_rerank(query_emb: np.ndarray, candidate_embs: np.ndarray, candidate_scor
         mmr_values = {}
         for idx in candidate_idxs:
             sim_q = sim_to_query[idx]
-            sim_sel = max((candidate_embs[idx] @ candidate_embs[s].T).item() for s in selected) if selected else 0
+            sim_sel = (
+                max(
+                    (candidate_embs[idx] @ candidate_embs[s].T).item() for s in selected
+                )
+                if selected
+                else 0
+            )
             mmr_values[idx] = diversity * sim_q - (1 - diversity) * sim_sel
         next_idx = max(mmr_values.items(), key=lambda x: x[1])[0]
         selected.append(next_idx)
         candidate_idxs.remove(next_idx)
     return selected
+
 
 # ---------------- RetrievalAgent ----------------
 class RetrievalAgent:
@@ -205,8 +224,14 @@ class RetrievalAgent:
         self._cross_encoder = None
 
     # ---------- ingestion ----------
-    def index_corpus(self, corpus_path: str, chunk_max_words: int = 160, chunk_overlap: int = 20,
-                     batch_size: int = 64, rebuild_dense: bool = True):
+    def index_corpus(
+        self,
+        corpus_path: str,
+        chunk_max_words: int = 160,
+        chunk_overlap: int = 20,
+        batch_size: int = 64,
+        rebuild_dense: bool = True,
+    ):
         """
         Walk directory (or single file) and create passages.
         Then build BM25 and optionally dense indices (if faiss + sentence-transformers available).
@@ -231,11 +256,15 @@ class RetrievalAgent:
             if not raw.strip():
                 continue
             # chunk
-            chunks = chunk_by_sentences(raw, max_words=chunk_max_words, overlap=chunk_overlap)
+            chunks = chunk_by_sentences(
+                raw, max_words=chunk_max_words, overlap=chunk_overlap
+            )
             for i, ch in enumerate(chunks):
                 pid = f"{f.name}_{i}"
                 meta = {"source_path": str(f), "chunk_index": i}
-                self.passages.append(Passage(id=pid, doc_id=str(f), title=f.name, text=ch, metadata=meta))
+                self.passages.append(
+                    Passage(id=pid, doc_id=str(f), title=f.name, text=ch, metadata=meta)
+                )
         logger.info("Total passages: %d", len(self.passages))
         # build indices
         self.build_bm25()
@@ -245,8 +274,10 @@ class RetrievalAgent:
     # ---------- BM25 ----------
     def build_bm25(self, tokenizer: Callable[[str], list[str]] = None):
         if tokenizer is None:
+
             def tokenizer(s):
                 return word_tokenize(s.lower())
+
         texts = [p.text for p in self.passages]
         tokenized = [tokenizer(t) for t in texts]
         self._bm25_tokenized = tokenized
@@ -259,12 +290,18 @@ class RetrievalAgent:
             logger.warning("FAISS not available. Skipping dense build.")
             return
         # load model
-        self._dense_model = SentenceTransformer(self.dense_model_name, device=("cuda" if use_gpu else "cpu"))
+        self._dense_model = SentenceTransformer(
+            self.dense_model_name, device=("cuda" if use_gpu else "cpu")
+        )
         texts = [p.text for p in self.passages]
-        logger.info("Encoding %d passages in batches (batch_size=%d)", len(texts), batch_size)
+        logger.info(
+            "Encoding %d passages in batches (batch_size=%d)", len(texts), batch_size
+        )
         embs_list = []
         for batch in tqdm(list(batch_iter(texts, batch_size)), desc="Encoding"):
-            emb = self._dense_model.encode(batch, convert_to_numpy=True, show_progress_bar=False)
+            emb = self._dense_model.encode(
+                batch, convert_to_numpy=True, show_progress_bar=False
+            )
             embs_list.append(emb)
         embs = np.vstack(embs_list).astype("float32")
         embs = cosine_normalize(embs)
@@ -279,7 +316,9 @@ class RetrievalAgent:
         elif self.faiss_index_type == "IVF":
             nlist = max(100, int(math.sqrt(len(embs))))
             quantizer = faiss.IndexFlatIP(dim)
-            index = faiss.IndexIVFFlat(quantizer, dim, nlist, faiss.METRIC_INNER_PRODUCT)
+            index = faiss.IndexIVFFlat(
+                quantizer, dim, nlist, faiss.METRIC_INNER_PRODUCT
+            )
             index.nprobe = min(10, nlist)
             index.train(embs)
         else:
@@ -342,8 +381,13 @@ class RetrievalAgent:
             # Without this, _dense_search() will return [] because
             # _dense_model is None, causing 0 evidence to be retrieved.
             if self._dense_model is None:
-                logger.info("Initializing dense model for query encoding: %s", self.dense_model_name)
-                self._dense_model = SentenceTransformer(self.dense_model_name, device=self.device)
+                logger.info(
+                    "Initializing dense model for query encoding: %s",
+                    self.dense_model_name,
+                )
+                self._dense_model = SentenceTransformer(
+                    self.dense_model_name, device=self.device
+                )
                 logger.info("✓ Dense model initialized successfully")
 
         # rebuild BM25
@@ -363,21 +407,32 @@ class RetrievalAgent:
             return []
         q_emb = self._dense_model.encode([query], convert_to_numpy=True)
         q_emb = cosine_normalize(q_emb.astype("float32"))
-        D, I = self._faiss_index.search(q_emb, k)
+        D, I = self._faiss_index.search(q_emb, k)  # noqa: E741, N806
         idxs = I[0].tolist()
         scores = D[0].tolist()
-        return [(int(i), float(s)) for i, s in zip(idxs, scores, strict=False) if i >= 0]
+        return [
+            (int(i), float(s)) for i, s in zip(idxs, scores, strict=False) if i >= 0
+        ]
 
     # ---------- public retrieve ----------
-    def retrieve(self, query: str, top_k: int = 5, bm25_weight: float = 0.6,
-                 candidate_k: int = 50, rerank_with_cross: bool = False,
-                 mmr: bool = False, mmr_diversity: float = 0.7) -> list[dict[str, Any]]:
+    def retrieve(
+        self,
+        query: str,
+        top_k: int = 5,
+        bm25_weight: float = 0.6,
+        candidate_k: int = 50,
+        rerank_with_cross: bool = False,
+        mmr: bool = False,
+        mmr_diversity: float = 0.7,
+    ) -> list[dict[str, Any]]:
         """
         Returns list of dicts:
         {passage_id, doc_id, title, text, metadata, bm25_score, dense_score, hybrid_score, cross_score}
         """
         bm25_res = self._bm25_search(query, k=candidate_k) if self._bm25 else []
-        dense_res = self._dense_search(query, k=candidate_k) if self._faiss_index else []
+        dense_res = (
+            self._dense_search(query, k=candidate_k) if self._faiss_index else []
+        )
 
         # merge scores in dict by index
         candidates = {}
@@ -393,8 +448,11 @@ class RetrievalAgent:
             return []
 
         # normalise scores
-        all_scores = [v["bm25"] for v in candidates.values()] + [v["dense"] for v in candidates.values()]
+        all_scores = [v["bm25"] for v in candidates.values()] + [
+            v["dense"] for v in candidates.values()
+        ]
         min_s, max_s = min(all_scores), max(all_scores)
+
         def norm(x):
             if max_s - min_s < 1e-9:
                 return 0.0
@@ -405,7 +463,14 @@ class RetrievalAgent:
             bm25_n = norm(v["bm25"])
             dense_n = norm(v["dense"])
             hybrid = bm25_weight * bm25_n + (1 - bm25_weight) * dense_n
-            merged.append({"idx": idx, "bm25_score": v["bm25"], "dense_score": v["dense"], "hybrid_score": hybrid})
+            merged.append(
+                {
+                    "idx": idx,
+                    "bm25_score": v["bm25"],
+                    "dense_score": v["dense"],
+                    "hybrid_score": hybrid,
+                }
+            )
 
         merged = sorted(merged, key=lambda x: x["hybrid_score"], reverse=True)
         # optional MMR for diversity
@@ -413,8 +478,13 @@ class RetrievalAgent:
             candidate_idxs = [m["idx"] for m in merged[:candidate_k]]
             candidate_embs = self._embeddings[candidate_idxs]
             query_emb = self._dense_model.encode([query], convert_to_numpy=True)[0]
-            selected_idxs = mmr_rerank(query_emb, candidate_embs, [m["hybrid_score"] for m in merged[:candidate_k]],
-                                       diversity=mmr_diversity, top_k=top_k)
+            selected_idxs = mmr_rerank(
+                query_emb,
+                candidate_embs,
+                [m["hybrid_score"] for m in merged[:candidate_k]],
+                diversity=mmr_diversity,
+                top_k=top_k,
+            )
             merged = [merged[i] for i in selected_idxs]
         else:
             merged = merged[:top_k]
@@ -425,21 +495,27 @@ class RetrievalAgent:
             scores = self._cross_encoder.predict(pairs)
             for m, s in zip(merged, scores, strict=False):
                 m["cross_score"] = float(s)
-            merged = sorted(merged, key=lambda x: x.get("cross_score", x["hybrid_score"]), reverse=True)
+            merged = sorted(
+                merged,
+                key=lambda x: x.get("cross_score", x["hybrid_score"]),
+                reverse=True,
+            )
 
         # produce output
         out = []
         for m in merged[:top_k]:
             p = self.passages[m["idx"]]
-            out.append({
-                "passage_id": p.id,
-                "doc_id": p.doc_id,
-                "title": p.title,
-                "text": p.text,
-                "metadata": p.metadata,
-                "bm25_score": m.get("bm25_score"),
-                "dense_score": m.get("dense_score"),
-                "hybrid_score": m.get("hybrid_score"),
-                "cross_score": m.get("cross_score", None)
-            })
+            out.append(
+                {
+                    "passage_id": p.id,
+                    "doc_id": p.doc_id,
+                    "title": p.title,
+                    "text": p.text,
+                    "metadata": p.metadata,
+                    "bm25_score": m.get("bm25_score"),
+                    "dense_score": m.get("dense_score"),
+                    "hybrid_score": m.get("hybrid_score"),
+                    "cross_score": m.get("cross_score", None),
+                }
+            )
         return out

@@ -1,4 +1,3 @@
-
 """
 Claim Extractor Tools - Tools for NLP-based claim extraction.
 
@@ -49,7 +48,11 @@ def _fallback_claim_sentences(text: str) -> list[str]:
     sentences = (
         _sentencize_vietnamese(text)
         if lang == "vi"
-        else [segment.strip() for segment in re.split(r"(?<=[.!?])\s+", text) if segment.strip()]
+        else [
+            segment.strip()
+            for segment in re.split(r"(?<=[.!?])\s+", text)
+            if segment.strip()
+        ]
     )
 
     claims: list[str] = []
@@ -61,9 +64,16 @@ def _fallback_claim_sentences(text: str) -> list[str]:
             continue
         if lang == "vi":
             lowered = stripped.lower()
-            if any(marker in lowered for marker in [" là ", " có ", " đã ", " sẽ ", " đang ", " theo "]):
+            if any(
+                marker in lowered
+                for marker in [" là ", " có ", " đã ", " sẽ ", " đang ", " theo "]
+            ):
                 claims.append(stripped)
-        elif re.search(r"\b(is|are|was|were|has|have|had|said|says|reported|announced|according to)\b", stripped, re.IGNORECASE):
+        elif re.search(
+            r"\b(is|are|was|were|has|have|had|said|says|reported|announced|according to)\b",
+            stripped,
+            re.IGNORECASE,
+        ):
             claims.append(stripped)
 
     return claims
@@ -80,18 +90,70 @@ def _detect_language(text: str) -> str:
     """
     # Vietnamese common patterns
     vietnamese_markers = [
-        "ă", "â", "đ", "ê", "ô", "ơ", "ư", "ạ", "ả", "ấ", "ầ", "ẩ", "ẫ",
-        "ậ", "ắ", "ằ", "ẳ", "ẵ", "ặ", "ẹ", "ẻ", "ẽ", "ế", "ề", "ể", "ễ",
-        "ệ", "ỉ", "ị", "ọ", "ỏ", "ố", "ồ", "ổ", "ỗ", "ộ", "ụ", "ủ", "ứ",
-        "ừ", "ử", "ữ", "ự", "ợ", "tôi", "bạn", "ông", "bà", "chúng", "họ",
-        "năm", "tháng", "ngày", "giờ", "phút"
+        "ă",
+        "â",
+        "đ",
+        "ê",
+        "ô",
+        "ơ",
+        "ư",
+        "ạ",
+        "ả",
+        "ấ",
+        "ầ",
+        "ẩ",
+        "ẫ",
+        "ậ",
+        "ắ",
+        "ằ",
+        "ẳ",
+        "ẵ",
+        "ặ",
+        "ẹ",
+        "ẻ",
+        "ẽ",
+        "ế",
+        "ề",
+        "ể",
+        "ễ",
+        "ệ",
+        "ỉ",
+        "ị",
+        "ọ",
+        "ỏ",
+        "ố",
+        "ồ",
+        "ổ",
+        "ỗ",
+        "ộ",
+        "ụ",
+        "ủ",
+        "ứ",
+        "ừ",
+        "ử",
+        "ữ",
+        "ự",
+        "ợ",
+        "tôi",
+        "bạn",
+        "ông",
+        "bà",
+        "chúng",
+        "họ",
+        "năm",
+        "tháng",
+        "ngày",
+        "giờ",
+        "phút",
     ]
 
     lower_text = text.lower()
     vietnamese_count = sum(1 for marker in vietnamese_markers if marker in lower_text)
 
     # Also check for Vietnamese diacritics
-    has_diacritics = any(c in lower_text for c in "ạảấầẩẫậắằẳẵặẹẻẽếềểễệỉịọỏốồổỗộụủứừửữựợ")
+    has_diacritics = any(
+        c in lower_text for c in "ạảấầẩẫậắằẳẵặẹẻẽếềểễệỉịọỏốồổỗộụủứừửữựợ"
+    )
 
     if vietnamese_count >= 2 or has_diacritics:
         return "vi"
@@ -109,6 +171,7 @@ def _tokenize_vietnamese(text: str) -> list[str]:
     """
     try:
         from underthesea import word_tokenize
+
         return word_tokenize(text, format="text").split()
     except ImportError:
         logger.warning("underthesea not installed, using simple split")
@@ -129,6 +192,7 @@ def _sentencize_vietnamese(text: str) -> list[str]:
     """
     try:
         from underthesea import sent_tokenize
+
         return sent_tokenize(text)
     except ImportError:
         logger.warning("underthesea not installed, using regex-based splitting")
@@ -173,14 +237,27 @@ def _ner_extract_vietnamese(text: str) -> str:
     nlp = _load_spacy_model("xx_ent_wiki_sm", "xx_sm")
     if nlp is None:
         claims = _fallback_claim_sentences(text)
-        logger.info("ner_claim_extraction_tool completed (heuristic fallback): %d claims found", len(claims))
-        result = {"claims": claims, "method": "ner", "language": "vi", "ner_done": False, "fallback": "heuristic"}
+        logger.info(
+            "ner_claim_extraction_tool completed (heuristic fallback): %d claims found",
+            len(claims),
+        )
+        result = {
+            "claims": claims,
+            "method": "ner",
+            "language": "vi",
+            "ner_done": False,
+            "fallback": "heuristic",
+        }
         return json.dumps(result, ensure_ascii=False)
 
     claims = []
     for sent in _sentencize_vietnamese(text):
         sent_doc = nlp(sent.strip())
-        entities = [ent.text for ent in sent_doc.ents if ent.label_ in ["PERSON", "ORG", "GPE", "LOC", "DATE", "MONEY", "EVENT"]]
+        entities = [
+            ent.text
+            for ent in sent_doc.ents
+            if ent.label_ in ["PERSON", "ORG", "GPE", "LOC", "DATE", "MONEY", "EVENT"]
+        ]
         if entities and _looks_like_claim_vietnamese(sent_doc):
             claims.append(sent.strip())
 
@@ -194,8 +271,17 @@ def _ner_extract_english(text: str) -> str:
     nlp = _load_spacy_model("en_core_web_sm", "xx_ent_wiki_sm", "xx_sm")
     if nlp is None:
         claims = _fallback_claim_sentences(text)
-        logger.info("ner_claim_extraction_tool completed (heuristic fallback): %d claims found", len(claims))
-        result = {"claims": claims, "method": "ner", "language": "en", "ner_done": False, "fallback": "heuristic"}
+        logger.info(
+            "ner_claim_extraction_tool completed (heuristic fallback): %d claims found",
+            len(claims),
+        )
+        result = {
+            "claims": claims,
+            "method": "ner",
+            "language": "en",
+            "ner_done": False,
+            "fallback": "heuristic",
+        }
         return json.dumps(result)
 
     doc = nlp(text)
@@ -204,7 +290,11 @@ def _ner_extract_english(text: str) -> str:
     for sent in doc.sents:
         sent_text = sent.text.strip()
         sent_doc = nlp(sent_text)
-        entities = [ent.text for ent in sent_doc.ents if ent.label_ in ["PERSON", "ORG", "GPE", "LOC", "EVENT", "DATE", "MONEY"]]
+        entities = [
+            ent.text
+            for ent in sent_doc.ents
+            if ent.label_ in ["PERSON", "ORG", "GPE", "LOC", "EVENT", "DATE", "MONEY"]
+        ]
         if entities and _looks_like_claim(sent_doc):
             claims.append(sent_text)
 
@@ -229,9 +319,30 @@ def _looks_like_claim_vietnamese(doc) -> bool:
 
     # Check for factual markers in Vietnamese
     factual_markers = [
-        "là", "có", "đã", "sẽ", "đang", "phát", "triển", "tăng", "giảm",
-        "cho biết", "theo", "báo", "tin", "nói", "khẳng", "định", "công",
-        "bố", "thông", "tin", "nghiên", "cứu", "xác", "nhận"
+        "là",
+        "có",
+        "đã",
+        "sẽ",
+        "đang",
+        "phát",
+        "triển",
+        "tăng",
+        "giảm",
+        "cho biết",
+        "theo",
+        "báo",
+        "tin",
+        "nói",
+        "khẳng",
+        "định",
+        "công",
+        "bố",
+        "thông",
+        "tin",
+        "nghiên",
+        "cứu",
+        "xác",
+        "nhận",
     ]
 
     text_lower = text.lower()
@@ -271,15 +382,49 @@ def _dependency_extract_vietnamese(text: str) -> str:
     nlp = _load_spacy_model("xx_ent_wiki_sm", "xx_sm", "en_core_web_sm")
     if nlp is None:
         claims = _fallback_claim_sentences(text)
-        logger.info("dependency_claim_extraction_tool completed (heuristic fallback): %d claims found", len(claims))
-        result = {"claims": claims, "method": "dependency", "language": "vi", "dependency_done": False, "fallback": "heuristic"}
+        logger.info(
+            "dependency_claim_extraction_tool completed (heuristic fallback): %d claims found",
+            len(claims),
+        )
+        result = {
+            "claims": claims,
+            "method": "dependency",
+            "language": "vi",
+            "dependency_done": False,
+            "fallback": "heuristic",
+        }
         return json.dumps(result, ensure_ascii=False)
 
     vi_claim_markers = [
-        "nói", "cho biết", "khẳng định", "tuyên bố", "thông báo", "báo cáo",
-        "xác nhận", "phủ nhận", "công bố", "kết luận", "nghiên cứu", "cho hay",
-        "trả lời", "hồi", "tin", "theo", "được", "là", "có", "đã", "sẽ", "đang",
-        "phát", "triển", "tăng", "giảm", "đạt", "vượt", "hạ"
+        "nói",
+        "cho biết",
+        "khẳng định",
+        "tuyên bố",
+        "thông báo",
+        "báo cáo",
+        "xác nhận",
+        "phủ nhận",
+        "công bố",
+        "kết luận",
+        "nghiên cứu",
+        "cho hay",
+        "trả lời",
+        "hồi",
+        "tin",
+        "theo",
+        "được",
+        "là",
+        "có",
+        "đã",
+        "sẽ",
+        "đang",
+        "phát",
+        "triển",
+        "tăng",
+        "giảm",
+        "đạt",
+        "vượt",
+        "hạ",
     ]
 
     claims = []
@@ -291,16 +436,30 @@ def _dependency_extract_vietnamese(text: str) -> str:
             continue
 
         sent_doc = nlp(sent_text)
-        has_claim_marker = any(marker in sent_text.lower() for marker in vi_claim_markers)
+        has_claim_marker = any(
+            marker in sent_text.lower() for marker in vi_claim_markers
+        )
         has_subject = any(token.dep_ in ["nsubj", "nsubj:pass"] for token in sent_doc)
-        has_factual_data = any(ind in sent_text for ind in ["năm", "người", "triệu", "tỷ", "phần", "%", "°"])
+        has_factual_data = any(
+            ind in sent_text
+            for ind in ["năm", "người", "triệu", "tỷ", "phần", "%", "°"]
+        )
 
-        if (has_claim_marker or has_factual_data) and (has_subject or len(sent_doc) > 5):
+        if (has_claim_marker or has_factual_data) and (
+            has_subject or len(sent_doc) > 5
+        ):
             if _looks_like_claim_vietnamese(sent_doc):
                 claims.append(sent_text)
 
-    logger.info(f"dependency_claim_extraction_tool completed: {len(claims)} claims found")
-    result = {"claims": claims, "method": "dependency", "language": "vi", "dependency_done": True}
+    logger.info(
+        f"dependency_claim_extraction_tool completed: {len(claims)} claims found"
+    )
+    result = {
+        "claims": claims,
+        "method": "dependency",
+        "language": "vi",
+        "dependency_done": True,
+    }
     return json.dumps(result, ensure_ascii=False)
 
 
@@ -309,24 +468,94 @@ def _dependency_extract_english(text: str) -> str:
     nlp = _load_spacy_model("en_core_web_sm", "xx_ent_wiki_sm", "xx_sm")
     if nlp is None:
         claims = _fallback_claim_sentences(text)
-        logger.info("dependency_claim_extraction_tool completed (heuristic fallback): %d claims found", len(claims))
-        result = {"claims": claims, "method": "dependency", "language": "en", "dependency_done": False, "fallback": "heuristic"}
+        logger.info(
+            "dependency_claim_extraction_tool completed (heuristic fallback): %d claims found",
+            len(claims),
+        )
+        result = {
+            "claims": claims,
+            "method": "dependency",
+            "language": "en",
+            "dependency_done": False,
+            "fallback": "heuristic",
+        }
         return json.dumps(result)
 
     doc = nlp(text)
     claim_verbs = {
-        "say", "claim", "state", "report", "announce", "declare", "assert", "allege",
-        "argue", "maintain", "contend", "insist", "affirm", "attest", "testify",
-        "reveal", "disclose", "admit", "acknowledge", "confess", "confirm", "deny",
-        "show", "prove", "demonstrate", "indicate", "suggest", "imply",
-        "note", "observe", "find", "discover", "detect", "notice",
-        "emphasize", "stress", "highlight", "underscore", "point out",
-        "predict", "forecast", "warn", "caution", "anticipate", "expect",
-        "explain", "describe", "characterize", "define", "specify",
-        "believe", "think", "consider", "regard", "view",
-        "estimate", "calculate", "determine", "assess", "evaluate",
-        "is", "are", "was", "were", "be", "been", "being",
-        "has", "have", "had", "contain", "include", "involve"
+        "say",
+        "claim",
+        "state",
+        "report",
+        "announce",
+        "declare",
+        "assert",
+        "allege",
+        "argue",
+        "maintain",
+        "contend",
+        "insist",
+        "affirm",
+        "attest",
+        "testify",
+        "reveal",
+        "disclose",
+        "admit",
+        "acknowledge",
+        "confess",
+        "confirm",
+        "deny",
+        "show",
+        "prove",
+        "demonstrate",
+        "indicate",
+        "suggest",
+        "imply",
+        "note",
+        "observe",
+        "find",
+        "discover",
+        "detect",
+        "notice",
+        "emphasize",
+        "stress",
+        "highlight",
+        "underscore",
+        "point out",
+        "predict",
+        "forecast",
+        "warn",
+        "caution",
+        "anticipate",
+        "expect",
+        "explain",
+        "describe",
+        "characterize",
+        "define",
+        "specify",
+        "believe",
+        "think",
+        "consider",
+        "regard",
+        "view",
+        "estimate",
+        "calculate",
+        "determine",
+        "assess",
+        "evaluate",
+        "is",
+        "are",
+        "was",
+        "were",
+        "be",
+        "been",
+        "being",
+        "has",
+        "have",
+        "had",
+        "contain",
+        "include",
+        "involve",
     }
     claims = []
 
@@ -341,8 +570,15 @@ def _dependency_extract_english(text: str) -> str:
             if not sent_text.endswith("?") and _looks_like_claim(sent_doc):
                 claims.append(sent_text)
 
-    logger.info(f"dependency_claim_extraction_tool completed: {len(claims)} claims found")
-    result = {"claims": claims, "method": "dependency", "language": "en", "dependency_done": True}
+    logger.info(
+        f"dependency_claim_extraction_tool completed: {len(claims)} claims found"
+    )
+    result = {
+        "claims": claims,
+        "method": "dependency",
+        "language": "en",
+        "dependency_done": True,
+    }
     return json.dumps(result)
 
 
@@ -394,8 +630,8 @@ Trả về CHỈ một mảng JSON: [{{"claim_text": "tuyên bố 1"}}, {{"claim
 
     content = call_llm(prompt, system_prompt=system_prompt, max_tokens=500)
 
-    content = re.sub(r'```json\n?', '', content)
-    content = re.sub(r'```\n?', '', content)
+    content = re.sub(r"```json\n?", "", content)
+    content = re.sub(r"```\n?", "", content)
     content = content.strip()
 
     try:
@@ -408,8 +644,15 @@ Trả về CHỈ một mảng JSON: [{{"claim_text": "tuyên bố 1"}}, {{"claim
                 elif isinstance(item, str):
                     claims.append(item.strip())
 
-            logger.info(f"llm_claim_extraction_tool completed: {len(claims)} claims found")
-            result = {"claims": claims, "method": "llm", "language": "vi", "llm_done": True}
+            logger.info(
+                f"llm_claim_extraction_tool completed: {len(claims)} claims found"
+            )
+            result = {
+                "claims": claims,
+                "method": "llm",
+                "language": "vi",
+                "llm_done": True,
+            }
             return json.dumps(result, ensure_ascii=False)
 
         logger.warning("Invalid LLM response format")
@@ -437,8 +680,8 @@ No markdown, no additional text."""
         max_tokens=500,
     )
 
-    content = re.sub(r'```json\n?', '', content)
-    content = re.sub(r'```\n?', '', content)
+    content = re.sub(r"```json\n?", "", content)
+    content = re.sub(r"```\n?", "", content)
     content = content.strip()
 
     try:
@@ -451,8 +694,15 @@ No markdown, no additional text."""
                 elif isinstance(item, str):
                     claims.append(item.strip())
 
-            logger.info(f"llm_claim_extraction_tool completed: {len(claims)} claims found")
-            result = {"claims": claims, "method": "llm", "language": "en", "llm_done": True}
+            logger.info(
+                f"llm_claim_extraction_tool completed: {len(claims)} claims found"
+            )
+            result = {
+                "claims": claims,
+                "method": "llm",
+                "language": "en",
+                "llm_done": True,
+            }
             return json.dumps(result)
 
         logger.warning("Invalid LLM response format")

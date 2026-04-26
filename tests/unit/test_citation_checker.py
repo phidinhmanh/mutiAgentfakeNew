@@ -1,4 +1,5 @@
 """Tests for citation checker utilities."""
+
 from __future__ import annotations
 
 from fake_news_detector.utils.citation_checker import (

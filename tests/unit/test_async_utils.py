@@ -1,4 +1,5 @@
 """Tests for async utilities."""
+
 from __future__ import annotations
 
 import asyncio
@@ -21,6 +22,7 @@ class TestRunInThread:
     @pytest.mark.asyncio
     async def test_run_in_thread_success(self) -> None:
         """Blocking function runs in thread pool."""
+
         def blocking_func(x: int) -> int:
             return x * 2
 
@@ -30,6 +32,7 @@ class TestRunInThread:
     @pytest.mark.asyncio
     async def test_run_in_thread_with_string(self) -> None:
         """Thread pool works with string operations."""
+
         def blocking_upper(text: str) -> str:
             return text.upper()
 
@@ -39,6 +42,7 @@ class TestRunInThread:
     @pytest.mark.asyncio
     async def test_run_in_thread_with_multiple_args(self) -> None:
         """Multiple arguments are passed correctly."""
+
         def add(a: int, b: int) -> int:
             return a + b
 
@@ -52,6 +56,7 @@ class TestGatherWithTimeout:
     @pytest.mark.asyncio
     async def test_gather_success(self) -> None:
         """Successful tasks return results."""
+
         async def task1() -> int:
             return 1
 
@@ -64,6 +69,7 @@ class TestGatherWithTimeout:
     @pytest.mark.asyncio
     async def test_gather_timeout_returns_none(self) -> None:
         """Timeout returns None list."""
+
         async def slow_task() -> str:
             await asyncio.sleep(10)
             return "done"
@@ -74,6 +80,7 @@ class TestGatherWithTimeout:
     @pytest.mark.asyncio
     async def test_gather_multiple_tasks_timeout(self) -> None:
         """Multiple slow tasks all return None on timeout."""
+
         async def slow_task() -> str:
             await asyncio.sleep(10)
             return "done"
@@ -86,6 +93,7 @@ class TestGatherWithTimeout:
     @pytest.mark.asyncio
     async def test_gather_default_timeout(self) -> None:
         """Default timeout is 30 seconds."""
+
         async def fast_task() -> int:
             return 42
 
@@ -99,26 +107,35 @@ class TestParallelAnalysis:
     @pytest.mark.asyncio
     async def test_parallel_analysis_success(self) -> None:
         """Both functions run in parallel successfully."""
+
         def baseline_func(text: str) -> dict[str, Any]:
             return {"label": "REAL", "confidence": 0.9}
 
         def claim_func(text: str) -> list[dict[str, Any]]:
             return [{"text": "Test claim", "type": "FACT"}]
 
-        baseline, claims = await parallel_analysis("Test article", baseline_func, claim_func)
+        baseline, claims = await parallel_analysis(
+            "Test article", baseline_func, claim_func
+        )
         assert baseline["label"] == "REAL"
         assert len(claims) == 1
 
     @pytest.mark.asyncio
     async def test_parallel_analysis_returns_tuple(self) -> None:
         """Returns correct tuple of (baseline, claims)."""
+
         def baseline_func(text: str) -> dict[str, Any]:
             return {"label": "FAKE", "confidence": 0.95}
 
         def claim_func(text: str) -> list[dict[str, Any]]:
-            return [{"text": "Claim 1", "type": "FACT"}, {"text": "Claim 2", "type": "OPINION"}]
+            return [
+                {"text": "Claim 1", "type": "FACT"},
+                {"text": "Claim 2", "type": "OPINION"},
+            ]
 
-        baseline, claims = await parallel_analysis("Test article", baseline_func, claim_func)
+        baseline, claims = await parallel_analysis(
+            "Test article", baseline_func, claim_func
+        )
         assert baseline["label"] == "FAKE"
         assert len(claims) == 2
 
@@ -129,6 +146,7 @@ class TestCreateTaskWithRetry:
     @pytest.mark.asyncio
     async def test_retry_success_first_attempt(self) -> None:
         """Successful first attempt returns result."""
+
         async def successful_coro() -> int:
             return 42
 
@@ -139,6 +157,7 @@ class TestCreateTaskWithRetry:
     @pytest.mark.asyncio
     async def test_retry_returns_task(self) -> None:
         """Returns a task object that can be awaited."""
+
         async def dummy() -> int:
             return 100
 

@@ -1,4 +1,5 @@
 """Text preprocessing for Vietnamese text using underthesea."""
+
 import re
 
 from underthesea import sent_tokenize, word_tokenize
@@ -92,8 +93,19 @@ def extract_entities(text: str) -> dict[str, list[str]]:
 def _is_location(word: str) -> bool:
     """Check if a word is likely a location name."""
     location_markers = {
-        "tỉnh", "thành phố", "tp", "huyện", "quận", "xã", "phường",
-        "miền", "vùng", "đông", "tây", "nam", "bắc",
+        "tỉnh",
+        "thành phố",
+        "tp",
+        "huyện",
+        "quận",
+        "xã",
+        "phường",
+        "miền",
+        "vùng",
+        "đông",
+        "tây",
+        "nam",
+        "bắc",
     }
     return any(marker in word.lower() for marker in location_markers)
 
@@ -171,7 +183,9 @@ def preprocess_for_embedding(text: str) -> str:
     return text.strip()
 
 
-def create_chunk_windows(text: str, chunk_size: int = 200, overlap: int = 50) -> list[str]:
+def create_chunk_windows(
+    text: str, chunk_size: int = 200, overlap: int = 50
+) -> list[str]:
     """Create overlapping chunks for long text processing.
 
     Args:

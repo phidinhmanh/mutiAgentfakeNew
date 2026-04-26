@@ -15,6 +15,7 @@ import pytest
 @dataclass
 class MockDecomposedClaim:
     """Mock for DecomposedClaim dataclass."""
+
     original_claim: str
     atomic_claims: list[str]
     logic_structure: dict[str, Any]
@@ -32,19 +33,18 @@ class TestResearchOrchestratorIntegration:
             original_claim="Test claim",
             atomic_claims=[
                 "Việt Nam đạt tăng trưởng 8%",
-                "Tăng trưởng này cao nhất ASEAN"
+                "Tăng trưởng này cao nhất ASEAN",
             ],
             logic_structure={"type": "conjunction"},
             complexity_score=0.5,
-            causal_edges=[]
+            causal_edges=[],
         )
 
         mock = Mock()
         mock.decompose = Mock(return_value=mock_decomposed)
 
         monkeypatch.setattr(
-            "trust_agents.orchestrator_research.DecomposerAgent",
-            lambda: mock
+            "trust_agents.orchestrator_research.DecomposerAgent", lambda: mock
         )
         return mock
 
@@ -52,15 +52,16 @@ class TestResearchOrchestratorIntegration:
     def mock_logic_aggregator(self, monkeypatch: pytest.MonkeyPatch) -> Mock:
         """Mock LogicAggregator."""
         mock = Mock()
-        mock.aggregate = Mock(return_value={
-            "verdict": "true",
-            "confidence": 0.85,
-            "reasoning": "All atomic claims verified"
-        })
+        mock.aggregate = Mock(
+            return_value={
+                "verdict": "true",
+                "confidence": 0.85,
+                "reasoning": "All atomic claims verified",
+            }
+        )
 
         monkeypatch.setattr(
-            "trust_agents.orchestrator_research.LogicAggregator",
-            lambda: mock
+            "trust_agents.orchestrator_research.LogicAggregator", lambda: mock
         )
         return mock
 
@@ -68,19 +69,20 @@ class TestResearchOrchestratorIntegration:
     def mock_delphi_jury(self, monkeypatch: pytest.MonkeyPatch) -> Mock:
         """Mock DelphiJury."""
         mock = Mock()
-        mock.verify_with_jury = Mock(return_value={
-            "verdict": "true",
-            "confidence": 0.85,
-            "reasoning": "Jury consensus",
-            "jury_verdicts": [
-                {"agent": "agent_1", "verdict": "true", "confidence": 0.8},
-                {"agent": "agent_2", "verdict": "true", "confidence": 0.9},
-            ]
-        })
+        mock.verify_with_jury = Mock(
+            return_value={
+                "verdict": "true",
+                "confidence": 0.85,
+                "reasoning": "Jury consensus",
+                "jury_verdicts": [
+                    {"agent": "agent_1", "verdict": "true", "confidence": 0.8},
+                    {"agent": "agent_2", "verdict": "true", "confidence": 0.9},
+                ],
+            }
+        )
 
         monkeypatch.setattr(
-            "trust_agents.orchestrator_research.DelphiJury",
-            lambda: mock
+            "trust_agents.orchestrator_research.DelphiJury", lambda: mock
         )
         return mock
 
@@ -94,21 +96,16 @@ class TestResearchOrchestratorIntegration:
         # Import here to apply patches
         from trust_agents.orchestrator_research import ResearchTRUSTOrchestrator
 
-        orchestrator = ResearchTRUSTOrchestrator(
-            use_delphi_jury=True,
-            top_k_evidence=5
-        )
+        orchestrator = ResearchTRUSTOrchestrator(use_delphi_jury=True, top_k_evidence=5)
 
         # Patch evidence retrieval
         with patch(
             "trust_agents.orchestrator_research.run_evidence_retrieval_agent_sync",
-            return_value=[
-                {"content": "Test evidence", "source": "test", "score": 0.9}
-            ]
+            return_value=[{"content": "Test evidence", "source": "test", "score": 0.9}],
         ):
             with patch(
                 "trust_agents.orchestrator_research.run_explainer_agent_sync",
-                return_value={"summary": "Test", "explanation": "Test"}
+                return_value={"summary": "Test", "explanation": "Test"},
             ):
                 result = orchestrator.process_text("Test text")
 
@@ -124,20 +121,15 @@ class TestResearchOrchestratorIntegration:
         """Test that Delphi jury is used when enabled."""
         from trust_agents.orchestrator_research import ResearchTRUSTOrchestrator
 
-        orchestrator = ResearchTRUSTOrchestrator(
-            use_delphi_jury=True,
-            top_k_evidence=5
-        )
+        orchestrator = ResearchTRUSTOrchestrator(use_delphi_jury=True, top_k_evidence=5)
 
         with patch(
             "trust_agents.orchestrator_research.run_evidence_retrieval_agent_sync",
-            return_value=[
-                {"content": "Test evidence", "source": "test", "score": 0.9}
-            ]
+            return_value=[{"content": "Test evidence", "source": "test", "score": 0.9}],
         ):
             with patch(
                 "trust_agents.orchestrator_research.run_explainer_agent_sync",
-                return_value={"summary": "Test", "explanation": "Test"}
+                return_value={"summary": "Test", "explanation": "Test"},
             ):
                 orchestrator.process_text("Test text")
 
@@ -153,27 +145,24 @@ class TestResearchOrchestratorIntegration:
         from trust_agents.orchestrator_research import ResearchTRUSTOrchestrator
 
         orchestrator = ResearchTRUSTOrchestrator(
-            use_delphi_jury=False,
-            top_k_evidence=5
+            use_delphi_jury=False, top_k_evidence=5
         )
 
         with patch(
             "trust_agents.orchestrator_research.run_evidence_retrieval_agent_sync",
-            return_value=[
-                {"content": "Test evidence", "source": "test", "score": 0.9}
-            ]
+            return_value=[{"content": "Test evidence", "source": "test", "score": 0.9}],
         ):
             with patch(
                 "trust_agents.agents.verifier.run_verifier_agent_sync",
                 return_value={
                     "verdict": "true",
                     "confidence": 0.85,
-                    "reasoning": "Test"
-                }
+                    "reasoning": "Test",
+                },
             ):
                 with patch(
                     "trust_agents.orchestrator_research.run_explainer_agent_sync",
-                    return_value={"summary": "Test", "explanation": "Test"}
+                    return_value={"summary": "Test", "explanation": "Test"},
                 ):
                     result = orchestrator.process_text("Test text")
 
@@ -188,20 +177,15 @@ class TestResearchOrchestratorIntegration:
         """Test that logic aggregation is performed."""
         from trust_agents.orchestrator_research import ResearchTRUSTOrchestrator
 
-        orchestrator = ResearchTRUSTOrchestrator(
-            use_delphi_jury=True,
-            top_k_evidence=5
-        )
+        orchestrator = ResearchTRUSTOrchestrator(use_delphi_jury=True, top_k_evidence=5)
 
         with patch(
             "trust_agents.orchestrator_research.run_evidence_retrieval_agent_sync",
-            return_value=[
-                {"content": "Test evidence", "source": "test", "score": 0.9}
-            ]
+            return_value=[{"content": "Test evidence", "source": "test", "score": 0.9}],
         ):
             with patch(
                 "trust_agents.orchestrator_research.run_explainer_agent_sync",
-                return_value={"summary": "Test", "explanation": "Test"}
+                return_value={"summary": "Test", "explanation": "Test"},
             ):
                 result = orchestrator.process_text("Test text")
 
@@ -217,14 +201,11 @@ class TestResearchOrchestratorIntegration:
         """Test skipping evidence retrieval."""
         from trust_agents.orchestrator_research import ResearchTRUSTOrchestrator
 
-        orchestrator = ResearchTRUSTOrchestrator(
-            use_delphi_jury=True,
-            top_k_evidence=5
-        )
+        orchestrator = ResearchTRUSTOrchestrator(use_delphi_jury=True, top_k_evidence=5)
 
         with patch(
             "trust_agents.orchestrator_research.run_explainer_agent_sync",
-            return_value={"summary": "Test", "explanation": "Test"}
+            return_value={"summary": "Test", "explanation": "Test"},
         ):
             result = orchestrator.process_text("Test text", skip_evidence=True)
 
@@ -239,20 +220,15 @@ class TestResearchOrchestratorIntegration:
         """Test that metadata is correctly collected."""
         from trust_agents.orchestrator_research import ResearchTRUSTOrchestrator
 
-        orchestrator = ResearchTRUSTOrchestrator(
-            use_delphi_jury=True,
-            top_k_evidence=5
-        )
+        orchestrator = ResearchTRUSTOrchestrator(use_delphi_jury=True, top_k_evidence=5)
 
         with patch(
             "trust_agents.orchestrator_research.run_evidence_retrieval_agent_sync",
-            return_value=[
-                {"content": "Test evidence", "source": "test", "score": 0.9}
-            ]
+            return_value=[{"content": "Test evidence", "source": "test", "score": 0.9}],
         ):
             with patch(
                 "trust_agents.orchestrator_research.run_explainer_agent_sync",
-                return_value={"summary": "Test", "explanation": "Test"}
+                return_value={"summary": "Test", "explanation": "Test"},
             ):
                 result = orchestrator.process_text("Test text")
 
@@ -277,12 +253,12 @@ class TestResearchOrchestratorResultStructure:
                 atomic_claims=[],
                 logic_structure={},
                 complexity_score=0.0,
-                causal_edges=[]
+                causal_edges=[],
             ),
             atomic_verdicts=[],
             logic_aggregation={"verdict": "uncertain", "confidence": 0.0},
             final_verdict={},
-            metadata={}
+            metadata={},
         )
 
         assert hasattr(result, "original_text")

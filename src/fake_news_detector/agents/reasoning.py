@@ -1,4 +1,5 @@
 """Agent 3: Reasoning Agent - NVIDIA NIM + citation validation."""
+
 import json
 import logging
 import re
@@ -38,9 +39,7 @@ class ReasoningAgent:
         """
         self.llm = llm_client
 
-    def analyze(
-        self, claim: str, evidence: list[dict[str, Any]]
-    ) -> dict[str, Any]:
+    def analyze(self, claim: str, evidence: list[dict[str, Any]]) -> dict[str, Any]:
         """Analyze claim with evidence and return verdict.
 
         Args:
@@ -110,8 +109,7 @@ Evidence:
         formatted = []
         for i, ev in enumerate(evidence):
             formatted.append(
-                f"[{i}] {ev.get('content', '')}"
-                f" (Source: {ev.get('source', 'unknown')})"
+                f"[{i}] {ev.get('content', '')} (Source: {ev.get('source', 'unknown')})"
             )
         return "\n".join(formatted)
 
@@ -154,7 +152,8 @@ Evidence:
         return {
             **result,
             "citations": validated_citations,
-            "citations_valid": len(validated_citations) == len(result.get("citations", [])),
+            "citations_valid": len(validated_citations)
+            == len(result.get("citations", [])),
         }
 
     def _unverifiable_result(self, reason: str) -> dict[str, Any]:

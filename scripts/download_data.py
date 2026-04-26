@@ -1,4 +1,5 @@
-﻿"""Script to download and prepare ViFactCheck dataset."""
+"""Script to download and prepare ViFactCheck dataset."""
+
 import argparse
 import logging
 from pathlib import Path
@@ -97,13 +98,15 @@ def build_faiss_index(
         claim = item.get("claim", "")
         content = f"{claim} {evidence}".strip()
         if content:
-            documents.append({
-                "content": preprocess_for_embedding(content),
-                "claim": claim,
-                "evidence": evidence,
-                "label": item.get("label", ""),
-                "source": item.get("source", ""),
-            })
+            documents.append(
+                {
+                    "content": preprocess_for_embedding(content),
+                    "claim": claim,
+                    "evidence": evidence,
+                    "label": item.get("label", ""),
+                    "source": item.get("source", ""),
+                }
+            )
 
     logger.info(f"Creating index from {len(documents)} documents")
 

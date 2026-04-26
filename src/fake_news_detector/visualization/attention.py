@@ -1,4 +1,5 @@
 """Attention visualization for model interpretability."""
+
 import logging
 from typing import Any
 
@@ -156,7 +157,9 @@ def plot_stylistic_features(
     ax.set_title("Stylistic Feature Analysis")
 
     fake_score = features.get("fake_score", 0.5)
-    ax.axhline(y=fake_score, color="red", linestyle="--", label=f"Fake Score: {fake_score:.2f}")
+    ax.axhline(
+        y=fake_score, color="red", linestyle="--", label=f"Fake Score: {fake_score:.2f}"
+    )
     ax.legend()
 
     plt.tight_layout()

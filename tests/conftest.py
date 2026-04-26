@@ -1,4 +1,5 @@
 """Pytest configuration and shared fixtures."""
+
 from __future__ import annotations
 
 import json
@@ -81,7 +82,9 @@ def mock_nvidia_client() -> Mock:
     client.invoke = Mock(
         return_value='{"verdict": "REAL", "confidence": 0.8, "reasoning": "Test reasoning", "citations": []}'
     )
-    client.stream = Mock(return_value=iter(['{"verdict": "REAL', '", "confidence": 0.8}']))
+    client.stream = Mock(
+        return_value=iter(['{"verdict": "REAL', '", "confidence": 0.8}'])
+    )
     return client
 
 
@@ -90,9 +93,11 @@ def mock_nvidia_client_fake() -> Mock:
     """Mock NVIDIA NIM API client returning FAKE verdict."""
     client = Mock()
     client.invoke = Mock(
-        return_value='{"verdict": "FAKE", "confidence": 0.85, "reasoning": "Evidence contradicts claim", "citations": []}'
+        return_value='{"verdict": "FAKE", "confidence": 0.85, "reasoning": "Evidence contradicts claim", "citations": []}'  # noqa: E501
     )
-    client.stream = Mock(return_value=iter(['{"verdict": "FAKE', '", "confidence": 0.85}']))
+    client.stream = Mock(
+        return_value=iter(['{"verdict": "FAKE', '", "confidence": 0.85}'])
+    )
     return client
 
 
@@ -101,9 +106,11 @@ def mock_nvidia_client_unverifiable() -> Mock:
     """Mock NVIDIA NIM API client returning UNVERIFIABLE verdict."""
     client = Mock()
     client.invoke = Mock(
-        return_value='{"verdict": "UNVERIFIABLE", "confidence": 0.0, "reasoning": "Not enough evidence", "citations": []}'
+        return_value='{"verdict": "UNVERIFIABLE", "confidence": 0.0, "reasoning": "Not enough evidence", "citations": []}'  # noqa: E501
     )
-    client.stream = Mock(return_value=iter(['{"verdict": "UNVERIFIABLE', '", "confidence": 0.0}']))
+    client.stream = Mock(
+        return_value=iter(['{"verdict": "UNVERIFIABLE', '", "confidence": 0.0}'])
+    )
     return client
 
 
@@ -115,20 +122,22 @@ def mock_serper_api(monkeypatch: pytest.MonkeyPatch) -> Mock:
     """Mock Serper API responses."""
     mock_response = Mock()
     mock_response.status_code = 200
-    mock_response.json = Mock(return_value={
-        "organic": [
-            {
-                "title": "Vietnam Economy Grows",
-                "snippet": "Vietnam GDP growth 8% in 2023",
-                "link": "https://vnexpress.net/test",
-            },
-            {
-                "title": "Economic Report",
-                "snippet": "Vietnam fastest growing economy in ASEAN",
-                "link": "https://tuoitre.vn/test",
-            },
-        ]
-    })
+    mock_response.json = Mock(
+        return_value={
+            "organic": [
+                {
+                    "title": "Vietnam Economy Grows",
+                    "snippet": "Vietnam GDP growth 8% in 2023",
+                    "link": "https://vnexpress.net/test",
+                },
+                {
+                    "title": "Economic Report",
+                    "snippet": "Vietnam fastest growing economy in ASEAN",
+                    "link": "https://tuoitre.vn/test",
+                },
+            ]
+        }
+    )
     mock_response.raise_for_status = Mock()
 
     def mock_post(*args: Any, **kwargs: Any) -> Mock:
@@ -143,16 +152,18 @@ def mock_tavily_api(monkeypatch: pytest.MonkeyPatch) -> Mock:
     """Mock Tavily API responses."""
     mock_response = Mock()
     mock_response.status_code = 200
-    mock_response.json = Mock(return_value={
-        "results": [
-            {
-                "title": "Vietnam Economy",
-                "content": "Vietnam GDP grew 8% in 2023, fastest in ASEAN",
-                "url": "https://tavily.com/test",
-                "score": 0.9,
-            }
-        ]
-    })
+    mock_response.json = Mock(
+        return_value={
+            "results": [
+                {
+                    "title": "Vietnam Economy",
+                    "content": "Vietnam GDP grew 8% in 2023, fastest in ASEAN",
+                    "url": "https://tavily.com/test",
+                    "score": 0.9,
+                }
+            ]
+        }
+    )
     mock_response.raise_for_status = Mock()
 
     def mock_post(*args: Any, **kwargs: Any) -> Mock:
@@ -182,16 +193,22 @@ def mock_sentence_transformer() -> Mock:
 @pytest.fixture
 def mock_underthesea(monkeypatch: pytest.MonkeyPatch) -> Mock:
     """Mock underthesea functions."""
-    mock_sent_tokenize = Mock(return_value=[
-        "Theo báo cáo của Bộ Y tế.",
-        "Tính đến ngày 15 tháng 3 năm 2024.",
-        "Số ca mắc COVID-19 tại Việt Nam giảm 30% so với tháng trước.",
-        "Tôi nghĩ chúng ta đã kiểm soát được dịch bệnh.",
-    ])
+    mock_sent_tokenize = Mock(
+        return_value=[
+            "Theo báo cáo của Bộ Y tế.",
+            "Tính đến ngày 15 tháng 3 năm 2024.",
+            "Số ca mắc COVID-19 tại Việt Nam giảm 30% so với tháng trước.",
+            "Tôi nghĩ chúng ta đã kiểm soát được dịch bệnh.",
+        ]
+    )
     mock_word_tokenize = Mock(return_value=["Theo", "báo", "cáo"])
-    mock_pos_tag = Mock(return_value=[
-        ("Theo", "E"), ("báo", "N"), ("cáo", "N"),
-    ])
+    mock_pos_tag = Mock(
+        return_value=[
+            ("Theo", "E"),
+            ("báo", "N"),
+            ("cáo", "N"),
+        ]
+    )
 
     monkeypatch.setattr("underthesea.sent_tokenize", mock_sent_tokenize)
     monkeypatch.setattr("underthesea.word_tokenize", mock_word_tokenize)
@@ -221,7 +238,9 @@ def mock_transformers_tokenizer() -> Mock:
 @pytest.fixture
 def mock_transformers_model() -> Mock:
     """Mock HuggingFace model."""
-    with patch("transformers.AutoModelForSequenceClassification.from_pretrained") as mock:
+    with patch(
+        "transformers.AutoModelForSequenceClassification.from_pretrained"
+    ) as mock:
         model = Mock()
         model.eval = Mock()
 
@@ -313,6 +332,7 @@ class MockNVIDIAResponse:
 
 # === Orchestrator Fixtures for Integration/Acceptance Tests ===
 
+
 class MockAgentResponses:
     """Mock responses for agent pipeline testing."""
 
@@ -324,7 +344,7 @@ class MockAgentResponses:
     @staticmethod
     def claim_extractor_multiple() -> str:
         """Return multiple claims including opinions."""
-        return '{"claims": ["Số ca mắc COVID-19 giảm 30%", "Chúng tôi đã kiểm soát được dịch", "Tốc độ tăng trưởng đạt 8%"]}'
+        return '{"claims": ["Số ca mắc COVID-19 giảm 30%", "Chúng tôi đã kiểm soát được dịch", "Tốc độ tăng trưởng đạt 8%"]}'  # noqa: E501
 
     @staticmethod
     def claim_extractor_empty() -> str:
@@ -334,75 +354,105 @@ class MockAgentResponses:
     @staticmethod
     def evidence_retriever_real() -> str:
         """Return evidence supporting real claim."""
-        return json.dumps({
-            "evidence": [
-                {"content": "Việt Nam đạt tăng trưởng 8% trong quý 3/2023, cao nhất ASEAN", "source": "vnexpress", "score": 0.92},
-                {"content": "Theo WB, GDP VN 2023 đạt 5.6%, thuộc nhóm cao nhất khu vực", "source": "worldbank", "score": 0.88},
-            ]
-        })
+        return json.dumps(
+            {
+                "evidence": [
+                    {
+                        "content": "Việt Nam đạt tăng trưởng 8% trong quý 3/2023, cao nhất ASEAN",
+                        "source": "vnexpress",
+                        "score": 0.92,
+                    },
+                    {
+                        "content": "Theo WB, GDP VN 2023 đạt 5.6%, thuộc nhóm cao nhất khu vực",
+                        "source": "worldbank",
+                        "score": 0.88,
+                    },
+                ]
+            }
+        )
 
     @staticmethod
     def evidence_retriever_fake() -> str:
         """Return evidence contradicting claim."""
-        return json.dumps({
-            "evidence": [
-                {"content": "Việt Nam tăng trưởng 4.2% trong năm 2023, không phải cao nhất", "source": "tuoitre", "score": 0.85},
-                {"content": "Campuchia đạt 5.6%, cao hơn Việt Nam", "source": "vietnamnet", "score": 0.82},
-            ]
-        })
+        return json.dumps(
+            {
+                "evidence": [
+                    {
+                        "content": "Việt Nam tăng trưởng 4.2% trong năm 2023, không phải cao nhất",
+                        "source": "tuoitre",
+                        "score": 0.85,
+                    },
+                    {
+                        "content": "Campuchia đạt 5.6%, cao hơn Việt Nam",
+                        "source": "vietnamnet",
+                        "score": 0.82,
+                    },
+                ]
+            }
+        )
 
     @staticmethod
     def verifier_real() -> str:
         """Return REAL verdict."""
-        return json.dumps({
-            "verdict": "true",
-            "confidence": 0.85,
-            "reasoning": "Evidence strongly supports the claim. Multiple sources confirm Vietnam's 8% growth.",
-            "label": "true"
-        })
+        return json.dumps(
+            {
+                "verdict": "true",
+                "confidence": 0.85,
+                "reasoning": "Evidence strongly supports the claim. Multiple sources confirm Vietnam's 8% growth.",
+                "label": "true",
+            }
+        )
 
     @staticmethod
     def verifier_fake() -> str:
         """Return FAKE verdict."""
-        return json.dumps({
-            "verdict": "false",
-            "confidence": 0.90,
-            "reasoning": "Evidence contradicts the claim. Actual growth is 4.2%, not 8%.",
-            "label": "false"
-        })
+        return json.dumps(
+            {
+                "verdict": "false",
+                "confidence": 0.90,
+                "reasoning": "Evidence contradicts the claim. Actual growth is 4.2%, not 8%.",
+                "label": "false",
+            }
+        )
 
     @staticmethod
     def verifier_unverifiable() -> str:
         """Return UNVERIFIABLE verdict."""
-        return json.dumps({
-            "verdict": "uncertain",
-            "confidence": 0.3,
-            "reasoning": "Not enough evidence to verify this claim.",
-            "label": "uncertain"
-        })
+        return json.dumps(
+            {
+                "verdict": "uncertain",
+                "confidence": 0.3,
+                "reasoning": "Not enough evidence to verify this claim.",
+                "label": "uncertain",
+            }
+        )
 
     @staticmethod
     def verifier_with_citations() -> str:
         """Return verdict with citations."""
-        return json.dumps({
-            "verdict": "true",
-            "confidence": 0.85,
-            "reasoning": "Evidence from multiple sources supports claim",
-            "label": "true",
-            "citations": [
-                {"evidence_id": 0, "quote_text": "Vietnam GDP grew 8%"},
-                {"evidence_id": 1, "quote_text": "Highest in ASEAN"}
-            ]
-        })
+        return json.dumps(
+            {
+                "verdict": "true",
+                "confidence": 0.85,
+                "reasoning": "Evidence from multiple sources supports claim",
+                "label": "true",
+                "citations": [
+                    {"evidence_id": 0, "quote_text": "Vietnam GDP grew 8%"},
+                    {"evidence_id": 1, "quote_text": "Highest in ASEAN"},
+                ],
+            }
+        )
 
     @staticmethod
     def explainer_report() -> str:
         """Return explainer report."""
-        return json.dumps({
-            "summary": "Claim verified as REAL with 85% confidence",
-            "explanation": "Multiple authoritative sources confirm Vietnam's economic growth",
-            "evidence_count": 2
-        })
+        return json.dumps(
+            {
+                "summary": "Claim verified as REAL with 85% confidence",
+                "explanation": "Multiple authoritative sources confirm Vietnam's economic growth",
+                "evidence_count": 2,
+            }
+        )
 
 
 @pytest.fixture
@@ -411,11 +461,10 @@ def mock_claim_extractor_agent(monkeypatch: pytest.MonkeyPatch) -> Mock:
     mock = Mock()
     mock.return_value = [
         "Việt Nam đạt tăng trưởng 8% trong năm 2023",
-        "GDP Việt Nam cao nhất ASEAN"
+        "GDP Việt Nam cao nhất ASEAN",
     ]
     monkeypatch.setattr(
-        "trust_agents.orchestrator.run_claim_extractor_agent_sync",
-        mock
+        "trust_agents.orchestrator.run_claim_extractor_agent_sync", mock
     )
     return mock
 
@@ -427,11 +476,10 @@ def mock_claim_extractor_multiple(monkeypatch: pytest.MonkeyPatch) -> Mock:
     mock.return_value = [
         "Số ca mắc COVID-19 giảm 30%",
         "Chúng tôi đã kiểm soát được dịch",
-        "Tốc độ tăng trưởng đạt 8%"
+        "Tốc độ tăng trưởng đạt 8%",
     ]
     monkeypatch.setattr(
-        "trust_agents.orchestrator.run_claim_extractor_agent_sync",
-        mock
+        "trust_agents.orchestrator.run_claim_extractor_agent_sync", mock
     )
     return mock
 
@@ -442,8 +490,7 @@ def mock_claim_extractor_empty(monkeypatch: pytest.MonkeyPatch) -> Mock:
     mock = Mock()
     mock.return_value = []
     monkeypatch.setattr(
-        "trust_agents.orchestrator.run_claim_extractor_agent_sync",
-        mock
+        "trust_agents.orchestrator.run_claim_extractor_agent_sync", mock
     )
     return mock
 
@@ -453,12 +500,15 @@ def mock_evidence_retriever(monkeypatch: pytest.MonkeyPatch) -> Mock:
     """Mock evidence retriever agent for integration tests."""
     mock = Mock()
     mock.return_value = [
-        {"content": "Việt Nam đạt tăng trưởng 8%", "source": "vnexpress", "score": 0.92},
-        {"content": "GDP cao nhất ASEAN", "source": "worldbank", "score": 0.88}
+        {
+            "content": "Việt Nam đạt tăng trưởng 8%",
+            "source": "vnexpress",
+            "score": 0.92,
+        },
+        {"content": "GDP cao nhất ASEAN", "source": "worldbank", "score": 0.88},
     ]
     monkeypatch.setattr(
-        "trust_agents.orchestrator.run_evidence_retrieval_agent_sync",
-        mock
+        "trust_agents.orchestrator.run_evidence_retrieval_agent_sync", mock
     )
     return mock
 
@@ -469,8 +519,7 @@ def mock_evidence_retriever_empty(monkeypatch: pytest.MonkeyPatch) -> Mock:
     mock = Mock()
     mock.return_value = []
     monkeypatch.setattr(
-        "trust_agents.orchestrator.run_evidence_retrieval_agent_sync",
-        mock
+        "trust_agents.orchestrator.run_evidence_retrieval_agent_sync", mock
     )
     return mock
 
@@ -483,12 +532,9 @@ def mock_verifier_agent(monkeypatch: pytest.MonkeyPatch) -> Mock:
         "verdict": "true",
         "confidence": 0.85,
         "label": "true",
-        "reasoning": "Evidence supports claim"
+        "reasoning": "Evidence supports claim",
     }
-    monkeypatch.setattr(
-        "trust_agents.orchestrator.run_verifier_agent_sync",
-        mock
-    )
+    monkeypatch.setattr("trust_agents.orchestrator.run_verifier_agent_sync", mock)
     return mock
 
 
@@ -500,12 +546,9 @@ def mock_verifier_agent_fake(monkeypatch: pytest.MonkeyPatch) -> Mock:
         "verdict": "false",
         "confidence": 0.90,
         "label": "false",
-        "reasoning": "Evidence contradicts claim"
+        "reasoning": "Evidence contradicts claim",
     }
-    monkeypatch.setattr(
-        "trust_agents.orchestrator.run_verifier_agent_sync",
-        mock
-    )
+    monkeypatch.setattr("trust_agents.orchestrator.run_verifier_agent_sync", mock)
     return mock
 
 
@@ -517,16 +560,14 @@ def mock_explainer_agent(monkeypatch: pytest.MonkeyPatch) -> Mock:
         "summary": "Claim verified as REAL",
         "explanation": "Multiple sources confirm",
         "verdict": "true",
-        "confidence": 0.85
+        "confidence": 0.85,
     }
-    monkeypatch.setattr(
-        "trust_agents.orchestrator.run_explainer_agent_sync",
-        mock
-    )
+    monkeypatch.setattr("trust_agents.orchestrator.run_explainer_agent_sync", mock)
     return mock
 
 
 # === Golden Samples for Acceptance Tests ===
+
 
 @pytest.fixture
 def golden_samples_vietnamese() -> list[dict[str, Any]]:
@@ -537,36 +578,36 @@ def golden_samples_vietnamese() -> list[dict[str, Any]]:
             "text": "Theo báo cáo của WB, Việt Nam đạt tăng trưởng GDP 8% trong quý 3 năm 2023, cao nhất ASEAN.",
             "expected_verdict": "true",
             "expected_claims": 1,
-            "description": "Tin thật với số liệu cụ thể từ nguồn uy tín"
+            "description": "Tin thật với số liệu cụ thể từ nguồn uy tín",
         },
         {
             "id": "sample_fake_1",
             "text": "Việt Nam đã phát hiện người ngoài hành tinh tại Hà Nội và chính phủ đang che giấu thông tin này.",
             "expected_verdict": "false",
             "expected_claims": 1,
-            "description": "Tin giả với thông tin vô lý"
+            "description": "Tin giả với thông tin vô lý",
         },
         {
             "id": "sample_unverifiable_1",
-            "text": "Một nguồn tin cho biết lãnh đạo đất nước sẽ có cuộc họp quan trọng vào tuần tới nhưng không tiết lộ chi tiết.",
+            "text": "Một nguồn tin cho biết lãnh đạo đất nước sẽ có cuộc họp quan trọng vào tuần tới nhưng không tiết lộ chi tiết.",  # noqa: E501
             "expected_verdict": "uncertain",
             "expected_claims": 1,
-            "description": "Tin không thể xác minh do thiếu chi tiết cụ thể"
+            "description": "Tin không thể xác minh do thiếu chi tiết cụ thể",
         },
         {
             "id": "sample_real_2",
             "text": "Bộ Y tế công bố số ca mắc COVID-19 ngày 15/3/2024 giảm 30% so với tuần trước, xuống còn 1,500 ca.",
             "expected_verdict": "true",
             "expected_claims": 1,
-            "description": "Tin thật với số liệu chính thức từ Bộ Y tế"
+            "description": "Tin thật với số liệu chính thức từ Bộ Y tế",
         },
         {
             "id": "sample_fake_2",
             "text": "Tỷ lệ thất nghiệp tại Việt Nam đạt 50% trong năm 2024, cao nhất thế giới.",
             "expected_verdict": "false",
             "expected_claims": 1,
-            "description": "Tin giả với số liệu phi lý"
-        }
+            "description": "Tin giả với số liệu phi lý",
+        },
     ]
 
 
@@ -584,7 +625,7 @@ def sample_orchestrator_result() -> dict[str, Any]:
                 "label": "true",
                 "reasoning": "Evidence supports claim",
                 "summary": "Claim verified",
-                "explanation": "Multiple sources confirm"
+                "explanation": "Multiple sources confirm",
             }
         ],
         "summary": {
@@ -592,6 +633,6 @@ def sample_orchestrator_result() -> dict[str, Any]:
             "verdicts": {"true": 1, "false": 0, "uncertain": 0, "error": 0},
             "average_confidence": 0.85,
             "high_confidence_claims": 1,
-            "low_confidence_claims": 0
-        }
+            "low_confidence_claims": 0,
+        },
     }

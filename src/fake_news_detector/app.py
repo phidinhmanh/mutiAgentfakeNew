@@ -1,4 +1,5 @@
 """Streamlit UI for Vietnamese Fake News Detection."""
+
 import logging
 import time
 from typing import Any
@@ -206,15 +207,11 @@ def main() -> None:
                 with col_conf:
                     st.metric("Confidence", f"{baseline.get('confidence', 0):.1%}")
 
-                verdict_color = (
-                    "red" if baseline.get("fake_prob", 0) > 0.5 else "green"
-                )
+                verdict_color = "red" if baseline.get("fake_prob", 0) > 0.5 else "green"
                 baseline_label = (
                     "FAKE" if baseline.get("fake_prob", 0) > 0.5 else "REAL"
                 )
-                st.markdown(
-                    f"**Baseline Verdict:** :{verdict_color}[{baseline_label}]"
-                )
+                st.markdown(f"**Baseline Verdict:** :{verdict_color}[{baseline_label}]")
 
             if "trust" in results:
                 st.divider()
@@ -292,9 +289,7 @@ def main() -> None:
                     st.write(f"- Giật gân: {features.get('sensational_words', 0)}")
                 with col2_f:
                     st.write(f"- Nguồn: {features.get('source_mentions', 0)}")
-                    st.write(
-                        f"- Câu TB: {features.get('avg_sentence_length', 0):.1f}"
-                    )
+                    st.write(f"- Câu TB: {features.get('avg_sentence_length', 0):.1f}")
                     st.write(f"- Fake Score: {features.get('fake_score', 0):.2f}")
 
             if "evidence" in results and results["evidence"]:

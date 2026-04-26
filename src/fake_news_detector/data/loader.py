@@ -1,4 +1,5 @@
 """Data loader for Vietnamese Fact-Check dataset."""
+
 import logging
 from typing import Any
 
@@ -55,9 +56,9 @@ def format_sample(sample: dict[str, Any]) -> str:
     Returns:
         Formatted string
     """
-    return f"""Claim: {sample['claim']}
-Evidence: {sample['evidence']}
-Label: {sample['label']}
-Source: {sample.get('source', 'N/A')}
-Date: {sample.get('claim_date', 'N/A')}
+    return f"""Claim: {sample["claim"]}
+Evidence: {sample["evidence"]}
+Label: {sample["label"]}
+Source: {sample.get("source", "N/A")}
+Date: {sample.get("claim_date", "N/A")}
 """

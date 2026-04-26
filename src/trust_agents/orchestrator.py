@@ -1,4 +1,3 @@
-
 """
 TRUST Agents Orchestrator - Coordinates all agents in the fact-checking pipeline.
 
@@ -33,6 +32,7 @@ logger = logging.getLogger("TRUST_agents.orchestrator")
 @dataclass
 class TRUSTResult:
     """Result from complete TRUST Agents pipeline."""
+
     original_text: str
     claims: list[str]
     results: list[dict[str, Any]]
@@ -106,7 +106,7 @@ class TRUSTOrchestrator:
                 "false": "false",
                 "insufficient": "uncertain",
                 "uncertain": "uncertain",
-                "error": "uncertain"
+                "error": "uncertain",
             }
 
             # Try direct mapping first
@@ -125,10 +125,14 @@ class TRUSTOrchestrator:
                     # Default to uncertain for anything else
                     normalized["verdict"] = "uncertain"
                     normalized["label"] = "uncertain"
-                    logger.warning(f"[ORCHESTRATOR] Unusual verdict format: {raw_verdict}, defaulting to uncertain")
+                    logger.warning(
+                        f"[ORCHESTRATOR] Unusual verdict format: {raw_verdict}, defaulting to uncertain"
+                    )
         else:
             # Non-string verdict
-            logger.warning(f"[ORCHESTRATOR] Non-string verdict: {type(raw_verdict)}, defaulting to uncertain")
+            logger.warning(
+                f"[ORCHESTRATOR] Non-string verdict: {type(raw_verdict)}, defaulting to uncertain"
+            )
             normalized["verdict"] = "uncertain"
             normalized["label"] = "uncertain"
 
@@ -145,20 +149,26 @@ class TRUSTOrchestrator:
             # If confidence is > 1, assume it's in 0-100 format
             if confidence > 1.0:
                 confidence = confidence / 100.0
-                logger.debug(f"[ORCHESTRATOR] Converted confidence from percentage: {raw_confidence} -> {confidence}")
+                logger.debug(
+                    f"[ORCHESTRATOR] Converted confidence from percentage: {raw_confidence} -> {confidence}"
+                )
 
             # Clamp to valid range
             confidence = max(0.0, min(1.0, confidence))
 
         except (ValueError, TypeError):
-            logger.warning(f"[ORCHESTRATOR] Could not parse confidence: {raw_confidence}, defaulting to 0.3")
+            logger.warning(
+                f"[ORCHESTRATOR] Could not parse confidence: {raw_confidence}, defaulting to 0.3"
+            )
             confidence = 0.3
 
         normalized["confidence"] = float(confidence)
 
         # Ensure reasoning exists
         if "reasoning" not in normalized or not normalized["reasoning"]:
-            normalized["reasoning"] = normalized.get("evidence_summary", {}).get("reasoning", "No reasoning provided")
+            normalized["reasoning"] = normalized.get("evidence_summary", {}).get(
+                "reasoning", "No reasoning provided"
+            )
 
         return normalized
 
@@ -187,7 +197,7 @@ class TRUSTOrchestrator:
                 original_text=text,
                 claims=[],
                 results=[],
-                summary={"status": "no_claims", "message": "No claims found in text"}
+                summary={"status": "no_claims", "message": "No claims found in text"},
             )
 
         # Process each claim
@@ -196,13 +206,12 @@ class TRUSTOrchestrator:
         # Create summary
         summary = self._create_summary(results)
 
-        logger.info("[ORCHESTRATOR] Pipeline complete. Processed %d claims", len(results))
+        logger.info(
+            "[ORCHESTRATOR] Pipeline complete. Processed %d claims", len(results)
+        )
 
         return TRUSTResult(
-            original_text=text,
-            claims=claims,
-            results=results,
-            summary=summary
+            original_text=text, claims=claims, results=results, summary=summary
         )
 
     def _process_claims(
@@ -211,7 +220,9 @@ class TRUSTOrchestrator:
         """Process claims with bounded concurrency while preserving order."""
         if len(claims) <= 1 or self.max_claim_workers == 1:
             return [
-                self._process_single_claim_with_fallback(index, claim, len(claims), skip_evidence)
+                self._process_single_claim_with_fallback(
+                    index, claim, len(claims), skip_evidence
+                )
                 for index, claim in enumerate(claims, 1)
             ]
 
@@ -278,7 +289,9 @@ class TRUSTOrchestrator:
                 "error": str(e),
             }
 
-    def _process_single_claim(self, claim: str, skip_evidence: bool = False) -> dict[str, Any]:
+    def _process_single_claim(
+        self, claim: str, skip_evidence: bool = False
+    ) -> dict[str, Any]:
         """
         Process a single claim through the pipeline.
 
@@ -296,8 +309,12 @@ class TRUSTOrchestrator:
         else:
             logger.info("[ORCHESTRATOR] STEP 2: Retrieving evidence...")
             try:
-                evidence = run_evidence_retrieval_agent_sync(claim, top_k=self.top_k_evidence)
-                logger.info("[ORCHESTRATOR] Retrieved %d evidence passages", len(evidence))
+                evidence = run_evidence_retrieval_agent_sync(
+                    claim, top_k=self.top_k_evidence
+                )
+                logger.info(
+                    "[ORCHESTRATOR] Retrieved %d evidence passages", len(evidence)
+                )
             except Exception as e:
                 logger.error(f"[ORCHESTRATOR] Evidence retrieval failed: {e}")
                 evidence = []
@@ -314,14 +331,17 @@ class TRUSTOrchestrator:
                     "verdict": "uncertain",
                     "confidence": 0.1,
                     "label": "uncertain",
-                    "reasoning": "No evidence available for verification"
+                    "reasoning": "No evidence available for verification",
                 }
 
             # CRITICAL FIX: Normalize the verdict output
             verdict_data = self._normalize_verdict(verdict_data)
 
-            logger.info("[ORCHESTRATOR] Verification complete: %s (%.1f%%)",
-                       verdict_data.get("verdict"), verdict_data.get("confidence", 0) * 100)
+            logger.info(
+                "[ORCHESTRATOR] Verification complete: %s (%.1f%%)",
+                verdict_data.get("verdict"),
+                verdict_data.get("confidence", 0) * 100,
+            )
         except Exception as e:
             logger.error(f"[ORCHESTRATOR] Verification failed: {e}", exc_info=True)
             verdict_data = {
@@ -330,7 +350,7 @@ class TRUSTOrchestrator:
                 "confidence": 0.1,
                 "label": "uncertain",
                 "reasoning": f"Verification error: {str(e)}",
-                "error": str(e)
+                "error": str(e),
             }
 
         # Step 4: Generate Explanation
@@ -343,11 +363,13 @@ class TRUSTOrchestrator:
                 report = self._normalize_verdict(report)
             else:
                 # Merge verdict data into report if not present
-                report.update({
-                    "verdict": verdict_data["verdict"],
-                    "confidence": verdict_data["confidence"],
-                    "label": verdict_data["label"]
-                })
+                report.update(
+                    {
+                        "verdict": verdict_data["verdict"],
+                        "confidence": verdict_data["confidence"],
+                        "label": verdict_data["label"],
+                    }
+                )
 
             logger.info("[ORCHESTRATOR] Explanation complete")
         except Exception as e:
@@ -399,11 +421,13 @@ class TRUSTOrchestrator:
             "verdicts": verdict_counts,
             "average_confidence": round(avg_confidence, 3),
             "high_confidence_claims": sum(1 for c in confidences if c > 0.7),
-            "low_confidence_claims": sum(1 for c in confidences if c < 0.4)
+            "low_confidence_claims": sum(1 for c in confidences if c < 0.4),
         }
 
 
-def run_trust_pipeline_sync(text: str, top_k_evidence: int = 5, skip_evidence: bool = False) -> dict[str, Any]:
+def run_trust_pipeline_sync(
+    text: str, top_k_evidence: int = 5, skip_evidence: bool = False
+) -> dict[str, Any]:
     """
     Run complete TRUST pipeline on text.
 
@@ -441,10 +465,16 @@ if __name__ == "__main__":
     # Example usage
     import argparse
 
-    parser = argparse.ArgumentParser(description="Run TRUST Agents fact-checking pipeline")
+    parser = argparse.ArgumentParser(
+        description="Run TRUST Agents fact-checking pipeline"
+    )
     parser.add_argument("--text", required=True, help="Text to fact-check")
-    parser.add_argument("--top-k", type=int, default=5, help="Evidence passages per claim")
-    parser.add_argument("--skip-evidence", action="store_true", help="Skip evidence retrieval")
+    parser.add_argument(
+        "--top-k", type=int, default=5, help="Evidence passages per claim"
+    )
+    parser.add_argument(
+        "--skip-evidence", action="store_true", help="Skip evidence retrieval"
+    )
     parser.add_argument("--output", help="Save results to JSON file")
 
     args = parser.parse_args()
@@ -452,31 +482,31 @@ if __name__ == "__main__":
     # Configure logging
     logging.basicConfig(
         level=logging.INFO,
-        format="%(asctime)s | %(levelname)-8s | %(name)s | %(message)s"
+        format="%(asctime)s | %(levelname)-8s | %(name)s | %(message)s",
     )
 
     # Run pipeline
     result = run_trust_pipeline_sync(
-        args.text,
-        top_k_evidence=args.top_k,
-        skip_evidence=args.skip_evidence
+        args.text, top_k_evidence=args.top_k, skip_evidence=args.skip_evidence
     )
 
     # Print results
-    print("\n" + "="*70)
+    print("\n" + "=" * 70)
     print("TRUST AGENTS - FACT-CHECK RESULTS")
-    print("="*70)
+    print("=" * 70)
     print(f"\nOriginal Text: {args.text[:200]}...")
     print(f"\nClaims Found: {len(result['claims'])}")
 
-    for i, claim_result in enumerate(result['results'], 1):
+    for i, claim_result in enumerate(result["results"], 1):
         print(f"\n--- Claim {i} ---")
         print(f"Claim: {claim_result['claim']}")
-        print(f"Verdict: {claim_result['verdict']} (confidence: {claim_result.get('confidence', 0):.1%})")
+        print(
+            f"Verdict: {claim_result['verdict']} (confidence: {claim_result.get('confidence', 0):.1%})"
+        )
         print(f"Summary: {claim_result.get('summary', 'N/A')}")
 
     print("\n--- Summary ---")
-    summary = result['summary']
+    summary = result["summary"]
     print(f"Total Claims: {summary['total_claims']}")
     print(f"Verdicts: {summary.get('verdicts', {})}")
     print(f"Average Confidence: {summary.get('average_confidence', 0):.1%}")
@@ -484,6 +514,7 @@ if __name__ == "__main__":
     # Save if requested
     if args.output:
         import json
+
         with open(args.output, "w") as f:
             json.dump(result, f, indent=2, ensure_ascii=False)
         print(f"\n✓ Results saved to {args.output}")

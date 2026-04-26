@@ -1,4 +1,5 @@
 """Agent 1: Claim Extractor - Extract and verify claims."""
+
 import json
 import logging
 import re
@@ -47,11 +48,13 @@ def extract_claims(article: str) -> list[dict[str, Any]]:
             continue
 
         claim_type = _classify_claim(sent)
-        claims.append({
-            "text": sent,
-            "type": claim_type,
-            "verifiable": claim_type == "FACT",
-        })
+        claims.append(
+            {
+                "text": sent,
+                "type": claim_type,
+                "verifiable": claim_type == "FACT",
+            }
+        )
 
     logger.info(f"Extracted {len(claims)} claims from article")
     return claims
@@ -67,16 +70,48 @@ def _classify_claim(sentence: str) -> str:
         "FACT" or "OPINION"
     """
     opinion_indicators = {
-        "tôi nghĩ", "tôi tin", "theo tôi", "có lẽ", "có thể",
-        "chắc chắn", "đảm bảo", "tuyệt đối", "luôn luôn",
-        "không bao giờ", "phải", "nên", "không nên",
-        "đẹp", "xấu", "tốt", "hay", "dở", "buồn", "vui",
+        "tôi nghĩ",
+        "tôi tin",
+        "theo tôi",
+        "có lẽ",
+        "có thể",
+        "chắc chắn",
+        "đảm bảo",
+        "tuyệt đối",
+        "luôn luôn",
+        "không bao giờ",
+        "phải",
+        "nên",
+        "không nên",
+        "đẹp",
+        "xấu",
+        "tốt",
+        "hay",
+        "dở",
+        "buồn",
+        "vui",
     }
     fact_indicators = {
-        "theo", "cho biết", "phát biểu", "nghiên cứu", "thống kê",
-        "số liệu", "báo cáo", "xác nhận", "công bố", "điều tra",
-        "ngày", "tháng", "năm", "lúc", "giờ", "phút",
-        "%", "triệu", "nghìn", "tỷ",
+        "theo",
+        "cho biết",
+        "phát biểu",
+        "nghiên cứu",
+        "thống kê",
+        "số liệu",
+        "báo cáo",
+        "xác nhận",
+        "công bố",
+        "điều tra",
+        "ngày",
+        "tháng",
+        "năm",
+        "lúc",
+        "giờ",
+        "phút",
+        "%",
+        "triệu",
+        "nghìn",
+        "tỷ",
     }
 
     sentence_lower = sentence.lower()
@@ -92,7 +127,9 @@ def _classify_claim(sentence: str) -> str:
         return "FACT" if any(c.isdigit() for c in sentence) else "OPINION"
 
 
-def verify_facts_with_llm(claims: list[dict[str, Any]], llm: Any) -> list[dict[str, Any]]:
+def verify_facts_with_llm(
+    claims: list[dict[str, Any]], llm: Any
+) -> list[dict[str, Any]]:
     """Verify facts using LLM.
 
     Args:
@@ -112,7 +149,7 @@ def verify_facts_with_llm(claims: list[dict[str, Any]], llm: Any) -> list[dict[s
 
         try:
             prompt = f"""Kiểm tra claim sau là FACT hay không có cơ sở:
-Claim: {claim['text']}
+Claim: {claim["text"]}
 
 Trả lời JSON: {{"is_verified": true/false, "reason": "giải thích ngắn"}}
 """
@@ -150,7 +187,4 @@ def filter_verifiable_claims(claims: list[dict[str, Any]]) -> list[dict[str, Any
     Returns:
         List of verifiable fact claims
     """
-    return [
-        c for c in claims
-        if c.get("type") == "FACT" and c.get("verifiable", False)
-    ]
+    return [c for c in claims if c.get("type") == "FACT" and c.get("verifiable", False)]
