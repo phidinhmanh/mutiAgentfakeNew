@@ -28,6 +28,9 @@ dependencies = [
     "langchain-openai>=0.1.0",
     "langchain-nvidia-ai-endpoints>=0.2.0",
     "tenacity>=8.2.0",
+    "duckduckgo-search>=8.1.1",
+    "trafilatura>=2.0.0",
+    "fake-useragent>=2.2.0",
 ]
 
 [project.optional-dependencies]

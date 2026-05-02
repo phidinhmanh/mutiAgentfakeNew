@@ -23,7 +23,7 @@ class ChatGemini(BaseChatModel):
     provider: str = "google"
     google_api_key: str | None = None
     nvidia_api_key: str | None = None
-    timeout: int = 60  # Default timeout in seconds
+    timeout: int = 120  # Increased timeout for complex requests
 
     def __init__(self, **kwargs: Any) -> None:
         super().__init__(**kwargs)

@@ -63,7 +63,15 @@ def parse_evidence_payload(text: str) -> list[dict[str, Any]]:
     evidence = parsed.get("evidence", [])
     if not isinstance(evidence, list):
         return []
-    return [item for item in evidence if isinstance(item, dict)]
+
+    result = []
+    for item in evidence:
+        if isinstance(item, dict):
+            result.append(item)
+        elif isinstance(item, str) and item.strip():
+            result.append({"text": item.strip(), "source": "web", "score": 0.8})
+
+    return result
 
 
 def parse_dict_payload(text: str) -> dict[str, Any] | None:

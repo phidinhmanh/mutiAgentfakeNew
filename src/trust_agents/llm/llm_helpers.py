@@ -26,86 +26,96 @@ def call_llm(
     temperature: float = 0.1,
     max_tokens: int = 1000,
 ) -> str:
-    """Call LLM with prompt, supporting multiple backends."""
+    """Call LLM with prompt, supporting multiple backends with retries for 429."""
+    import time
     config = get_llm_config()
+    max_retries = 5
+    base_delay = 10
 
-    if config.provider.value == "openai":
-        from openai import OpenAI
+    for attempt in range(max_retries):
+        try:
+            if config.provider.value == "openai":
+                from openai import OpenAI
+                messages = []
+                if system_prompt:
+                    messages.append({"role": "system", "content": system_prompt})
+                messages.append({"role": "user", "content": prompt})
+                client = OpenAI(api_key=config.get_api_key())
+                response = client.chat.completions.create(
+                    model=config.model,
+                    messages=messages,
+                    temperature=temperature,
+                    max_tokens=max_tokens,
+                )
+                return (response.choices[0].message.content or "").strip()
 
-        messages = []
-        if system_prompt:
-            messages.append({"role": "system", "content": system_prompt})
-        messages.append({"role": "user", "content": prompt})
+            if config.provider.value == "groq":
+                from groq import Groq
+                messages = []
+                if system_prompt:
+                    messages.append({"role": "system", "content": system_prompt})
+                messages.append({"role": "user", "content": prompt})
+                client = Groq(api_key=config.get_api_key())
+                response = client.chat.completions.create(
+                    model=config.model,
+                    messages=messages,
+                    temperature=temperature,
+                    max_tokens=max_tokens,
+                )
+                return (response.choices[0].message.content or "").strip()
 
-        client = OpenAI(api_key=config.get_api_key())
-        response = client.chat.completions.create(
-            model=config.model,
-            messages=messages,
-            temperature=temperature,
-            max_tokens=max_tokens,
-        )
-        return (response.choices[0].message.content or "").strip()
+            if config.provider.value == "nvidia":
+                from openai import OpenAI
+                api_key = config.get_api_key()
+                if not isinstance(api_key, str) or not api_key:
+                    raise ValueError("A string NVIDIA API key is required")
+                client = OpenAI(
+                    base_url="https://integrate.api.nvidia.com/v1",
+                    api_key=api_key,
+                )
+                messages = []
+                if system_prompt:
+                    messages.append({"role": "system", "content": system_prompt})
+                messages.append({"role": "user", "content": prompt})
+                response = client.chat.completions.create(
+                    model=config.model,
+                    messages=messages,
+                    temperature=temperature,
+                    max_tokens=max_tokens,
+                )
+                return (response.choices[0].message.content or "").strip()
 
-    if config.provider.value == "groq":
-        from groq import Groq
+            from google import genai
+            from google.genai import types
+            api_key = config.get_api_key()
+            if not isinstance(api_key, str) or not api_key:
+                raise ValueError("A string Gemini API key is required")
+            client = genai.Client(api_key=api_key)
+            full_prompt = f"{system_prompt}\n\n{prompt}" if system_prompt else prompt
+            response = client.models.generate_content(
+                model=config.model,
+                contents=full_prompt,
+                config=types.GenerateContentConfig(
+                    temperature=temperature,
+                    max_output_tokens=max_tokens,
+                ),
+            )
+            return response.text.strip() if hasattr(response, "text") else str(response)
 
-        messages = []
-        if system_prompt:
-            messages.append({"role": "system", "content": system_prompt})
-        messages.append({"role": "user", "content": prompt})
+        except Exception as e:
+            error_str = str(e).lower()
+            is_retryable = any(code in error_str for code in
+                ["429", "500", "502", "503", "504", "bad gateway", "rate_limit", "timeout"])
 
-        client = Groq(api_key=config.get_api_key())
-        response = client.chat.completions.create(
-            model=config.model,
-            messages=messages,
-            temperature=temperature,
-            max_tokens=max_tokens,
-        )
-        return (response.choices[0].message.content or "").strip()
+            if is_retryable and attempt < max_retries - 1:
+                delay = base_delay * (2 ** attempt)
+                logger.warning(f"Retryable error hit ({e}). Retrying in {delay}s... (Attempt {attempt+1}/{max_retries})")
+                time.sleep(delay)
+                continue
+            logger.error(f"LLM call failed: {e}")
+            raise e
 
-    if config.provider.value == "nvidia":
-        from openai import OpenAI
-
-        api_key = os.getenv("NVIDIA_API_KEY") or config.get_api_key()
-        if not isinstance(api_key, str) or not api_key:
-            raise ValueError("A string NVIDIA API key is required")
-
-        client = OpenAI(
-            base_url="https://integrate.api.nvidia.com/v1",
-            api_key=api_key,
-        )
-        messages = []
-        if system_prompt:
-            messages.append({"role": "system", "content": system_prompt})
-        messages.append({"role": "user", "content": prompt})
-
-        response = client.chat.completions.create(
-            model=config.model,
-            messages=messages,
-            temperature=temperature,
-            max_tokens=max_tokens,
-        )
-        return (response.choices[0].message.content or "").strip()
-
-    from google import genai
-    from google.genai import types
-
-    api_key = config.get_api_key()
-    if not isinstance(api_key, str) or not api_key:
-        raise ValueError("A string Gemini API key is required")
-
-    client = genai.Client(api_key=api_key)
-    full_prompt = f"{system_prompt}\n\n{prompt}" if system_prompt else prompt
-    response = client.models.generate_content(
-        model=config.model,
-        contents=full_prompt,
-        config=types.GenerateContentConfig(
-            temperature=temperature,
-            max_output_tokens=max_tokens,
-        ),
-    )
-
-    return response.text.strip() if hasattr(response, "text") else str(response)
+    raise Exception(f"Failed to call LLM after {max_retries} retries due to rate limits.")
 
 
 def _clean_json_text(text: str) -> str:

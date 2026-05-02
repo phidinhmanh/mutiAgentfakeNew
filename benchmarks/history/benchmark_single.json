@@ -1,0 +1,448 @@
+{
+  "mode": "single",
+  "benchmark_results": [
+    {
+      "status": "success",
+      "elapsed_time": 25.212193727493286,
+      "verdict": "true",
+      "verdict_label": "REAL",
+      "confidence": 1.0,
+      "expected_label": "FAKE",
+      "correct": false,
+      "summary": "Nội dung của tuyên bố hoàn toàn trùng khớp với thông tin được cung cấp trong bằng chứng. Bằng chứng xác nhận chính xác thời gian (chiều 23/3), địa điểm (họp báo thường kỳ Bộ Ngoại giao), nhân vật (Phó Phát ngôn Phạm Thu Hằng) và nội dung câu hỏi về việc nâng cấp quan hệ Việt - Mỹ.",
+      "full_report": {
+        "verdict": "true",
+        "confidence": 1.0,
+        "summary": "Nội dung của tuyên bố hoàn toàn trùng khớp với thông tin được cung cấp trong bằng chứng. Bằng chứng xác nhận chính xác thời gian (chiều 23/3), địa điểm (họp báo thường kỳ Bộ Ngoại giao), nhân vật (Phó Phát ngôn Phạm Thu Hằng) và nội dung câu hỏi về việc nâng cấp quan hệ Việt - Mỹ.",
+        "detailed_explanation": "Nội dung của tuyên bố hoàn toàn trùng khớp với thông tin được cung cấp trong bằng chứng. Bằng chứng xác nhận chính xác thời gian (chiều 23/3), địa điểm (họp báo thường kỳ Bộ Ngoại giao), nhân vật (Phó Phát ngôn Phạm Thu Hằng) và nội dung câu hỏi về việc nâng cấp quan hệ Việt - Mỹ."
+      },
+      "mode": "single"
+    },
+    {
+      "status": "success",
+      "elapsed_time": 10.044633626937866,
+      "verdict": "true",
+      "verdict_label": "REAL",
+      "confidence": 1.0,
+      "expected_label": "FAKE",
+      "correct": false,
+      "summary": "Tuyên bố hoàn toàn trùng khớp với thông tin được cung cấp trong bằng chứng.",
+      "full_report": {
+        "verdict": "true",
+        "confidence": 1.0,
+        "summary": "Tuyên bố hoàn toàn trùng khớp với thông tin được cung cấp trong bằng chứng.",
+        "detailed_explanation": "Tuyên bố hoàn toàn trùng khớp với thông tin được cung cấp trong bằng chứng."
+      },
+      "mode": "single"
+    },
+    {
+      "status": "success",
+      "elapsed_time": 9.959748029708862,
+      "verdict": "true",
+      "verdict_label": "REAL",
+      "confidence": 1.0,
+      "expected_label": "FAKE",
+      "correct": false,
+      "summary": "Tuyên bố hoàn toàn trùng khớp với nội dung được cung cấp trong bằng chứng.",
+      "full_report": {
+        "verdict": "true",
+        "confidence": 1.0,
+        "summary": "Tuyên bố hoàn toàn trùng khớp với nội dung được cung cấp trong bằng chứng.",
+        "detailed_explanation": "Tuyên bố hoàn toàn trùng khớp với nội dung được cung cấp trong bằng chứng."
+      },
+      "mode": "single"
+    },
+    {
+      "status": "success",
+      "elapsed_time": 16.140684127807617,
+      "verdict": "true",
+      "verdict_label": "REAL",
+      "confidence": 1.0,
+      "expected_label": "FAKE",
+      "correct": false,
+      "summary": "Tất cả các chi tiết trong tuyên bố bao gồm ngân sách (1.000 tỷ đồng), tên dự án, các huyện đi qua (Vĩnh Thạnh, Cờ Đỏ, Thới Lai), số trường hợp bị ảnh hưởng (952) và số nền tái định cư dự kiến (260) đều hoàn toàn trùng khớp với thông tin được cung cấp trong bằng chứng.",
+      "full_report": {
+        "verdict": "true",
+        "confidence": 1.0,
+        "summary": "Tất cả các chi tiết trong tuyên bố bao gồm ngân sách (1.000 tỷ đồng), tên dự án, các huyện đi qua (Vĩnh Thạnh, Cờ Đỏ, Thới Lai), số trường hợp bị ảnh hưởng (952) và số nền tái định cư dự kiến (260) đều hoàn toàn trùng khớp với thông tin được cung cấp trong bằng chứng.",
+        "detailed_explanation": "Tất cả các chi tiết trong tuyên bố bao gồm ngân sách (1.000 tỷ đồng), tên dự án, các huyện đi qua (Vĩnh Thạnh, Cờ Đỏ, Thới Lai), số trường hợp bị ảnh hưởng (952) và số nền tái định cư dự kiến (260) đều hoàn toàn trùng khớp với thông tin được cung cấp trong bằng chứng."
+      },
+      "mode": "single"
+    },
+    {
+      "status": "success",
+      "elapsed_time": 49.21484923362732,
+      "verdict": "true",
+      "verdict_label": "REAL",
+      "confidence": 1.0,
+      "expected_label": "FAKE",
+      "correct": false,
+      "summary": "Bằng chứng xác nhận vào ngày 26/3, công an đã xác định được hai người liên quan là N.T.N (mẹ ruột của bé Th. SN 2020) và L.V.B (người sống như vợ chồng với N.T.N). Đồng thời, bằng chứng cũng nêu rõ vụ việc được cho là xảy ra tại huyện Hóc Môn, hoàn toàn khớp với các chi tiết về nhân thân và địa điểm trong tuyên bố.",
+      "full_report": {
+        "verdict": "true",
+        "confidence": 1.0,
+        "summary": "Bằng chứng xác nhận vào ngày 26/3, công an đã xác định được hai người liên quan là N.T.N (mẹ ruột của bé Th. SN 2020) và L.V.B (người sống như vợ chồng với N.T.N). Đồng thời, bằng chứng cũng nêu rõ vụ việc được cho là xảy ra tại huyện Hóc Môn, hoàn toàn khớp với các chi tiết về nhân thân và địa điểm trong tuyên bố.",
+        "detailed_explanation": "Bằng chứng xác nhận vào ngày 26/3, công an đã xác định được hai người liên quan là N.T.N (mẹ ruột của bé Th. SN 2020) và L.V.B (người sống như vợ chồng với N.T.N). Đồng thời, bằng chứng cũng nêu rõ vụ việc được cho là xảy ra tại huyện Hóc Môn, hoàn toàn khớp với các chi tiết về nhân thân và địa điểm trong tuyên bố."
+      },
+      "mode": "single"
+    },
+    {
+      "status": "success",
+      "elapsed_time": 12.862953424453735,
+      "verdict": "false",
+      "verdict_label": "FAKE",
+      "confidence": 1.0,
+      "expected_label": "REAL",
+      "correct": false,
+      "summary": "Tuyên bố nêu ngày kết thúc thí điểm là 10/8/2024, trong khi bằng chứng cung cấp xác nhận ngày kết thúc thí điểm là 10/8/2023. Có sự mâu thuẫn trực tiếp về mốc thời gian (năm).",
+      "full_report": {
+        "verdict": "false",
+        "confidence": 1.0,
+        "summary": "Tuyên bố nêu ngày kết thúc thí điểm là 10/8/2024, trong khi bằng chứng cung cấp xác nhận ngày kết thúc thí điểm là 10/8/2023. Có sự mâu thuẫn trực tiếp về mốc thời gian (năm).",
+        "detailed_explanation": "Tuyên bố nêu ngày kết thúc thí điểm là 10/8/2024, trong khi bằng chứng cung cấp xác nhận ngày kết thúc thí điểm là 10/8/2023. Có sự mâu thuẫn trực tiếp về mốc thời gian (năm)."
+      },
+      "mode": "single"
+    },
+    {
+      "status": "success",
+      "elapsed_time": 12.668628215789795,
+      "verdict": "false",
+      "verdict_label": "FAKE",
+      "confidence": 1.0,
+      "expected_label": "REAL",
+      "correct": false,
+      "summary": "Tuyên bố có sự mâu thuẫn trực tiếp về mặt thời gian so với bằng chứng. Tuyên bố nói rằng NASA công bố hình ảnh vào ngày 15/3, trong khi bằng chứng xác nhận việc công bố diễn ra vào ngày 14/3.",
+      "full_report": {
+        "verdict": "false",
+        "confidence": 1.0,
+        "summary": "Tuyên bố có sự mâu thuẫn trực tiếp về mặt thời gian so với bằng chứng. Tuyên bố nói rằng NASA công bố hình ảnh vào ngày 15/3, trong khi bằng chứng xác nhận việc công bố diễn ra vào ngày 14/3.",
+        "detailed_explanation": "Tuyên bố có sự mâu thuẫn trực tiếp về mặt thời gian so với bằng chứng. Tuyên bố nói rằng NASA công bố hình ảnh vào ngày 15/3, trong khi bằng chứng xác nhận việc công bố diễn ra vào ngày 14/3."
+      },
+      "mode": "single"
+    },
+    {
+      "status": "success",
+      "elapsed_time": 13.445876836776733,
+      "verdict": "false",
+      "verdict_label": "FAKE",
+      "confidence": 1.0,
+      "expected_label": "REAL",
+      "correct": false,
+      "summary": "Tuyên bố khẳng định họ có '1 trận thắng', nhưng bằng chứng chỉ ghi nhận 'một trận hòa không bàn thắng' và một trận thua 1-2. Có sự mâu thuẫn trực tiếp giữa kết quả 'thắng' trong tuyên bố và 'hòa' trong bằng chứng.",
+      "full_report": {
+        "verdict": "false",
+        "confidence": 1.0,
+        "summary": "Tuyên bố khẳng định họ có '1 trận thắng', nhưng bằng chứng chỉ ghi nhận 'một trận hòa không bàn thắng' và một trận thua 1-2. Có sự mâu thuẫn trực tiếp giữa kết quả 'thắng' trong tuyên bố và 'hòa' trong bằng chứng.",
+        "detailed_explanation": "Tuyên bố khẳng định họ có '1 trận thắng', nhưng bằng chứng chỉ ghi nhận 'một trận hòa không bàn thắng' và một trận thua 1-2. Có sự mâu thuẫn trực tiếp giữa kết quả 'thắng' trong tuyên bố và 'hòa' trong bằng chứng."
+      },
+      "mode": "single"
+    },
+    {
+      "status": "success",
+      "elapsed_time": 11.707458972930908,
+      "verdict": "false",
+      "verdict_label": "FAKE",
+      "confidence": 1.0,
+      "expected_label": "REAL",
+      "correct": false,
+      "summary": "Có sự mâu thuẫn trực tiếp về trọng lượng của bức tượng: tuyên bố ghi là 700 kg, trong khi bằng chứng cung cấp là 500 kg.",
+      "full_report": {
+        "verdict": "false",
+        "confidence": 1.0,
+        "summary": "Có sự mâu thuẫn trực tiếp về trọng lượng của bức tượng: tuyên bố ghi là 700 kg, trong khi bằng chứng cung cấp là 500 kg.",
+        "detailed_explanation": "Có sự mâu thuẫn trực tiếp về trọng lượng của bức tượng: tuyên bố ghi là 700 kg, trong khi bằng chứng cung cấp là 500 kg."
+      },
+      "mode": "single"
+    },
+    {
+      "status": "success",
+      "elapsed_time": 21.61651635169983,
+      "verdict": "false",
+      "verdict_label": "FAKE",
+      "confidence": 1.0,
+      "expected_label": "REAL",
+      "correct": false,
+      "summary": "Có sự mâu thuẫn trực tiếp về con số cụ thể: Tuyên bố đưa ra con số 304.170 tài khoản được kích hoạt thành công, trong khi bằng chứng cung cấp con số là 304.191 tài khoản.",
+      "full_report": {
+        "verdict": "false",
+        "confidence": 1.0,
+        "summary": "Có sự mâu thuẫn trực tiếp về con số cụ thể: Tuyên bố đưa ra con số 304.170 tài khoản được kích hoạt thành công, trong khi bằng chứng cung cấp con số là 304.191 tài khoản.",
+        "detailed_explanation": "Có sự mâu thuẫn trực tiếp về con số cụ thể: Tuyên bố đưa ra con số 304.170 tài khoản được kích hoạt thành công, trong khi bằng chứng cung cấp con số là 304.191 tài khoản."
+      },
+      "mode": "single"
+    },
+    {
+      "status": "success",
+      "elapsed_time": 61.98845672607422,
+      "verdict": "uncertain",
+      "verdict_label": "UNCERTAIN",
+      "confidence": 0.8,
+      "expected_label": "UNCERTAIN",
+      "correct": true,
+      "summary": "Bằng chứng chỉ xác nhận phần đầu của tuyên bố (về việc UBKT Trung ương thi hành kỷ luật Ban Thường vụ Tỉnh ủy Đồng Nai tại Kỳ họp thứ 23), nhưng hoàn toàn không cung cấp thông tin để xác minh chi tiết về việc 'có 2 cá nhân trong tổ chức bị phạt nặng nhất'. Do đó, thông tin hiện tại là không đủ để kết luận tính chính xác của toàn bộ tuyên bố.",
+      "full_report": {
+        "verdict": "uncertain",
+        "confidence": 0.8,
+        "summary": "Bằng chứng chỉ xác nhận phần đầu của tuyên bố (về việc UBKT Trung ương thi hành kỷ luật Ban Thường vụ Tỉnh ủy Đồng Nai tại Kỳ họp thứ 23), nhưng hoàn toàn không cung cấp thông tin để xác minh chi tiết về việc 'có 2 cá nhân trong tổ chức bị phạt nặng nhất'. Do đó, thông tin hiện tại là không đủ để kết luận tính chính xác của toàn bộ tuyên bố.",
+        "detailed_explanation": "Bằng chứng chỉ xác nhận phần đầu của tuyên bố (về việc UBKT Trung ương thi hành kỷ luật Ban Thường vụ Tỉnh ủy Đồng Nai tại Kỳ họp thứ 23), nhưng hoàn toàn không cung cấp thông tin để xác minh chi tiết về việc 'có 2 cá nhân trong tổ chức bị phạt nặng nhất'. Do đó, thông tin hiện tại là không đủ để kết luận tính chính xác của toàn bộ tuyên bố."
+      },
+      "mode": "single"
+    },
+    {
+      "status": "success",
+      "elapsed_time": 28.606064319610596,
+      "verdict": "uncertain",
+      "verdict_label": "UNCERTAIN",
+      "confidence": 0.9,
+      "expected_label": "UNCERTAIN",
+      "correct": true,
+      "summary": "Bằng chứng chỉ hỗ trợ phần số liệu thống kê về số vụ vi phạm, số cá nhân/tổ chức bị xử phạt và tổng số tiền phạt. Tuy nhiên, bằng chứng không cung cấp bất kỳ thông tin nào liên quan đến việc các quán tái phạm nhiều lần hoặc thông tin cụ thể về việc quán 'Food&Drink' bị buộc thôi kinh doanh. Do đó, không đủ thông tin để xác minh toàn bộ nội dung của tuyên bố.",
+      "full_report": {
+        "verdict": "uncertain",
+        "confidence": 0.9,
+        "summary": "Bằng chứng chỉ hỗ trợ phần số liệu thống kê về số vụ vi phạm, số cá nhân/tổ chức bị xử phạt và tổng số tiền phạt. Tuy nhiên, bằng chứng không cung cấp bất kỳ thông tin nào liên quan đến việc các quán tái phạm nhiều lần hoặc thông tin cụ thể về việc quán 'Food&Drink' bị buộc thôi kinh doanh. Do đó, không đủ thông tin để xác minh toàn bộ nội dung của tuyên bố.",
+        "detailed_explanation": "Bằng chứng chỉ hỗ trợ phần số liệu thống kê về số vụ vi phạm, số cá nhân/tổ chức bị xử phạt và tổng số tiền phạt. Tuy nhiên, bằng chứng không cung cấp bất kỳ thông tin nào liên quan đến việc các quán tái phạm nhiều lần hoặc thông tin cụ thể về việc quán 'Food&Drink' bị buộc thôi kinh doanh. Do đó, không đủ thông tin để xác minh toàn bộ nội dung của tuyên bố."
+      },
+      "mode": "single"
+    },
+    {
+      "status": "success",
+      "elapsed_time": 60.45991826057434,
+      "verdict": "uncertain",
+      "verdict_label": "UNCERTAIN",
+      "confidence": 0.9,
+      "expected_label": "UNCERTAIN",
+      "correct": true,
+      "summary": "Bằng chứng xác nhận chính xác danh tính, chức vụ của ông Lê Ngọc Quyền và nội dung phát biểu về việc thành lập đài theo Quyết định số 133/TTg. Tuy nhiên, bằng chứng không cung cấp thông tin về độ tuổi của ông (60 tuổi), do đó không đủ thông tin để xác minh toàn bộ tuyên bố.",
+      "full_report": {
+        "verdict": "uncertain",
+        "confidence": 0.9,
+        "summary": "Bằng chứng xác nhận chính xác danh tính, chức vụ của ông Lê Ngọc Quyền và nội dung phát biểu về việc thành lập đài theo Quyết định số 133/TTg. Tuy nhiên, bằng chứng không cung cấp thông tin về độ tuổi của ông (60 tuổi), do đó không đủ thông tin để xác minh toàn bộ tuyên bố.",
+        "detailed_explanation": "Bằng chứng xác nhận chính xác danh tính, chức vụ của ông Lê Ngọc Quyền và nội dung phát biểu về việc thành lập đài theo Quyết định số 133/TTg. Tuy nhiên, bằng chứng không cung cấp thông tin về độ tuổi của ông (60 tuổi), do đó không đủ thông tin để xác minh toàn bộ tuyên bố."
+      },
+      "mode": "single"
+    },
+    {
+      "status": "success",
+      "elapsed_time": 35.7944552898407,
+      "verdict": "true",
+      "verdict_label": "REAL",
+      "confidence": 0.9,
+      "expected_label": "UNCERTAIN",
+      "correct": false,
+      "summary": "Bằng chứng hỗ trợ trực tiếp các nội dung cốt lõi của tuyên bố, bao gồm: công nghệ kiểm định vượt trội so với IGI/GIA, dịch vụ khắc chữ trên mặt kim cương và kỹ thuật gia công tinh xảo của sản phẩm DOJI. Mặc dù bằng chứng không đề cập cụ thể đến mốc thời gian 'năm 2022' hay cụm từ 'đa dạng về kiểu dáng', nhưng không có sự mâu thuẫn nào với các chi tiết này, và các thông tin quan trọng nhất về đặc tính sản phẩm đều được xác nhận.",
+      "full_report": {
+        "verdict": "true",
+        "confidence": 0.9,
+        "summary": "Bằng chứng hỗ trợ trực tiếp các nội dung cốt lõi của tuyên bố, bao gồm: công nghệ kiểm định vượt trội so với IGI/GIA, dịch vụ khắc chữ trên mặt kim cương và kỹ thuật gia công tinh xảo của sản phẩm DOJI. Mặc dù bằng chứng không đề cập cụ thể đến mốc thời gian 'năm 2022' hay cụm từ 'đa dạng về kiểu dáng', nhưng không có sự mâu thuẫn nào với các chi tiết này, và các thông tin quan trọng nhất về đặc tính sản phẩm đều được xác nhận.",
+        "detailed_explanation": "Bằng chứng hỗ trợ trực tiếp các nội dung cốt lõi của tuyên bố, bao gồm: công nghệ kiểm định vượt trội so với IGI/GIA, dịch vụ khắc chữ trên mặt kim cương và kỹ thuật gia công tinh xảo của sản phẩm DOJI. Mặc dù bằng chứng không đề cập cụ thể đến mốc thời gian 'năm 2022' hay cụm từ 'đa dạng về kiểu dáng', nhưng không có sự mâu thuẫn nào với các chi tiết này, và các thông tin quan trọng nhất về đặc tính sản phẩm đều được xác nhận."
+      },
+      "mode": "single"
+    },
+    {
+      "status": "success",
+      "elapsed_time": 19.74138593673706,
+      "verdict": "true",
+      "verdict_label": "REAL",
+      "confidence": 1.0,
+      "expected_label": "UNCERTAIN",
+      "correct": false,
+      "summary": "Tất cả các chi tiết cốt lõi trong tuyên bố bao gồm: ngày diễn ra (26.3), đơn vị tổ chức (Đồn biên phòng Hướng Lập phối hợp với các nhà tài trợ), số lượng nhà (4 căn), địa điểm (xã Hướng Lập và Hướng Việt, biên giới Bảo Khánh) và tổng kinh phí (210 triệu đồng) đều hoàn toàn trùng khớp với thông tin được cung cấp trong phần bằng chứng.",
+      "full_report": {
+        "verdict": "true",
+        "confidence": 1.0,
+        "summary": "Tất cả các chi tiết cốt lõi trong tuyên bố bao gồm: ngày diễn ra (26.3), đơn vị tổ chức (Đồn biên phòng Hướng Lập phối hợp với các nhà tài trợ), số lượng nhà (4 căn), địa điểm (xã Hướng Lập và Hướng Việt, biên giới Bảo Khánh) và tổng kinh phí (210 triệu đồng) đều hoàn toàn trùng khớp với thông tin được cung cấp trong phần bằng chứng.",
+        "detailed_explanation": "Tất cả các chi tiết cốt lõi trong tuyên bố bao gồm: ngày diễn ra (26.3), đơn vị tổ chức (Đồn biên phòng Hướng Lập phối hợp với các nhà tài trợ), số lượng nhà (4 căn), địa điểm (xã Hướng Lập và Hướng Việt, biên giới Bảo Khánh) và tổng kinh phí (210 triệu đồng) đều hoàn toàn trùng khớp với thông tin được cung cấp trong phần bằng chứng."
+      },
+      "mode": "single"
+    }
+  ],
+  "samples": [
+    {
+      "sample_id": 21,
+      "expected_label": "FAKE",
+      "statement": "Tại họp báo thường kỳ Bộ Ngoại giao chiều 23/3, Phó Phát ngôn Bộ Ngoại giao Phạm Thu Hằng trả lời câu hỏi của phóng viên về việc Việt Nam có sẵn lòng nâng cấp quan hệ với Hoa Kỳ từ quan hệ hiện tại là đối tác toàn diện, lên quan hệ chiến lược hay không.",
+      "statement_length": 253,
+      "hardness_score": 5,
+      "hardness_reasons": [
+        "Long"
+      ],
+      "evidence": "Phó Phát ngôn Bộ Ngoại giao Phạm Thu Hằng Chiều 23/3, tại họp báo thường kỳ Bộ Ngoại giao, trả lời câu hỏi của phóng viên về việc Việt Nam có sẵn lòng nâng cấp quan hệ với Hoa Kỳ từ quan hệ hiện tại là đối tác toàn diện, lên quan hệ chiến lược hay không",
+      "claim": "Tại họp báo thường kỳ Bộ Ngoại giao chiều 23/3, Phó Phát ngôn Bộ Ngoại giao Phạm Thu Hằng trả lời câu hỏi của phóng viên về việc Việt Nam có sẵn lòng nâng cấp quan hệ với Hoa Kỳ từ quan hệ hiện tại là đối tác toàn diện, lên quan hệ chiến lược hay không."
+    },
+    {
+      "sample_id": 44,
+      "expected_label": "FAKE",
+      "statement": "Kỷ niệm 1980 năm Ngày mất Hai Bà Trưng (6-2-43 – 6-2-2023 âm lịch) do Hội Liên hiệp Phụ nữ (LHPN) TP.HCM phối hợp Sở Văn hóa - Thể thao và Công viên Lịch sử Văn hóa Dân tộc TP tổ chức vào ngày 25-2.",
+      "statement_length": 198,
+      "hardness_score": 5,
+      "hardness_reasons": [
+        "Medium"
+      ],
+      "evidence": "Ngày 25-2, Hội Liên hiệp Phụ nữ (LHPN) TP.HCM phối hợp Sở Văn hóa - Thể thao và Công viên Lịch sử Văn hóa Dân tộc TP tổ chức kỷ niệm 1980 năm Ngày mất Hai Bà Trưng (6-2-43 – 6-2-2023 âm lịch).",
+      "claim": "Kỷ niệm 1980 năm Ngày mất Hai Bà Trưng (6-2-43 – 6-2-2023 âm lịch) do Hội Liên hiệp Phụ nữ (LHPN) TP.HCM phối hợp Sở Văn hóa - Thể thao và Công viên Lịch sử Văn hóa Dân tộc TP tổ chức vào ngày 25-2."
+    },
+    {
+      "sample_id": 57,
+      "expected_label": "FAKE",
+      "statement": "Chiều 23/3, Chánh văn Phòng Sở Giáo dục và Đào tạo TP Hồ Chí Minh ông Hồ Tấn Minh khẳng định nếu trong trường hợp bất khả kháng, học sinh không có mã định danh cá nhân thì ngành giáo dục sẽ cấp một mã tạm cho các em để tham gia công tác tuyển sinh.",
+      "statement_length": 248,
+      "hardness_score": 5,
+      "hardness_reasons": [
+        "Long"
+      ],
+      "evidence": "Chiều 23/3, ông Hồ Tấn Minh, Chánh văn Phòng Sở Giáo dục và Đào tạo TP Hồ Chí Minh khẳng định: Nếu trường hợp bất khả kháng, học sinh không có mã định danh cá nhân, ngành giáo dục sẽ cấp một mã tạm cho các em để tham gia công tác tuyển sinh.",
+      "claim": "Chiều 23/3, Chánh văn Phòng Sở Giáo dục và Đào tạo TP Hồ Chí Minh ông Hồ Tấn Minh khẳng định nếu trong trường hợp bất khả kháng, học sinh không có mã định danh cá nhân thì ngành giáo dục sẽ cấp một mã tạm cho các em để tham gia công tác tuyển sinh."
+    },
+    {
+      "sample_id": 142,
+      "expected_label": "FAKE",
+      "statement": "Ngân sách của TP Cần Thơ năm 2023 là 1.000 cho dự án tuyến cao tốc Châu Đốc - Cần Thơ - Sóc Trăng đi qua địa bàn 3 huyện là Vĩnh Thạnh, Cờ Đỏ và Thới Lai với trường hợp bị ảnh hưởng là 952, dự kiến nền TĐC là khoảng 260.",
+      "statement_length": 220,
+      "hardness_score": 5,
+      "hardness_reasons": [
+        "Long"
+      ],
+      "evidence": "Cần Thơ đã bố trí vốn ngân sách địa phương năm 2023 là 1.000 tỉ đồng cho dự án này. Công trình đi qua địa bàn 3 huyện: Vĩnh Thạnh, Cờ Đỏ và Thới Lai với khoảng 952 trường hợp bị ảnh hưởng, dự kiến có khoảng 260 nền TĐC. tuyến cao tốc Châu Đốc - Cần Thơ - Sóc Trăng",
+      "claim": "Ngân sách của TP Cần Thơ năm 2023 là 1.000 cho dự án tuyến cao tốc Châu Đốc - Cần Thơ - Sóc Trăng đi qua địa bàn 3 huyện là Vĩnh Thạnh, Cờ Đỏ và Thới Lai với trường hợp bị ảnh hưởng là 952, dự kiến nền TĐC là khoảng 260."
+    },
+    {
+      "sample_id": 190,
+      "expected_label": "FAKE",
+      "statement": "Ngày 26/3, các đối tượng liên quan đến vụ việc đã được công an xác định là bé Th. (SN 2020), mẹ ruột của bé và một người đàn ông chung sống như vợ chồng với mẹ bé; cả 3 được cho là ở tại Hóc Môn khi sự việc xảy ra.",
+      "statement_length": 214,
+      "hardness_score": 5,
+      "hardness_reasons": [
+        "Long"
+      ],
+      "evidence": "Ngày 26/3, Công an huyện Hóc Môn (TPHCM) đã phối hợp với Phòng Cảnh sát Hình sự (Công an TPHCM) xác định được hai người liên quan trong vụ việc được cho là xảy ra tại huyện Hóc Môn Hai người này là L.V.B (SN 1979) và N.T.N (SN 2000, trú tại quận Tân Bình). Trong đó, N. được xác định là mẹ ruột của bé Th. (SN 2020), B. là người sống như vợ chồng với N",
+      "claim": "Ngày 26/3, các đối tượng liên quan đến vụ việc đã được công an xác định là bé Th. (SN 2020), mẹ ruột của bé và một người đàn ông chung sống như vợ chồng với mẹ bé; cả 3 được cho là ở tại Hóc Môn khi sự việc xảy ra."
+    },
+    {
+      "sample_id": 526,
+      "expected_label": "REAL",
+      "statement": "Ban Cán sự đảng UBND TP được giao chỉ đạo hoàn thiện báo cáo, đề xuất chính thức thành lập Đội Quản lý trật tự xây dựng đô thị thuộc UBND quận, huyện, thị xã sau khi kết thúc thí điểm vào ngày 10/8/2024. ",
+      "statement_length": 204,
+      "hardness_score": 5,
+      "hardness_reasons": [
+        "Long"
+      ],
+      "evidence": "Ban Chỉ đạo giao Ban Cán sự đảng UBND TP chỉ đạo hoàn thiện báo cáo, đề xuất chính thức thành lập Đội Quản lý trật tự xây dựng đô thị thuộc UBND quận, huyện, thị xã sau khi kết thúc thí điểm vào ngày 10/8/2023",
+      "claim": "Ban Cán sự đảng UBND TP được giao chỉ đạo hoàn thiện báo cáo, đề xuất chính thức thành lập Đội Quản lý trật tự xây dựng đô thị thuộc UBND quận, huyện, thị xã sau khi kết thúc thí điểm vào ngày 10/8/2024. "
+    },
+    {
+      "sample_id": 79,
+      "expected_label": "REAL",
+      "statement": "NASA đã công bố bức hình tuyệt đẹp của WR 124 vào ngày 15/3, với hình ảnh ngôi sao này được bao quanh bởi mây khí bụi, là vật chất thoát ra từ ngôi sao già cỗi trong các vụ phóng hỗn loạn và ngẫu nhiên.",
+      "statement_length": 202,
+      "hardness_score": 4,
+      "hardness_reasons": [
+        "Long"
+      ],
+      "evidence": "Trong bức ảnh tuyệt đẹp được NASA công bố hôm 14/3 Những đám mây khổng lồ này là vật chất thoát ra từ ngôi sao già cỗi trong các vụ phóng hỗn loạn và ngẫu nhiên. WR 124 được bao quanh bởi mây khí bụi",
+      "claim": "NASA đã công bố bức hình tuyệt đẹp của WR 124 vào ngày 15/3, với hình ảnh ngôi sao này được bao quanh bởi mây khí bụi, là vật chất thoát ra từ ngôi sao già cỗi trong các vụ phóng hỗn loạn và ngẫu nhiên."
+    },
+    {
+      "sample_id": 101,
+      "expected_label": "REAL",
+      "statement": "Hai trận đấu họ thua kém hoàn toàn đối thủ về lối chơi và những thống kê quan trọng như cầm bóng, dứt điểm cầu môn và dĩ nhiên là bàn thắng khiến họ có 1 trận thắng và 1 trận thất bại 1-2 trước New Zealand.",
+      "statement_length": 206,
+      "hardness_score": 4,
+      "hardness_reasons": [
+        "Long"
+      ],
+      "evidence": "một trận hòa không bàn thắng thất bại 1-2 trước New Zealand hai trận đấu họ thua kém hoàn toàn đối thủ về lối chơi và những thống kê quan trọng như cầm bóng, dứt điểm cầu môn và dĩ nhiên là bàn thắng.",
+      "claim": "Hai trận đấu họ thua kém hoàn toàn đối thủ về lối chơi và những thống kê quan trọng như cầm bóng, dứt điểm cầu môn và dĩ nhiên là bàn thắng khiến họ có 1 trận thắng và 1 trận thất bại 1-2 trước New Zealand."
+    },
+    {
+      "sample_id": 166,
+      "expected_label": "REAL",
+      "statement": "Nặng 700 kg, cao 1,7 m, rộng 1,6 m, dài 2,3 m, tượng cố nhạc sĩ Trịnh Công Sơn mang dáng vẻ đang ngồi, cầm đàn guitar, được làm bằng đồng. Chủ tịch TP Huế, đã yêu cầu sớm chỉnh trang để chuẩn bị đặt tượng cố nhạc sĩ.",
+      "statement_length": 216,
+      "hardness_score": 4,
+      "hardness_reasons": [
+        "Long"
+      ],
+      "evidence": "Chủ tịch TP Huế, đã yêu cầu sớm chỉnh trang để chuẩn bị đặt tượng cố nhạc sĩ. Tượng cố nhạc sĩ Trịnh Công Sơn đang ngồi, cầm đàn guitar, được làm bằng đồng, nặng 500 kg, cao 1,7 m, rộng 1,6 m, dài 2,3 m.",
+      "claim": "Nặng 700 kg, cao 1,7 m, rộng 1,6 m, dài 2,3 m, tượng cố nhạc sĩ Trịnh Công Sơn mang dáng vẻ đang ngồi, cầm đàn guitar, được làm bằng đồng. Chủ tịch TP Huế, đã yêu cầu sớm chỉnh trang để chuẩn bị đặt tượng cố nhạc sĩ."
+    },
+    {
+      "sample_id": 187,
+      "expected_label": "REAL",
+      "statement": "Tính đến ngày 1-3-2023, chỉ mới có 304.170 tài khoản được kích hoạt thành công, đạt tỉ lệ 20,3% trong tổng số 1.497.360 tài khoản định danh điện tử do TP tổ chức cấp.",
+      "statement_length": 166,
+      "hardness_score": 4,
+      "hardness_reasons": [
+        "Medium"
+      ],
+      "evidence": "Tính đến ngày 1-3-2023, TP tổ chức cấp 1.497.360 tài khoản định danh điện tử. Tuy nhiên chỉ mới có 304.191 tài khoản được kích hoạt thành công, đạt tỉ lệ 20,3%.",
+      "claim": "Tính đến ngày 1-3-2023, chỉ mới có 304.170 tài khoản được kích hoạt thành công, đạt tỉ lệ 20,3% trong tổng số 1.497.360 tài khoản định danh điện tử do TP tổ chức cấp."
+    },
+    {
+      "sample_id": 36,
+      "expected_label": "UNCERTAIN",
+      "statement": "Kết luận của UBKT Trung ương tại Kỳ họp thứ 23 đối với Ban cán sự đảng UBND tỉnh Đồng Nai và một số tổ chức đảng, đảng viên có liên quan là thi hành kỷ luật Ban Thường vụ Tỉnh ủy Đồng Nai, trong đó có 2 cá nhân trong tổ chức bị phạt nặng nhất.",
+      "statement_length": 243,
+      "hardness_score": 4,
+      "hardness_reasons": [
+        "Long"
+      ],
+      "evidence": "kết luận của UBKT Trung ương tại Kỳ họp thứ 23 đối với Ban cán sự đảng UBND tỉnh Đồng Nai và một số tổ chức đảng, đảng viên có liên quan thi hành kỷ luật Ban Thường vụ Tỉnh ủy Đồng Nai",
+      "claim": "Kết luận của UBKT Trung ương tại Kỳ họp thứ 23 đối với Ban cán sự đảng UBND tỉnh Đồng Nai và một số tổ chức đảng, đảng viên có liên quan là thi hành kỷ luật Ban Thường vụ Tỉnh ủy Đồng Nai, trong đó có 2 cá nhân trong tổ chức bị phạt nặng nhất."
+    },
+    {
+      "sample_id": 47,
+      "expected_label": "UNCERTAIN",
+      "statement": "Theo thống kê của Phòng Cảnh sát môi trường, Công an TP Đà Nẵng, từ năm 2019 đến 2023, đơn vị đã xử lý 18 trường hợp vi phạm về tiếng ồn, xử phạt 9 cá nhân và 5 tổ chức  với tổng số tiền hơn 232 triệu đồng., có nhiều quán còn tái phạm nhiều lần, điển hình như quán Food&Drink đã bị buộc thôi kinh doanh.",
+      "statement_length": 303,
+      "hardness_score": 4,
+      "hardness_reasons": [
+        "Long"
+      ],
+      "evidence": "Theo thống kê của Phòng Cảnh sát môi trường, Công an TP Đà Nẵng, từ năm 2019 đến nay, đơn vị đã xử lý 18 trường hợp vi phạm về tiếng ồn, xử phạt 9 cá nhân và 5 tổ chức với tổng số tiền hơn 232 triệu đồng.",
+      "claim": "Theo thống kê của Phòng Cảnh sát môi trường, Công an TP Đà Nẵng, từ năm 2019 đến 2023, đơn vị đã xử lý 18 trường hợp vi phạm về tiếng ồn, xử phạt 9 cá nhân và 5 tổ chức  với tổng số tiền hơn 232 triệu đồng., có nhiều quán còn tái phạm nhiều lần, điển hình như quán Food&Drink đã bị buộc thôi kinh doanh."
+    },
+    {
+      "sample_id": 65,
+      "expected_label": "UNCERTAIN",
+      "statement": "Giám đốc Đài Khí tượng thủy văn khu vực Nam Bộ ông Lê Ngọc Quyền năm nay 60 tuổi cho biết đài được thành lập theo Quyết định số 133/TTg ngày 30-3-1993 của Thủ tướng Chính phủ, trên cơ sở sáp nhập 13 đài Khí tượng thủy văn các tỉnh tại Nam Bộ.",
+      "statement_length": 242,
+      "hardness_score": 4,
+      "hardness_reasons": [
+        "Long"
+      ],
+      "evidence": "ông Lê Ngọc Quyền - Giám đốc Đài Khí tượng thủy văn khu vực Nam Bộ cho biết đài được thành lập theo Quyết định số 133/TTg ngày 30-3-1993 của Thủ tướng Chính phủ, trên cơ sở sáp nhập 13 đài Khí tượng thủy văn các tỉnh tại Nam Bộ.",
+      "claim": "Giám đốc Đài Khí tượng thủy văn khu vực Nam Bộ ông Lê Ngọc Quyền năm nay 60 tuổi cho biết đài được thành lập theo Quyết định số 133/TTg ngày 30-3-1993 của Thủ tướng Chính phủ, trên cơ sở sáp nhập 13 đài Khí tượng thủy văn các tỉnh tại Nam Bộ."
+    },
+    {
+      "sample_id": 177,
+      "expected_label": "UNCERTAIN",
+      "statement": "Theo các chuyên gia của IIDGR, sản phẩm nhẫn kim cương của DOJI được ra mắt vào năm 2022 không chỉ đa dạng về kiểu dáng và chất lượng cao, mà còn được áp dụng công nghệ kiểm định hoàn toàn khác biệt và vượt trội so với IGI, GIA. Điều này cho phép khách hàng có thể sử dụng dịch vụ ứng dụng công nghệ khắc chữ lên trên mặt kim cương, tạo thêm sự cá nhân hóa và độc đáo cho chiếc nhẫn. Mỗi chiếc nhẫn của DOJI không chỉ là một sản phẩm mỹ thuật, mà còn là một tuyệt phẩm hội tụ những kỹ thuật đính đá và gia công tinh xảo bậc nhất, tạo nên sự hoàn hảo và sang trọng.",
+      "statement_length": 564,
+      "hardness_score": 4,
+      "hardness_reasons": [
+        "Long"
+      ],
+      "evidence": "Theo các chuyên gia của IIDGR, sản phẩm được áp dụng công nghệ kiểm định hoàn toàn khác biệt và vượt trội so với IGI, GIA. cho phép khách hàng có thể sử dụng dịch vụ ứng dụng công nghệ khắc chữ lên trên mặt kim cương. Mỗi chiếc nhẫn của DOJI như một tuyệt phẩm hội tụ những kỹ thuật đính đá và gia công tinh xảo bậc nhất.",
+      "claim": "Theo các chuyên gia của IIDGR, sản phẩm nhẫn kim cương của DOJI được ra mắt vào năm 2022 không chỉ đa dạng về kiểu dáng và chất lượng cao, mà còn được áp dụng công nghệ kiểm định hoàn toàn khác biệt và vượt trội so với IGI, GIA. Điều này cho phép khách hàng có thể sử dụng dịch vụ ứng dụng công nghệ khắc chữ lên trên mặt kim cương, tạo thêm sự cá nhân hóa và độc đáo cho chiếc nhẫn. Mỗi chiếc nhẫn của DOJI không chỉ là một sản phẩm mỹ thuật, mà còn là một tuyệt phẩm hội tụ những kỹ thuật đính đá và gia công tinh xảo bậc nhất, tạo nên sự hoàn hảo và sang trọng."
+    },
+    {
+      "sample_id": 339,
+      "expected_label": "UNCERTAIN",
+      "statement": "Theo thông tin từ Báo Tuổi trẻ Online đưa tin, trong ngày 26.3, Đồn biên phòng Hướng Lập phối hợp với các nhà tài trợ tổ chức khánh thành, bàn giao tổng cộng 4 căn nhà mái ấm biên cương cho các hộ gia đình nằm tại xã Hướng Lập và Hướng Việt có hoàn cảnh đặc biệt khó khăn trên địa bàn biên giới Bảo Khánh, với tổng kinh phí 210 triệu đồng. Thông tin này được đăng trên trang web của Báo Tuổi trẻ Online và thu hút sự quan tâm của nhiều người dân trong và ngoài khu vực.",
+      "statement_length": 469,
+      "hardness_score": 4,
+      "hardness_reasons": [
+        "Long"
+      ],
+      "evidence": "Khánh thành, bàn giao 4 căn nhà mái ấm biên cương cho các hộ gia đình khó khăn trên địa bàn biên giới BẢO KHÁNH Cũng trong ngày 26.3, Đồn biên phòng Hướng Lập đã phối hợp với các nhà tài trợ tổ chức khánh thành, bàn giao 4 căn nhà mái ấm biên cương cho hộ gia đình đặc biệt khó khăn với tổng số tiền 210 triệu đồng ở xã Hướng Lập và Hướng Việt.",
+      "claim": "Theo thông tin từ Báo Tuổi trẻ Online đưa tin, trong ngày 26.3, Đồn biên phòng Hướng Lập phối hợp với các nhà tài trợ tổ chức khánh thành, bàn giao tổng cộng 4 căn nhà mái ấm biên cương cho các hộ gia đình nằm tại xã Hướng Lập và Hướng Việt có hoàn cảnh đặc biệt khó khăn trên địa bàn biên giới Bảo Khánh, với tổng kinh phí 210 triệu đồng. Thông tin này được đăng trên trang web của Báo Tuổi trẻ Online và thu hút sự quan tâm của nhiều người dân trong và ngoài khu vực."
+    }
+  ],
+  "summary": {
+    "total": 15,
+    "correct": 3,
+    "accuracy": 20.0,
+    "avg_time": 25.96425487200419
+  }
+}

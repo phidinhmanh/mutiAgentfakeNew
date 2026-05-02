@@ -35,7 +35,7 @@ def search_serper(
     payload = {"q": query, "num": num_results}
 
     try:
-        response = requests.post(url, json=payload, headers=headers, timeout=10)
+        response = requests.post(url, json=payload, headers=headers, timeout=30)
         response.raise_for_status()
         data = response.json()
 
@@ -106,11 +106,35 @@ def search_web(query: str, num_results: int = 3) -> list[dict[str, Any]]:
     if results:
         return results
 
-    if not _should_fallback_to_tavily(failure_reason, results):
-        return []
+    if _should_fallback_to_tavily(failure_reason, results):
+        _log_tavily_fallback_reason(failure_reason)
+        results = search_tavily(query, num_results)
+        if results:
+            return results
 
-    _log_tavily_fallback_reason(failure_reason)
-    return search_tavily(query, num_results)
+    # Final fallback: DuckDuckGo (Free)
+    logger.info("Falling back to DuckDuckGo search")
+    return search_ddg(query, num_results)
+
+
+def search_ddg(query: str, num_results: int = 3) -> list[dict[str, Any]]:
+    """Search using DuckDuckGo (Free fallback)."""
+    try:
+        from langchain_community.tools import DuckDuckGoSearchRun
+        search = DuckDuckGoSearchRun()
+        content = search.run(query)
+        if content:
+            return [{
+                "content": content,
+                "title": f"Search result for {query[:30]}...",
+                "url": "https://duckduckgo.com",
+                "source": "duckduckgo",
+                "score": 0.6
+            }]
+        return []
+    except Exception as e:
+        logger.error(f"DuckDuckGo search failed: {e}")
+        return []
 
 
 def search_tavily(query: str, num_results: int = 3) -> list[dict[str, Any]]:
@@ -135,12 +159,13 @@ def search_tavily(query: str, num_results: int = 3) -> list[dict[str, Any]]:
         "api_key": settings.tavily_api_key,
         "query": query,
         "max_results": num_results,
+        "search_depth": "advanced",
         "include_answer": False,
-        "include_raw_content": False,
+        "include_raw_content": True,
     }
 
     try:
-        response = requests.post(url, json=payload, headers=headers, timeout=10)
+        response = requests.post(url, json=payload, headers=headers, timeout=30)
         response.raise_for_status()
         data = response.json()
 

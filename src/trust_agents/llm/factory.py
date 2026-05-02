@@ -2,10 +2,12 @@
 
 from __future__ import annotations
 
-import os
 from typing import Any
 
+import logging
 from trust_agents.config import LLMConfig, get_llm_config
+
+logger = logging.getLogger("trust_agents.llm.factory")
 
 try:
     from langchain_openai import ChatOpenAI
@@ -57,16 +59,43 @@ def create_chat_model(config: LLMConfig | None = None) -> Any:
         )
 
     if provider_val == "nvidia":
-        nvidia_key = os.getenv("NVIDIA_API_KEY") or resolved_config.get_api_key()
+        nvidia_key = resolved_config.get_api_key()
         if not nvidia_key:
             raise ValueError("NVIDIA_API_KEY environment variable required")
+            
         if ChatNVIDIA is not None:
-            return ChatNVIDIA(
+            # Subclass to disable parallel tool calls
+            class PatchedChatNVIDIA(ChatNVIDIA):
+                def bind_tools(self, tools, **kwargs):
+                    logger.info("[DEBUG] PatchedChatNVIDIA.bind_tools called with parallel_tool_calls=False")
+                    kwargs["parallel_tool_calls"] = False
+                    return super().bind_tools(tools, **kwargs)
+                    
+            return PatchedChatNVIDIA(
                 model=resolved_config.model,
                 temperature=resolved_config.temperature,
                 nvidia_api_key=nvidia_key,
                 max_completion_tokens=resolved_config.max_tokens,
+                max_retries=10,
             )
+            
+        # Fallback to ChatOpenAI for NVIDIA NIM (OpenAI compatible)
+        if ChatOpenAI is not None:
+            # Subclass to disable parallel tool calls
+            class PatchedChatOpenAI(ChatOpenAI):
+                def bind_tools(self, tools, **kwargs):
+                    logger.info("[DEBUG] PatchedChatOpenAI.bind_tools called with parallel_tool_calls=False")
+                    kwargs["parallel_tool_calls"] = False
+                    return super().bind_tools(tools, **kwargs)
+                    
+            return PatchedChatOpenAI(
+                model=resolved_config.model,
+                temperature=resolved_config.temperature,
+                openai_api_key=nvidia_key,
+                base_url="https://integrate.api.nvidia.com/v1",
+                max_retries=10,
+            )
+        # Last resort fallback (only works for Google models on NVIDIA)
         ChatGemini_cls = _get_chat_gemini()  # noqa: N806
         return ChatGemini_cls(
             model_name=resolved_config.model,
@@ -81,6 +110,6 @@ def create_chat_model(config: LLMConfig | None = None) -> Any:
         model_name=resolved_config.model,
         provider=provider_val,
         temperature=resolved_config.temperature,
-        google_api_key=os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY"),
-        nvidia_api_key=os.getenv("NVIDIA_API_KEY"),
+        google_api_key=resolved_config.get_api_key_for("google"),
+        nvidia_api_key=resolved_config.get_api_key_for("nvidia"),
     )

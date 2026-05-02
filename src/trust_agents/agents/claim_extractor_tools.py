@@ -196,8 +196,8 @@ def _sentencize_vietnamese(text: str) -> list[str]:
         return sent_tokenize(text)
     except ImportError:
         logger.warning("underthesea not installed, using regex-based splitting")
-        # Fallback: split by common Vietnamese punctuation
-        sentences = re.split(r'[。.!?"]|{1,2}', text)
+        # Fallback: split by common Vietnamese punctuation and newlines
+        sentences = re.split(r'[。.!?"]|\n+', text)
         return [s.strip() for s in sentences if s.strip()]
     except Exception as e:
         logger.warning(f"underthesea sent_tokenize failed: {e}")

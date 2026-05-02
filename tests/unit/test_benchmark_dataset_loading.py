@@ -144,7 +144,7 @@ class TestCreateBenchmarkModel:
         assert result == "openai-client"
         openai_ctor.assert_called_once_with(
             api_key="oa-key",
-            base_url=None,
+            base_url="https://openrouter.ai/api/v1",
             timeout=12.0,
         )
 

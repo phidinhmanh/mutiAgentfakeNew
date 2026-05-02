@@ -7,7 +7,6 @@ from typing import Any
 import streamlit as st
 
 from fake_news_detector.application.analysis_service import (
-    analyze_with_legacy,
     analyze_with_trust,
 )
 from fake_news_detector.application.index_service import (
@@ -29,20 +28,6 @@ except ImportError as e:
     TRUST_AVAILABLE = False
     logging.warning(f"TRUST orchestrator not available: {e}")
 
-try:
-    from fake_news_detector.agents.claim_extractor import (
-        extract_claims,
-        filter_verifiable_claims,
-    )
-    from fake_news_detector.agents.evidence_retriever import (
-        enrich_evidence_with_context,
-        retrieve_evidence_for_claims,
-    )
-
-    LEGACY_AVAILABLE = True
-except ImportError:
-    LEGACY_AVAILABLE = False
-
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -51,7 +36,7 @@ def analyze_article(article: str, use_trust: bool = True) -> dict[str, Any]:
     """Run full analysis pipeline on article."""
     start_time = time.time()
 
-    if use_trust and TRUST_AVAILABLE:
+    if TRUST_AVAILABLE:
         logger.info("Using TRUST multi-agent system")
         try:
             results = analyze_with_trust(
@@ -62,38 +47,10 @@ def analyze_article(article: str, use_trust: bool = True) -> dict[str, Any]:
             return results
         except Exception as e:
             logger.error(f"TRUST pipeline failed: {e}")
-            fallback_results = analyze_with_legacy(
-                article=article,
-                extract_claims_fn=lambda _article: [],
-                filter_verifiable_claims_fn=lambda claims: claims,
-                retrieve_evidence_for_claims_fn=lambda claims: [],
-                enrich_evidence_with_context_fn=lambda evidence, text: evidence,
-            )
-            fallback_results["trust_error"] = str(e)
-            fallback_results["claims"] = []
-            return fallback_results
+            raise e
 
-    logger.info("Using legacy single-agent system")
-    if LEGACY_AVAILABLE:
-        results = analyze_with_legacy(
-            article=article,
-            extract_claims_fn=extract_claims,
-            filter_verifiable_claims_fn=filter_verifiable_claims,
-            retrieve_evidence_for_claims_fn=retrieve_evidence_for_claims,
-            enrich_evidence_with_context_fn=enrich_evidence_with_context,
-        )
-        logger.info(f"Analysis complete: {time.time() - start_time:.2f}s")
-        return results
-
-    results = analyze_with_legacy(
-        article=article,
-        extract_claims_fn=lambda _article: [],
-        filter_verifiable_claims_fn=lambda claims: claims,
-        retrieve_evidence_for_claims_fn=lambda claims: [],
-        enrich_evidence_with_context_fn=lambda evidence, text: evidence,
-    )
-    logger.info(f"Analysis complete: {time.time() - start_time:.2f}s")
-    return results
+    logger.error("TRUST pipeline not available")
+    return {"error": "TRUST pipeline not available"}
 
 
 def main() -> None:
@@ -113,18 +70,13 @@ def main() -> None:
         st.header("Cài đặt")
 
         st.subheader("Pipeline")
-        pipeline_options = ["trust"] if TRUST_AVAILABLE else []
-        if LEGACY_AVAILABLE:
-            pipeline_options.append("legacy")
-        if not pipeline_options:
-            pipeline_options = ["none"]
+        pipeline_options = ["trust"] if TRUST_AVAILABLE else ["none"]
 
         selected_pipeline = st.radio(
             "Chọn pipeline:",
             options=pipeline_options,
             format_func=lambda value: {
                 "trust": "🤖 TRUST Multi-Agent (Mới)",
-                "legacy": "📝 Single-Agent (Cũ)",
                 "none": "⚠️ Không có pipeline",
             }.get(value, value),
             index=0,
@@ -176,9 +128,7 @@ def main() -> None:
 
         col_analyze, col_clear = st.columns(2)
         with col_analyze:
-            analyze_button = st.button(
-                "🔍 Phân tích", type="primary", use_container_width=True
-            )
+            analyze_button = st.button("🔍 Phân tích", type="primary", use_container_width=True)
         with col_clear:
             if st.button("🗑️ Xóa", use_container_width=True):
                 st.session_state.clear()
@@ -190,9 +140,7 @@ def main() -> None:
         if analyze_button and article:
             use_trust = st.session_state["pipeline"] == "trust"
             with st.spinner("Đang phân tích..."):
-                st.session_state["analysis_results"] = analyze_article(
-                    article, use_trust=use_trust
-                )
+                st.session_state["analysis_results"] = analyze_article(article, use_trust=use_trust)
 
         if st.session_state.get("analysis_results"):
             results = st.session_state["analysis_results"]
@@ -208,9 +156,7 @@ def main() -> None:
                     st.metric("Confidence", f"{baseline.get('confidence', 0):.1%}")
 
                 verdict_color = "red" if baseline.get("fake_prob", 0) > 0.5 else "green"
-                baseline_label = (
-                    "FAKE" if baseline.get("fake_prob", 0) > 0.5 else "REAL"
-                )
+                baseline_label = "FAKE" if baseline.get("fake_prob", 0) > 0.5 else "REAL"
                 st.markdown(f"**Baseline Verdict:** :{verdict_color}[{baseline_label}]")
 
             if "trust" in results:
@@ -247,16 +193,10 @@ def main() -> None:
                             verdict_color = "gray"
 
                         claim_text = verdict_info.get("claim", "")[:100]
-                        with st.expander(
-                            f"{verdict_emoji} Claim {index + 1}: {claim_text}..."
-                        ):
-                            st.write(
-                                f"**Verdict:** :{verdict_color}[{verdict.upper()}]"
-                            )
+                        with st.expander(f"{verdict_emoji} Claim {index + 1}: {claim_text}..."):
+                            st.write(f"**Verdict:** :{verdict_color}[{verdict.upper()}]")
                             st.write(f"**Confidence:** {confidence:.1%}")
-                            st.write(
-                                f"**Reasoning:** {verdict_info.get('reasoning', 'N/A')}"
-                            )
+                            st.write(f"**Reasoning:** {verdict_info.get('reasoning', 'N/A')}")
 
             if "trust_error" in results:
                 st.error(f"TRUST Pipeline Error: {results['trust_error']}")
@@ -264,18 +204,11 @@ def main() -> None:
             if "claims_with_evidence" in results:
                 st.divider()
                 st.header("📋 Claims (Legacy)")
-                for index, claim_with_evidence in enumerate(
-                    results["claims_with_evidence"][:5]
-                ):
+                for index, claim_with_evidence in enumerate(results["claims_with_evidence"][:5]):
                     title = claim_with_evidence.get("text", "")[:60]
                     with st.expander(f"Claim {index + 1}: {title}..."):
-                        st.write(
-                            f"**Type:** {claim_with_evidence.get('type', 'UNKNOWN')}"
-                        )
-                        st.write(
-                            "**Verifiable:** "
-                            f"{claim_with_evidence.get('verifiable', False)}"
-                        )
+                        st.write(f"**Type:** {claim_with_evidence.get('type', 'UNKNOWN')}")
+                        st.write(f"**Verifiable:** {claim_with_evidence.get('verifiable', False)}")
                         st.write(f"**Text:** {claim_with_evidence.get('text', '')}")
 
             if "stylistic_features" in results:
@@ -305,9 +238,7 @@ def main() -> None:
             with st.expander("📈 Word Analysis"):
                 if article:
                     stats = analyze_text_length(article)
-                    st.write(
-                        f"Từ: {stats['word_count']}, Câu: {stats['sentence_count']}"
-                    )
+                    st.write(f"Từ: {stats['word_count']}, Câu: {stats['sentence_count']}")
                     top_words = get_top_words(article, 10)
                     st.write("Top words:", ", ".join(word for word, _ in top_words))
 

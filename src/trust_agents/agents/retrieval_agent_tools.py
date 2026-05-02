@@ -16,7 +16,7 @@ from typing import Any
 
 from langchain_core.tools import tool
 
-from fake_news_detector.config import settings
+from trust_agents.config import settings
 from shared_fact_checking.retrieval.policy import merge_results
 from shared_fact_checking.retrieval.service import retrieve_with_fallback
 
@@ -31,8 +31,8 @@ def _get_rag_components():
         Tuple of (vector_store_fn, retrieve_evidence_function)
     """
     try:
-        from fake_news_detector.rag.retriever import retrieve_evidence
-        from fake_news_detector.rag.vector_store import get_vector_store
+        from trust_agents.rag.retriever import retrieve_evidence
+        from trust_agents.rag.vector_store import get_vector_store
 
         return get_vector_store, retrieve_evidence
     except ImportError as e:
@@ -53,43 +53,51 @@ async def search_evidence_tool(
 
     try:
         vector_store_fn, _ = _get_rag_components()
+        from trust_agents.rag.web_search import search_web
 
+        results = []
         if vector_store_fn is not None:
-            from fake_news_detector.rag.web_search import search_web
+            try:
+                vector_store = vector_store_fn()
+                results = retrieve_with_fallback(
+                    query=query,
+                    local_search=lambda value: vector_store.similarity_search(
+                        value, k=top_k
+                    ),
+                    web_search=lambda value: search_web(value, num_results=top_k),
+                    threshold=settings.similarity_threshold,
+                    use_web_search=use_web_search,
+                    max_results=top_k,
+                )
+            except Exception as e:
+                logger.warning(f"Vector search failed, falling back to web only: {e}")
+                results = search_web(query, num_results=top_k)
+        else:
+            logger.warning("RAG not available, using web search only")
+            results = search_web(query, num_results=top_k)
 
-            vector_store = vector_store_fn()
-            results = retrieve_with_fallback(
-                query=query,
-                local_search=lambda value: vector_store.similarity_search(
-                    value, k=top_k
-                ),
-                web_search=lambda value: search_web(value, num_results=top_k),
-                threshold=settings.similarity_threshold,
-                use_web_search=use_web_search,
-                max_results=top_k,
-            )
-
+        if not results:
+            logger.warning("No search results found, using mock evidence as last resort")
+            evidence = [
+                {
+                    "id": f"mock_{index + 1:03d}",
+                    "text": f"Information regarding '{query[:50]}...'. No real-time evidence found.",
+                    "source": "System Fallback",
+                    "score": 0.5,
+                }
+                for index in range(1)
+            ]
+        else:
             evidence = [
                 {
                     "id": result.get("id", f"passage_{index + 1:03d}"),
                     "text": result.get("content", result.get("text", "")),
-                    "source": result.get("source", "ViFactCheck"),
+                    "source": result.get("source", "Web Search"),
                     "score": result.get("score", 0.5),
                     "url": result.get("url", ""),
                     "metadata": result.get("metadata", {}),
                 }
                 for index, result in enumerate(results)
-            ]
-        else:
-            logger.warning("RAG not available, using mock evidence")
-            evidence = [
-                {
-                    "id": f"mock_{index + 1:03d}",
-                    "text": f"Mock evidence for '{query[:30]}...'. This is a placeholder.",
-                    "source": "Mock Dataset",
-                    "score": 0.8 - (index * 0.1),
-                }
-                for index in range(min(top_k, 3))
             ]
 
         result = {

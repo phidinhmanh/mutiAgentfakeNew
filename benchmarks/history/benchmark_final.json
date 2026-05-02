@@ -1,0 +1,192 @@
+{
+  "mode": "multi",
+  "benchmark_results": [
+    {
+      "status": "success",
+      "elapsed_time": 175.76960396766663,
+      "claims_extracted": 1,
+      "claims": [
+        "Phó Phát ngôn Bộ Ngoại giao Phạm Thu Hằng trả lời câu hỏi của phóng viên về việc Việt Nam có sẵn lòng nâng cấp quan hệ với Hoa Kỳ từ đối tác toàn diện lên quan hệ chiến lược tại họp báo thường kỳ Bộ Ngoại giao chiều 23/3"
+      ],
+      "evidence_count": 3,
+      "verdict": "uncertain",
+      "confidence": 0.9,
+      "expected_label": "FAKE",
+      "verdict_label": "UNCERTAIN",
+      "correct": false,
+      "full_report": {
+        "verdict": "uncertain",
+        "confidence": 0.9,
+        "summary": "Thông tin về việc bà Phạm Thu Hằng trả lời câu hỏi về việc nâng cấp quan hệ Việt - Mỹ lên quan hệ chiến lược tại họp báo ngày 23/3 chưa thể xác thực dựa trên các bằng chứng được cung cấp. Các nguồn tin hiện có không chứa nội dung cụ thể về câu trả lời này.",
+        "detailed_explanation": "Dựa trên các bằng chứng được cung cấp, có hai vấn đề chính khiến tuyên bố này chưa thể khẳng định là đúng hay sai:\n\n1. **Về nội dung câu trả lời:** Nguồn tin 1 (Tuoitre) có đề cập đến các hoạt động của Bộ Ngoại giao vào ngày 23/3/2023, nhưng nội dung tập trung vào việc Việt Nam phản hồi về báo cáo nhân quyền thường niên năm 2022 của Bộ Ngoại giao Mỹ. Không có thông tin nào trong nguồn này xác nhận việc bà Phạm Thu Hằng trả lời về vấn đề nâng cấp quan hệ Việt - Mỹ lên quan hệ chiến lược.\n\n2. **Về vai trò của nhân vật:** Các nguồn tin 2 và 3 xác nhận bà Phạm Thu Hằng là Người Phát ngôn Bộ Ngoại giao, nhưng các thông tin này được ghi nhận vào tháng 6/2023 (sau thời điểm 23/3/2023 được nhắc đến trong tuyên bố). Mặc dù tuyên bố gọi bà là 'Phó Phát ngôn', nhưng các bằng chứng không cung cấp thông tin về chức danh cụ thể của bà tại thời điểm tháng 3/2023 hoặc nội dung phát biểu của bà vào ngày đó.\n\nVì vậy, do thiếu dữ liệu trực tiếp về nội dung cuộc họp báo ngày 23/3 liên quan đến quan hệ chiến lược Việt - Mỹ, kết quả được xác định là không chắc chắn.",
+        "citations": [
+          {
+            "source_idx": 1,
+            "text": "\"Việt Nam lấy làm tiếc vì báo cáo nhân quyền thường niên năm 2022 của Bộ Ngoại giao Mỹ đưa ra một số...\""
+          },
+          {
+            "source_idx": 2,
+            "text": "Như vậy, bà Phạm Thu Hằng đảm nhiệm vị trí Người Phát ngôn Bộ Ngoại giao Việt Nam."
+          },
+          {
+            "source_idx": 3,
+            "text": "Tại buổi lễ, Thứ trưởng Bộ Ngoại giao Hà Kim Ngọc đã trao quyết định cho bà Phạm Thu Hằng, phó vụ tr..."
+          }
+        ],
+        "label": "uncertain"
+      },
+      "all_claims_results": [
+        {
+          "claim": "Phó Phát ngôn Bộ Ngoại giao Phạm Thu Hằng trả lời câu hỏi của phóng viên về việc Việt Nam có sẵn lòng nâng cấp quan hệ với Hoa Kỳ từ đối tác toàn diện lên quan hệ chiến lược tại họp báo thường kỳ Bộ Ngoại giao chiều 23/3",
+          "evidence_count": 3,
+          "verdict": "uncertain",
+          "confidence": 0.9,
+          "reasoning": "Tuyên bố có các thành phần sau:\n1. Nhân vật: Phó Phát ngôn Phạm Thu Hằng (Evidence 1 xác nhận là phó phát ngôn Phạm Thu Hằng).\n2. Sự kiện: Họp báo thường kỳ Bộ Ngoại giao (Evidence 1 xác nhận).\n3. Thời gian: Chiều 23/3 (Evidence 1 xác nhận ngày 23/3 nhưng không nói rõ là 'chiều').\n4. Nội dung: Trả lời về việc nâng cấp quan hệ từ Đối tác toàn diện lên Quan hệ chiến lược (Evidence 1 xác nhận có câu hỏi về việc nâng cấp quan hệ Đối tác toàn diện lên 'tầm cao mới', nhưng không dùng chính xác cụm từ kỹ thuật 'quan hệ chiến lược' như trong claim).\n\nTheo quy tắc: Khi chủ đề chính (việc nâng cấp quan hệ Việt - Mỹ) được xác nhận nhưng các chi tiết cụ thể (cụm từ kỹ thuật 'quan hệ chiến lược' và thời gian 'chiều') không được bằng chứng xác nhận trực tiếp, tuyên bố được phân loại là UNCERTAIN (không phải FALSE vì không có sự mâu thuẫn trực tiếp về nội dung/chủ đề)."
+        }
+      ],
+      "mode": "multi"
+    },
+    {
+      "status": "success",
+      "elapsed_time": 115.98675489425659,
+      "claims_extracted": 1,
+      "claims": [
+        "Hội Liên hiệp Phụ nữ (LHPN) TP.HCM phối hợp Sở Văn hóa - Thể thao và Công viên Lịch sử Văn hóa Dân tộc TP tổ chức lễ kỷ niệm 1980 năm Ngày mất Hai Bà Trưng (6-2-43 – 6-2-2023 âm lịch) vào ngày 25-2."
+      ],
+      "evidence_count": 5,
+      "verdict": "uncertain",
+      "confidence": 1.0,
+      "expected_label": "REAL",
+      "verdict_label": "UNCERTAIN",
+      "correct": false,
+      "full_report": {
+        "verdict": "uncertain",
+        "confidence": 1.0,
+        "summary": "Thông tin về việc tổ chức lễ kỷ niệm 1980 năm Ngày mất Hai Bà Trưng vào ngày 25-2 bởi các cơ quan tại TP.HCM hiện không thể xác thực dựa trên các nguồn bằng chứng được cung cấp.",
+        "detailed_explanation": "Yêu cầu kiểm chứng đưa ra một thông tin cụ thể về việc Hội Liên hiệp Phụ nữ TP.HCM phối hợp với Sở Văn hóa - Thể thao và Công viên Lịch sử Văn hóa Dân tộc TP tổ chức lễ kỷ niệm 1980 năm Ngày mất Hai Bà Trưng (theo âm lịch) vào ngày 25-2. Tuy nhiên, khi đối chiếu với các nguồn bằng chứng được cung cấp, tất cả các nguồn đều không đề cập đến nội dung này. Các nguồn tài liệu (Source 1, 2, 4, 5) chủ yếu tập trung vào các sự kiện kỷ niệm '80 năm' khác nhau như: 80 năm Quốc hội Việt Nam, 80 năm Quốc khánh, hoặc 80 năm Đề cương văn hóa Việt Nam. Do không có thông tin liên quan đến Hai Bà Trưng hoặc sự kiện kỷ niệm cụ thể nêu trên trong các tài liệu được cung cấp, chúng tôi không thể khẳng định thông tin này là đúng hay sai.",
+        "citations": [
+          {
+            "source_idx": 1,
+            "text": "https://thanhnien.vn/chuan-bi-to-chuc-ky-niem-80-nam-quoc-hoi-viet-nam-185240110230105224.htm"
+          },
+          {
+            "source_idx": 2,
+            "text": "https://vnexpress.net/thoi-su/80-nam-quoc-khanh"
+          },
+          {
+            "source_idx": 4,
+            "text": "https://thanhnien.vn/chuong-trinh-nghe-thuat-dac-biet-ky-niem-80-nam-de-cuong-ve-van-hoa-viet-nam-185230227212537511.htm"
+          },
+          {
+            "source_idx": 5,
+            "text": "https://vnexpress.net/thoi-su/80-nam-quoc-khanh/dong-su-kien"
+          }
+        ],
+        "label": "uncertain"
+      },
+      "all_claims_results": [
+        {
+          "claim": "Hội Liên hiệp Phụ nữ (LHPN) TP.HCM phối hợp Sở Văn hóa - Thể thao và Công viên Lịch sử Văn hóa Dân tộc TP tổ chức lễ kỷ niệm 1980 năm Ngày mất Hai Bà Trưng (6-2-43 – 6-2-2023 âm lịch) vào ngày 25-2.",
+          "evidence_count": 5,
+          "verdict": "uncertain",
+          "confidence": 1.0,
+          "reasoning": "Tất cả các bằng chứng được cung cấp đều đề cập đến các sự kiện kỷ niệm khác (80 năm Ngày Tổng tuyển cử đầu tiên, 80 năm ra đời Đề cương về văn hóa Việt Nam, 80 năm Quốc khánh) hoặc các tin tức không liên quan. Không có bất kỳ thông tin nào trong các bằng chứng đề cập đến chủ đề kỷ niệm Ngày mất Hai Bà Trưng, các đơn vị tổ chức (Hội LHPN TP.HCM, Sở Văn hóa - Thể thao, Công viên Lịch sử Văn hóa Dân tộc TP) hay mốc thời gian 25-2. Vì bằng chứng không liên quan đến nội dung tuyên bố, không đủ cơ sở để kết luận là Đúng hay Sai."
+        }
+      ],
+      "mode": "multi"
+    },
+    {
+      "status": "success",
+      "elapsed_time": 147.78918385505676,
+      "claims_extracted": 1,
+      "claims": [
+        "Chiều 23/3, ông Hồ Tấn Minh, Chánh văn Phòng Sở Giáo dục và Đào tạo TP Hồ Chí Minh, khẳng định nếu trong trường hợp bất khả kháng, học sinh không có mã định danh cá nhân thì ngành giáo dục sẽ cấp một mã tạm cho học sinh để tham gia công tác tuyển sinh."
+      ],
+      "evidence_count": 4,
+      "verdict": "false",
+      "confidence": 1.0,
+      "expected_label": "FAKE",
+      "verdict_label": "FAKE",
+      "correct": true,
+      "full_report": {
+        "verdict": "false",
+        "confidence": 1.0,
+        "summary": "Thông tin cho rằng ông Hồ Tấn Minh khẳng định sẽ cấp mã định danh tạm thời cho học sinh không có mã định danh để tham gia tuyển sinh là không chính xác. Các phát ngôn thực tế của ông và Sở GD-ĐT TP.HCM liên quan đến vấn đề dạy thêm, học thêm.",
+        "detailed_explanation": "Qua kiểm chứng các nguồn tin báo chí được cung cấp, không có bất kỳ thông tin nào xác nhận việc ông Hồ Tấn Minh, Chánh văn phòng Sở GD-ĐT TP.HCM, phát biểu về việc cấp mã định danh tạm thời cho học sinh để phục vụ công tác tuyển sinh trong trường hợp bất khả kháng. Thay vào đó, các nguồn tin (Source 1, 2, 3, 4) đều tập trung vào việc Sở GD-ĐT TP.HCM lên tiếng làm rõ các quy định về dạy thêm, học thêm theo Thông tư 29/2024/TT-BGDĐT và bác bỏ các tin đồn thất thiệt liên quan đến việc kiểm tra, thanh tra giáo viên dạy thêm. Do đó, nội dung khẳng định trong claim là không có căn cứ và không phản ánh đúng các vấn đề mà ông Hồ Tấn Minh đang thực hiện phản hồi trước truyền thông.",
+        "citations": [
+          {
+            "source_idx": 1,
+            "text": "TPHCM khẳng định không cấm giáo viên dạy thêm"
+          },
+          {
+            "source_idx": 2,
+            "text": "Sở GD-ĐT TPHCM không có ngoại lệ với giáo viên dạy thêm sai quy định"
+          },
+          {
+            "source_idx": 3,
+            "text": "Sở GD-ĐT TPHCM bác thông tin bất thường về việc kiểm điểm giáo viên dạy thêm"
+          },
+          {
+            "source_idx": 4,
+            "text": "Chánh văn phòng Sở GD-ĐT TPHCM lên tiếng về việc giáo viên dạy thêm tại nhà"
+          }
+        ],
+        "label": "false"
+      },
+      "all_claims_results": [
+        {
+          "claim": "Chiều 23/3, ông Hồ Tấn Minh, Chánh văn Phòng Sở Giáo dục và Đào tạo TP Hồ Chí Minh, khẳng định nếu trong trường hợp bất khả kháng, học sinh không có mã định danh cá nhân thì ngành giáo dục sẽ cấp một mã tạm cho học sinh để tham gia công tác tuyển sinh.",
+          "evidence_count": 4,
+          "verdict": "false",
+          "confidence": 1.0,
+          "reasoning": "Tuyên bố khẳng định ông Hồ Tấn Minh (Chánh văn phòng Sở GD&ĐT TP.HCM) phát biểu về việc cấp mã tạm cho học sinh không có mã định danh cá nhân vào chiều 23/3. Tuy nhiên, tất cả các bằng chứng (Evidence 1, 2, 3, 4) đều cho thấy các phát biểu của ông Hồ Tấn Minh tập trung hoàn toàn vào vấn đề dạy thêm, học thêm và việc thực hiện Thông tư 29. Không có bất kỳ thông tin nào trong bằng chứng đề cập đến 'mã định danh cá nhân' hay 'cấp mã tạm để tuyển sinh'. Theo quy tắc đánh giá: khi bằng chứng đề cập đến cùng một nhân vật và chủ đề tương tự (phát biểu của lãnh đạo Sở về giáo dục) nhưng nội dung sự kiện khác biệt hoàn toàn (dạy thêm vs. mã định danh), tuyên bố được kết luận là FALSE."
+        }
+      ],
+      "mode": "multi"
+    }
+  ],
+  "samples": [
+    {
+      "sample_id": 21,
+      "expected_label": "FAKE",
+      "statement": "Tại họp báo thường kỳ Bộ Ngoại giao chiều 23/3, Phó Phát ngôn Bộ Ngoại giao Phạm Thu Hằng trả lời câu hỏi của phóng viên về việc Việt Nam có sẵn lòng nâng cấp quan hệ với Hoa Kỳ từ quan hệ hiện tại là đối tác toàn diện, lên quan hệ chiến lược hay không.",
+      "statement_length": 253,
+      "hardness_score": 5,
+      "hardness_reasons": [
+        "Long"
+      ],
+      "evidence": "Phó Phát ngôn Bộ Ngoại giao Phạm Thu Hằng Chiều 23/3, tại họp báo thường kỳ Bộ Ngoại giao, trả lời câu hỏi của phóng viên về việc Việt Nam có sẵn lòng nâng cấp quan hệ với Hoa Kỳ từ quan hệ hiện tại là đối tác toàn diện, lên quan hệ chiến lược hay không",
+      "claim": "Tại họp báo thường kỳ Bộ Ngoại giao chiều 23/3, Phó Phát ngôn Bộ Ngoại giao Phạm Thu Hằng trả lời câu hỏi của phóng viên về việc Việt Nam có sẵn lòng nâng cấp quan hệ với Hoa Kỳ từ quan hệ hiện tại là đối tác toàn diện, lên quan hệ chiến lược hay không."
+    },
+    {
+      "sample_id": 44,
+      "expected_label": "REAL",
+      "statement": "Kỷ niệm 1980 năm Ngày mất Hai Bà Trưng (6-2-43 – 6-2-2023 âm lịch) do Hội Liên hiệp Phụ nữ (LHPN) TP.HCM phối hợp Sở Văn hóa - Thể thao và Công viên Lịch sử Văn hóa Dân tộc TP tổ chức vào ngày 25-2.",
+      "statement_length": 198,
+      "hardness_score": 5,
+      "hardness_reasons": [
+        "Medium"
+      ],
+      "evidence": "Ngày 25-2, Hội Liên hiệp Phụ nữ (LHPN) TP.HCM phối hợp Sở Văn hóa - Thể thao và Công viên Lịch sử Văn hóa Dân tộc TP tổ chức kỷ niệm 1980 năm Ngày mất Hai Bà Trưng (6-2-43 – 6-2-2023 âm lịch).",
+      "claim": "Kỷ niệm 1980 năm Ngày mất Hai Bà Trưng (6-2-43 – 6-2-2023 âm lịch) do Hội Liên hiệp Phụ nữ (LHPN) TP.HCM phối hợp Sở Văn hóa - Thể thao và Công viên Lịch sử Văn hóa Dân tộc TP tổ chức vào ngày 25-2."
+    },
+    {
+      "sample_id": 57,
+      "expected_label": "FAKE",
+      "statement": "Chiều 23/3, Chánh văn Phòng Sở Giáo dục và Đào tạo TP Hồ Chí Minh ông Hồ Tấn Minh khẳng định nếu trong trường hợp bất khả kháng, học sinh không có mã định danh cá nhân thì ngành giáo dục sẽ cấp một mã tạm cho các em để tham gia công tác tuyển sinh.",
+      "statement_length": 248,
+      "hardness_score": 5,
+      "hardness_reasons": [
+        "Long"
+      ],
+      "evidence": "Chiều 23/3, ông Hồ Tấn Minh, Chánh văn Phòng Sở Giáo dục và Đào tạo TP Hồ Chí Minh khẳng định: Nếu trường hợp bất khả kháng, học sinh không có mã định danh cá nhân, ngành giáo dục sẽ cấp một mã tạm cho các em để tham gia công tác tuyển sinh.",
+      "claim": "Chiều 23/3, Chánh văn Phòng Sở Giáo dục và Đào tạo TP Hồ Chí Minh ông Hồ Tấn Minh khẳng định nếu trong trường hợp bất khả kháng, học sinh không có mã định danh cá nhân thì ngành giáo dục sẽ cấp một mã tạm cho các em để tham gia công tác tuyển sinh."
+    }
+  ],
+  "summary": {
+    "total": 3,
+    "correct": 1,
+    "accuracy": 33.33333333333333,
+    "avg_time": 146.51518090566
+  }
+}

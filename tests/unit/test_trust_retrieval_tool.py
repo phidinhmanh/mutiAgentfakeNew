@@ -37,9 +37,7 @@ class TestSearchEvidenceTool:
     """Test TRUST retrieval tool output contract."""
 
     @pytest.mark.asyncio
-    async def test_returns_faiss_results_without_web_search_when_confident(
-        self, monkeypatch
-    ) -> None:
+    async def test_returns_faiss_results_without_web_search_when_confident(self, monkeypatch) -> None:
         mock_vector_store = Mock()
         mock_vector_store.similarity_search.return_value = [
             {"content": "Evidence A", "score": 0.95, "source": "dataset"}
@@ -50,9 +48,7 @@ class TestSearchEvidenceTool:
             lambda: (lambda: mock_vector_store, Mock()),
         )
 
-        raw = await search_evidence_tool.ainvoke(
-            {"query": "claim text", "top_k": 3, "use_web_search": True}
-        )
+        raw = await search_evidence_tool.ainvoke({"query": "claim text", "top_k": 3, "use_web_search": True})
         result = json.loads(raw)
 
         assert result["query"] == "claim text"
@@ -64,9 +60,7 @@ class TestSearchEvidenceTool:
     @pytest.mark.asyncio
     async def test_adds_web_results_when_confidence_is_low(self, monkeypatch) -> None:
         mock_vector_store = Mock()
-        mock_vector_store.similarity_search.return_value = [
-            {"content": "Low confidence", "score": 0.2}
-        ]
+        mock_vector_store.similarity_search.return_value = [{"content": "Low confidence", "score": 0.2}]
         mock_search_web = Mock(
             return_value=[
                 {
@@ -81,14 +75,17 @@ class TestSearchEvidenceTool:
             "trust_agents.agents.retrieval_agent_tools._get_rag_components",
             lambda: (lambda: mock_vector_store, Mock()),
         )
+        # Patch at the original definition site. Since search_web is imported
+        # via "from X import search_web" inside the tool function, the reference
+        # captured at import time points to the module-level attribute, so patching
+        # it at its original definition site intercepts the call regardless of where
+        # it's imported.
         monkeypatch.setattr(
-            "fake_news_detector.rag.web_search.search_web",
+            "trust_agents.rag.web_search.search_web",
             mock_search_web,
         )
 
-        raw = await search_evidence_tool.ainvoke(
-            {"query": "claim text", "top_k": 5, "use_web_search": True}
-        )
+        raw = await search_evidence_tool.ainvoke({"query": "claim text", "top_k": 5, "use_web_search": True})
         result = json.loads(raw)
 
         assert result["total_found"] == 2
@@ -102,9 +99,7 @@ class TestSearchEvidenceTool:
             lambda: (_ for _ in ()).throw(RuntimeError("boom")),
         )
 
-        raw = await search_evidence_tool.ainvoke(
-            {"query": "claim text", "top_k": 5, "use_web_search": True}
-        )
+        raw = await search_evidence_tool.ainvoke({"query": "claim text", "top_k": 5, "use_web_search": True})
         result = json.loads(raw)
 
         assert result["evidence"] == []

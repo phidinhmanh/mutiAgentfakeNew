@@ -20,9 +20,9 @@ from dotenv import load_dotenv
 # Load environment variables
 load_dotenv()
 
-# Set defaults if not in .env
-os.environ.setdefault("LLM_PROVIDER", "nvidia")
-os.environ.setdefault("NVIDIA_MODEL", "openai/gpt-oss-120b")
+# Force LLM_PROVIDER for benchmark
+os.environ["LLM_PROVIDER"] = "nvidia"
+os.environ.setdefault("NVIDIA_MODEL", "meta/llama-3.1-70b-instruct")
 
 from trust_agents.config import LLMProvider, get_llm_config  # noqa: E402
 from trust_agents.llm.factory import create_chat_model  # noqa: E402
@@ -600,16 +600,15 @@ Khong giai thich, chi tra ve REAL hoac FAKE."""
     )
 
 
-def _normalize_trust_label(trust_label: str) -> str:
-    """Normalize TRUST verdict label to benchmark format (REAL/FAKE).
-
-    Only decisive verdicts are mapped. Uncertain/unverifiable pass through as
-    "UNCERTAIN" so benchmark reporting can track abstention separately.
-    """
-    label_upper = trust_label.upper()
-    if label_upper == "TRUE":
+def _normalize_trust_label(trust_label: Any) -> str:
+    """Normalize TRUST verdict label to benchmark format (REAL/FAKE)."""
+    if isinstance(trust_label, bool):
+        return "REAL" if trust_label else "FAKE"
+    
+    label_upper = str(trust_label).upper()
+    if label_upper in ["TRUE", "REAL"]:
         return "REAL"
-    elif label_upper == "FALSE":
+    elif label_upper in ["FALSE", "FAKE"]:
         return "FAKE"
     return "UNCERTAIN"
 
@@ -632,7 +631,7 @@ def run_trust_orchestrator_benchmark(
     status = "completed"
     error_msg = ""
 
-    orchestrator = TRUSTOrchestrator(top_k_evidence=5)
+    orchestrator = TRUSTOrchestrator(top_k_evidence=5, max_claim_workers=1)
 
     for sample in test_data:
         try:
@@ -641,12 +640,9 @@ def run_trust_orchestrator_benchmark(
 
             result = orchestrator.process_text(text, skip_evidence=False)
 
-            # Extract verdict from best-matching claim, not blindly index 0.
-            pred_label = "UNKNOWN"
-            if result.results:
-                best_result = _select_best_trust_result(result.results, sample["claim"])
-                trust_verdict = best_result.get("verdict", "uncertain")
-                pred_label = _normalize_trust_label(trust_verdict)
+            # Use the orchestrator's aggregated summary verdict
+            trust_verdict = result.summary.get("verdict", "uncertain")
+            pred_label = _normalize_trust_label(trust_verdict)
 
         except Exception as exc:
             status, error_msg = _update_error(status, error_msg, exc)
@@ -655,9 +651,12 @@ def run_trust_orchestrator_benchmark(
         c, u = _score_and_store_prediction(predictions, sample, pred_label)
         correct += c
         undecided += u
-        # Rate limit protection for Groq (8,000 TPM is tight)
-        if get_benchmark_provider_name() == "groq":
+        # Rate limit protection (NIM and Groq are sensitive)
+        provider = get_benchmark_provider_name()
+        if provider == "groq":
             time.sleep(5)
+        elif provider == "nvidia":
+            time.sleep(90)
 
     return _prepare_predictions_result(
         approach="TRUST Orchestrator (Real Multi-Agent)",

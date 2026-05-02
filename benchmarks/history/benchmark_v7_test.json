@@ -1,0 +1,99 @@
+{
+  "version": "v7",
+  "timestamp": "2026-04-29T13:34:05Z",
+  "total_samples": 3,
+  "real_count": 3,
+  "fake_count": 0,
+  "summary": {
+    "single_agent": {
+      "accuracy": 66.7,
+      "correct": 2,
+      "errors": 0,
+      "avg_latency_s": 26.83,
+      "total_tokens_approx": 826,
+      "avg_tokens_approx": 275
+    },
+    "multi_agent": {
+      "accuracy": 66.7,
+      "correct": 2,
+      "errors": 0,
+      "avg_latency_s": 116.24,
+      "total_tokens_approx": 73,
+      "avg_tokens_approx": 24
+    }
+  },
+  "comparison": {
+    "agreement_rate": 66.7,
+    "single_only_correct_count": 0,
+    "multi_only_correct_count": 0,
+    "latency_ratio": 0.23,
+    "token_ratio": 11.32
+  },
+  "crossover_analysis": {
+    "description": "Samples where Single Agent was correct but Multi-Agent was wrong",
+    "count": 0,
+    "samples": []
+  },
+  "per_sample_results": [
+    {
+      "sample_id": 1404,
+      "expected": "REAL",
+      "statement": "Thủ tướng đã ký quyết định cho Chủ tịch Tập đoàn Điện lực Việt Nam (EVN) nghỉ hưu từ 1/5.",
+      "single_verdict": "FAKE",
+      "single_correct": false,
+      "single_latency": 48.534897800011095,
+      "single_tokens_in": 173,
+      "single_tokens_out": 95,
+      "single_error": null,
+      "multi_verdict": "UNCERTAIN",
+      "multi_correct": false,
+      "multi_latency": 152.01573019998614,
+      "multi_tokens_in": 22,
+      "multi_tokens_out": 0,
+      "multi_error": null,
+      "agree": false,
+      "single_only_correct": false,
+      "multi_only_correct": false
+    },
+    {
+      "sample_id": 1449,
+      "expected": "REAL",
+      "statement": "Các cơ quan tài chính toàn cầu đang giám sát chặt chẽ hệ thống ngân hàng để ngăn chặn nguy cơ khủng hoảng tín dụng.",
+      "single_verdict": "REAL",
+      "single_correct": true,
+      "single_latency": 19.5564175999898,
+      "single_tokens_in": 204,
+      "single_tokens_out": 115,
+      "single_error": null,
+      "multi_verdict": "REAL",
+      "multi_correct": true,
+      "multi_latency": 126.38013669999782,
+      "multi_tokens_in": 28,
+      "multi_tokens_out": 0,
+      "multi_error": null,
+      "agree": true,
+      "single_only_correct": false,
+      "multi_only_correct": false
+    },
+    {
+      "sample_id": 6147,
+      "expected": "REAL",
+      "statement": "Dây hãm là phần mô có tính đàn hồi nằm dưới bao quy đầu và chức nhiều dây thần kinh, mạch máu.",
+      "single_verdict": "REAL",
+      "single_correct": true,
+      "single_latency": 12.410724699991988,
+      "single_tokens_in": 180,
+      "single_tokens_out": 59,
+      "single_error": null,
+      "multi_verdict": "REAL",
+      "multi_correct": true,
+      "multi_latency": 70.33165149998968,
+      "multi_tokens_in": 23,
+      "multi_tokens_out": 0,
+      "multi_error": null,
+      "agree": true,
+      "single_only_correct": false,
+      "multi_only_correct": false
+    }
+  ]
+}

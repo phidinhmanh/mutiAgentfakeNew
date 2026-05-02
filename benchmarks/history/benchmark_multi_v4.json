@@ -1,0 +1,1108 @@
+{
+  "mode": "multi",
+  "benchmark_results": [
+    {
+      "status": "success",
+      "elapsed_time": 188.93164539337158,
+      "claims_extracted": 3,
+      "claims": [
+        "Bộ Ngoại giao tổ chức họp báo thường kỳ vào chiều 23/3.",
+        "Phó Phát ngôn Bộ Ngoại giao là Phạm Thu Hằng.",
+        "Quan hệ hiện tại giữa Việt Nam và Hoa Kỳ là đối tác toàn diện."
+      ],
+      "evidence_count": 2,
+      "verdict": "false",
+      "confidence": 1.0,
+      "expected_label": "FAKE",
+      "verdict_label": "FAKE",
+      "correct": true,
+      "full_report": {
+        "verdict": "false",
+        "confidence": 1.0,
+        "summary": "Thông tin cho rằng Bộ Ngoại giao tổ chức họp báo thường kỳ vào chiều 23/3 là không chính xác. Thực tế, cuộc họp báo này diễn ra vào chiều ngày 23/4.",
+        "detailed_explanation": "Dựa trên các bằng chứng từ nguồn tin báo chí, cuộc họp báo thường kỳ của Bộ Ngoại giao với sự tham gia của Người phát ngôn Phạm Thu Hằng được ghi nhận diễn ra vào chiều ngày 23/4, không phải ngày 23/3 như khẳng định. Do đó, mốc thời gian trong yêu cầu đã bị sai lệch về tháng.",
+        "citations": [
+          {
+            "source_idx": 2,
+            "text": "Chiều 23-4, tại họp báo thường kỳ Bộ Ngoại giao, Người phát ngôn Phạm Thu Hằng đã trả lời câu hỏi..."
+          }
+        ],
+        "label": "false"
+      },
+      "all_claims_results": [
+        {
+          "claim": "Bộ Ngoại giao tổ chức họp báo thường kỳ vào chiều 23/3.",
+          "evidence_count": 3,
+          "verdict": "false",
+          "confidence": 1.0,
+          "reasoning": "Tuyên bố đưa ra ngày cụ thể là 23/3. Tuy nhiên, Evidence 2 xác nhận họp báo thường kỳ của Bộ Ngoại giao diễn ra vào chiều 23/4. Theo quy tắc đánh giá, khi bằng chứng đưa ra thông tin mâu thuẫn trực tiếp về ngày tháng so với tuyên bố, tuyên bố đó được kết luận là SAI."
+        },
+        {
+          "claim": "Phó Phát ngôn Bộ Ngoại giao là Phạm Thu Hằng.",
+          "evidence_count": 5,
+          "verdict": "false",
+          "confidence": 1.0,
+          "reasoning": "Tuyên bố cho rằng bà Phạm Thu Hằng là 'Phó Phát ngôn Bộ Ngoại giao'. Tuy nhiên, tất cả các bằng chứng (Evidence 1, 2, 3, 4, 5) đều xác nhận rằng bà Phạm Thu Hằng đã được bổ nhiệm giữ chức vụ 'Người Phát ngôn Bộ Ngoại giao' (Spokesperson), thay vì chỉ là 'Phó Phát ngôn' (Deputy Spokesperson). Cụ thể, Evidence 2, 3 và 4 nêu rõ bà được bổ nhiệm từ chức danh Phó Phát ngôn lên giữ chức Quyền Vụ trưởng kiêm Người Phát ngôn. Evidence 5 cũng xác nhận bà là người 'Đương nhiệm' của chức danh 'Người Phát ngôn Bộ Ngoại giao'. Do đó, thông tin về chức danh trong tuyên bố là sai so với thực tế được cung cấp trong bằng chứng."
+        },
+        {
+          "claim": "Quan hệ hiện tại giữa Việt Nam và Hoa Kỳ là đối tác toàn diện.",
+          "evidence_count": 4,
+          "verdict": "true",
+          "confidence": 1.0,
+          "reasoning": "Tất cả các bằng chứng (Evidence 1, 2, 3, và 4) đều xác nhận rằng quan hệ giữa Việt Nam và Hoa Kỳ đã được nâng cấp lên mức 'đối tác chiến lược toàn diện' (Comprehensive Strategic Partnership) vào tháng 9/2023. Vì 'đối tác chiến lược toàn diện' là cấp độ cao nhất và bao hàm tính chất 'toàn diện' của quan hệ, nên tuyên bố quan hệ hiện tại là 'đối tác toàn diện' là chính xác và được bằng chứng xác nhận chủ động."
+        }
+      ],
+      "mode": "multi"
+    },
+    {
+      "status": "success",
+      "elapsed_time": 253.79579520225525,
+      "claims_extracted": 4,
+      "claims": [
+        "Kỷ niệm 1980 năm Ngày mất Hai Bà Trưng",
+        "Ngày mất Hai Bà Trưng là từ 6-2-43 đến 6-2-2023 âm lịch",
+        "Hội Liên hiệp Phụ nữ (LHPN) TP.HCM phối hợp Sở Văn hóa - Thể thao và Công viên Lịch sử Văn hóa Dân tộc TP tổ chức sự kiện",
+        "Sự kiện được tổ chức vào ngày 25-2"
+      ],
+      "evidence_count": 3,
+      "verdict": "true",
+      "confidence": 1.0,
+      "expected_label": "FAKE",
+      "verdict_label": "REAL",
+      "correct": false,
+      "full_report": {
+        "verdict": "true",
+        "confidence": 1.0,
+        "summary": "Thông tin về việc tổ chức kỷ niệm 1980 năm ngày mất của Hai Bà Trưng là chính xác. Các hoạt động kỷ niệm đã được diễn ra tại TP.HCM vào ngày 25/2.",
+        "detailed_explanation": "Dựa trên các nguồn tin từ các cơ quan chính thống và báo chí, vào ngày 25/2, tại Công viên Lịch sử Văn hóa Dân tộc (TP. Thủ Đức, TP.HCM), các tổ chức đã phối hợp tổ chức lễ kỷ niệm 1980 năm ngày mất của Hai Bà Trưng. Sự kiện này do Hội Liên hiệp Phụ nữ TP.HCM phối hợp cùng Sở Văn hóa và Thể thao cùng Công viên Lịch sử Văn hóa Dân tộc thực hiện. Chương trình bao gồm nhiều hoạt động ý nghĩa, trong đó có các tiết mục sân khấu hóa về lịch sử do học sinh các trường THCS thực hiện nhằm tôn vinh công lao của Hai Bà Trưng và giáo dục truyền thống lịch sử cho thế hệ trẻ.",
+        "citations": [
+          {
+            "source_idx": 1,
+            "text": "TPHCM kỷ niệm 1980 năm ngày mất Hai Bà Trưng - ttbc-hcm.gov.vn"
+          },
+          {
+            "source_idx": 2,
+            "text": "Tiết mục sân khấu hóa về lịch sử Hai Bà Trưng do các em học sinh Trường THCS Hai Bà Trưng, Quận 3 biểu diễn - hcmcpv.org.vn"
+          },
+          {
+            "source_idx": 3,
+            "text": "Ngày 25-2, Hội Liên hiệp Phụ nữ (LHPN) TP.HCM phối hợp Sở Văn hóa - Thể thao và Công viên Lịch sử Văn hóa Dân tộc tổ chức kỷ niệm 1980 năm ngày mất Hai Bà Trưng - plo.vn"
+          }
+        ],
+        "label": "true"
+      },
+      "all_claims_results": [
+        {
+          "claim": "Kỷ niệm 1980 năm Ngày mất Hai Bà Trưng",
+          "evidence_count": 3,
+          "verdict": "true",
+          "confidence": 1.0,
+          "reasoning": "Cả ba bằng chứng đều xác nhận trực tiếp việc tổ chức hoạt động kỷ niệm 1980 năm ngày mất Hai Bà Trưng (với các mốc thời gian cụ thể là 6-2-43 – 6-2-2023). Tuyên bố hoàn toàn khớp với thông tin trong các bằng chứng được cung cấp."
+        },
+        {
+          "claim": "Ngày mất Hai Bà Trưng là từ 6-2-43 đến 6-2-2023 âm lịch",
+          "evidence_count": 4,
+          "verdict": "true",
+          "confidence": 1.0,
+          "reasoning": "Các bằng chứng (Evidence 1 và Evidence 2) xác nhận trực tiếp cụm thông tin về mốc thời gian '6/2/43 – 6/2/2023 âm lịch' trong ngữ cảnh kỷ niệm 1980 năm Ngày mất Hai Bà Trưng. Đồng thời, Evidence 3 cũng xác nhận ngày mất của Hai Bà Trưng là ngày mùng 6 tháng 2 năm Quý Mão 43 (năm 43 sau Công nguyên). Tuyên bố khớp hoàn toàn với thông tin được cung cấp trong các nguồn tài liệu."
+        },
+        {
+          "claim": "Hội Liên hiệp Phụ nữ (LHPN) TP.HCM phối hợp Sở Văn hóa - Thể thao và Công viên Lịch sử Văn hóa Dân tộc TP tổ chức sự kiện",
+          "evidence_count": 2,
+          "verdict": "uncertain",
+          "confidence": 1.0,
+          "reasoning": "Tuyên bố (claim) nêu rõ sự phối hợp giữa ba đơn vị: Hội LHPN TP.HCM, Sở Văn hóa - Thể thao và Công viên Lịch sử Văn hóa Dân tộc TP để tổ chức một sự kiện. Tuy nhiên, Evidence 1 chỉ liệt kê danh sách các sự kiện khác nhau do Hội LHPN TP.HCM tổ chức hoặc tham gia (như tập huấn pháp lý, chương trình 'Vòng tay yêu thương', 'Bữa sáng ruy băng trắng'...), và Evidence 2 chỉ cung cấp thông tin liên hệ của Hội LHPN TP.HCM. Không có thông tin nào trong các bằng chứng đề cập đến 'Sở Văn hóa - Thể thao' hay 'Công viên Lịch sử Văn hóa Dân tộc TP', cũng như không xác nhận sự kiện cụ thể mà claim đang ám chỉ. Do đó, không đủ thông tin để xác nhận hoặc bác bỏ tuyên bố này."
+        },
+        {
+          "claim": "Sự kiện được tổ chức vào ngày 25-2",
+          "evidence_count": 5,
+          "verdict": "uncertain",
+          "confidence": 1.0,
+          "reasoning": "Tuyên bố 'Sự kiện được tổ chức vào ngày 25-2' quá mơ hồ và thiếu chủ ngữ cụ thể (không xác định 'sự kiện' nào đang được nhắc đến). Mặc dù các bằng chứng (Evidence 1, 2, 3, 4, 5) đều cung cấp thông tin về rất nhiều sự kiện khác nhau diễn ra vào ngày 25/2 (bao gồm các sự kiện chính trị năm 2025 và các sự kiện lịch sử), nhưng không có thông tin nào để xác nhận liệu 'sự kiện' mà tuyên bố đề cập có phải là một trong các sự kiện được liệt kê trong bằng chứng hay không. Do đó, không đủ thông tin để kết luận tuyên bố này là ĐÚNG hay SAI."
+        }
+      ],
+      "mode": "multi"
+    },
+    {
+      "status": "success",
+      "elapsed_time": 185.91116452217102,
+      "claims_extracted": 2,
+      "claims": [
+        "Chiều 23/3, Chánh văn Phòng Sở Giáo dục và Đào tạo TP Hồ Chí Minh là ông Hồ Tấn Minh.",
+        "Trong trường hợp bất khả kháng, học sinh không có mã định danh cá nhân sẽ được ngành giáo dục cấp một mã tạm để tham gia công tác tuyển sinh."
+      ],
+      "evidence_count": 3,
+      "verdict": "false",
+      "confidence": 1.0,
+      "expected_label": "FAKE",
+      "verdict_label": "FAKE",
+      "correct": true,
+      "full_report": {
+        "verdict": "false",
+        "confidence": 1.0,
+        "summary": "Thông tin khẳng định ông Hồ Tấn Minh là Chánh văn phòng Sở GD&ĐT TP.HCM vào chiều ngày 23/3 là không chính xác về mốc thời gian.",
+        "detailed_explanation": "Dựa trên các bằng chứng được kiểm chứng, khẳng định trên là sai do sự sai lệch về thời điểm diễn ra sự kiện. Mặc dù ông Hồ Tấn Minh đúng là người được bổ nhiệm giữ chức vụ Chánh văn phòng Sở Giáo dục và Đào tạo TP.HCM, nhưng sự kiện trao quyết định bổ nhiệm này đã diễn ra vào ngày 1/12, không phải vào chiều ngày 23/3 như thông tin được nêu. Do mốc thời gian không khớp với thực tế, toàn bộ nội dung khẳng định được xác định là không chính xác.",
+        "citations": [
+          {
+            "source_idx": 1,
+            "text": "Ông Hồ Tấn Minh (bìa trái) nhận quyết định bổ nhiệm | ... Ngày 1.12, Sở GD- ĐT TP.HCM đã trao quyết định điều động, bổ nhiệm..."
+          }
+        ],
+        "label": "false"
+      },
+      "all_claims_results": [
+        {
+          "claim": "Chiều 23/3, Chánh văn Phòng Sở Giáo dục và Đào tạo TP Hồ Chí Minh là ông Hồ Tấn Minh.",
+          "evidence_count": 4,
+          "verdict": "false",
+          "confidence": 1.0,
+          "reasoning": "Tuyên bố đưa ra một mốc thời gian cụ thể là 'Chiều 23/3'. Mặc dù Evidence 1 và Evidence 2 xác nhận ông Hồ Tấn Minh giữ chức vụ Chánh Văn phòng Sở Giáo dục và Đào tạo TP.HCM, nhưng không có bằng chứng nào xác nhận hoặc đề cập đến việc ông giữ chức vụ này vào đúng thời điểm 'Chiều 23/3'. Theo quy tắc bắt buộc: 'Nếu claim đưa ra CON SỐ CỤ THỂ (ngày, số tiền, số lượng...) mà evidence KHÔNG XÁC NHẬN con số đó → FALSE', tuyên bố này phải được đánh giá là SAI."
+        },
+        {
+          "claim": "Trong trường hợp bất khả kháng, học sinh không có mã định danh cá nhân sẽ được ngành giáo dục cấp một mã tạm để tham gia công tác tuyển sinh.",
+          "evidence_count": 4,
+          "verdict": "true",
+          "confidence": 1.0,
+          "reasoning": "Tuyên bố được xác nhận trực tiếp bởi nhiều nguồn bằng chứng. Cụ thể, Evidence 1, Evidence 3 và Evidence 4 đều trích dẫn lời của ông Hồ Tấn Minh (Chánh văn phòng Sở Giáo dục và Đào tạo TP.HCM) khẳng định rằng trong các trường hợp bất khả kháng không thể cấp được mã định danh cá nhân hoặc CCCD gắn chíp, ngành giáo dục sẽ cấp mã tạm để học sinh có thể tham gia công tác tuyển sinh và thi tuyển."
+        }
+      ],
+      "mode": "multi"
+    },
+    {
+      "status": "success",
+      "elapsed_time": 277.3924126625061,
+      "claims_extracted": 4,
+      "claims": [
+        "Ngân sách của TP Cần Thơ năm 2023 cho dự án tuyến cao tốc Châu Đốc - Cần Thơ - Sóc Trăng là 1.000",
+        "Dự án tuyến cao tốc Châu Đốc - Cần Thơ - Sóc Trăng đi qua địa bàn 3 huyện là Vĩnh Thạnh, Cờ Đỏ và Thới Lai",
+        "Số trường hợp bị ảnh hưởng là 952",
+        "Dự kiến nền TĐC là khoảng 260"
+      ],
+      "evidence_count": 5,
+      "verdict": "false",
+      "confidence": 1.0,
+      "expected_label": "FAKE",
+      "verdict_label": "FAKE",
+      "correct": true,
+      "full_report": {
+        "verdict": "false",
+        "confidence": 1.0,
+        "summary": "Thông tin cho rằng ngân sách năm 2023 của TP Cần Thơ dành cho dự án cao tốc Châu Đốc - Cần Thơ - Sóc Trăng là 1.000 (tỷ đồng) là không chính xác vì con số này không phản ánh đầy đủ quy mô vốn thực tế được phân bổ và bổ sung.",
+        "detailed_explanation": "Mặc dù có thông tin cho rằng TP Cần Thơ chi 1.000 tỷ đồng vốn đầu tư công cho dự án cao tốc Châu Đốc - Cần Thơ - Sóc Trăng trong năm 2023 (Nguồn 1), nhưng con số này không phải là tổng ngân sách dành cho dự án. Các bằng chứng khác cho thấy quy mô vốn lớn hơn nhiều: Thứ nhất, có thông tin về việc bổ sung thêm 3.250 tỷ đồng cho dự án này (Nguồn 5). Thứ hai, TP Cần Thơ đã bố trí gần 1.500 tỷ đồng cho 5 dự án trọng điểm, trong đó có dự án cao tốc này (Nguồn 2). Do đó, việc khẳng định ngân sách cho dự án chỉ là 1.000 là thiếu sót và không phản ánh đúng thực tế các khoản vốn đã được giao và bổ sung.",
+        "citations": [
+          {
+            "source_idx": 1,
+            "text": "Cần Thơ chi 1000 tỷ đồng vốn đầu tư công năm nay cho cao tốc Châu Đốc - Cần Thơ - Sóc Trăng"
+          },
+          {
+            "source_idx": 2,
+            "text": "TP.Cần Thơ bố trí gần 1.500 tỉ đồng cho 5 dự án trọng điểm"
+          },
+          {
+            "source_idx": 5,
+            "text": "Bổ sung 3.250 tỷ đồng cho cao tốc Châu Đốc - Cần Thơ - Sóc Trăng"
+          }
+        ],
+        "label": "false"
+      },
+      "all_claims_results": [
+        {
+          "claim": "Ngân sách của TP Cần Thơ năm 2023 cho dự án tuyến cao tốc Châu Đốc - Cần Thơ - Sóc Trăng là 1.000",
+          "evidence_count": 5,
+          "verdict": "true",
+          "confidence": 1.0,
+          "reasoning": "Cả Evidence 1 và Evidence 2 đều xác nhận trực tiếp rằng trong kế hoạch vốn đầu tư công năm 2023 từ nguồn ngân sách địa phương (đợt 2), dự án thành phần 2 của cao tốc Châu Đốc - Cần Thơ - Sóc Trăng (đoạn qua TP Cần Thơ) được giao 1.000 tỷ đồng. Điều này khớp hoàn toàn với con số và nội dung trong tuyên bố."
+        },
+        {
+          "claim": "Dự án tuyến cao tốc Châu Đốc - Cần Thơ - Sóc Trăng đi qua địa bàn 3 huyện là Vĩnh Thạnh, Cờ Đỏ và Thới Lai",
+          "evidence_count": 5,
+          "verdict": "true",
+          "confidence": 1.0,
+          "reasoning": "Evidence 3 xác nhận trực tiếp rằng đoạn tuyến cao tốc Châu Đốc – Cần Thơ – Sóc Trăng đi qua thành phố Cần Thơ bao gồm 3 huyện là Vĩnh Thạnh, Cờ Đỏ và Thới Lai. Điều này khớp hoàn toàn với thông tin trong tuyên bố."
+        },
+        {
+          "claim": "Số trường hợp bị ảnh hưởng là 952",
+          "evidence_count": 3,
+          "verdict": "false",
+          "confidence": 1.0,
+          "reasoning": "Claim đưa ra một con số cụ thể là '952' trường hợp bị ảnh hưởng. Tuy nhiên, sau khi rà soát tất cả các bằng chứng được cung cấp: Evidence 1 nói về chính sách khoa học công nghệ và tiêu chuẩn nước giải khát; Evidence 2 nói về tình hình mưa lũ và lượng mưa tại miền Trung; Evidence 3 nói về quy trình thống kê thiệt hại và nhắc đến con số 75 căn nhà bị tốc mái tại Quảng Điền. Không có bất kỳ bằng chứng nào đề cập hoặc xác nhận con số '952'. Theo quy tắc bắt buộc: Nếu claim đưa ra con số cụ thể mà evidence không xác nhận thì kết luận là FALSE."
+        },
+        {
+          "claim": "Dự kiến nền TĐC là khoảng 260",
+          "evidence_count": 4,
+          "verdict": "false",
+          "confidence": 1.0,
+          "reasoning": "Claim đưa ra một con số cụ thể là '260' liên quan đến nền tái định cư (TĐC). Tuy nhiên, sau khi rà soát tất cả các bằng chứng được cung cấp (Evidence 1, 2, 3, 4), không có bất kỳ thông tin nào đề cập hoặc xác nhận con số '260' này. Theo quy tắc đánh giá bắt buộc: 'Nếu claim đưa ra CON SỐ CỤ THỂ mà evidence KHÔNG XÁC NHẬN con số đó → FALSE'."
+        }
+      ],
+      "mode": "multi"
+    },
+    {
+      "status": "success",
+      "elapsed_time": 218.88010096549988,
+      "claims_extracted": 3,
+      "claims": [
+        "Ngày 26/3, các đối tượng liên quan đến vụ việc đã được công an xác định.",
+        "Các đối tượng liên quan gồm bé Th. (SN 2020), mẹ ruột của bé và một người đàn ông chung sống như vợ chồng với mẹ bé.",
+        "Cả 3 đối tượng được cho là ở tại Hóc Môn khi sự việc xảy ra."
+      ],
+      "evidence_count": 4,
+      "verdict": "false",
+      "confidence": 1.0,
+      "expected_label": "FAKE",
+      "verdict_label": "FAKE",
+      "correct": true,
+      "full_report": {
+        "verdict": "false",
+        "confidence": 1.0,
+        "summary": "Khẳng định các đối tượng liên quan đến vụ việc được công an xác định vào ngày 26/3 là không chính xác về mặt thời gian.",
+        "detailed_explanation": "Dựa trên các bằng chứng được cung cấp, đặc biệt là thông tin từ báo Dân trí (Nguồn 1), vụ việc lọt đề toán trên mạng xã hội và việc Bộ Công an xác định 3 đối tượng liên quan được đưa tin vào thời điểm tháng 6 năm 2025 (dựa trên mốc thời gian hiển thị trong URL của bài báo: 20250625). Không có bằng chứng nào trong các nguồn tin xác nhận rằng việc xác định các đối tượng này diễn ra vào ngày 26/3. Do đó, mốc thời gian được nêu trong khẳng định là sai lệch so với thực tế được báo chí đưa tin.",
+        "citations": [
+          {
+            "source_idx": 1,
+            "text": "Vụ lọt đề toán trên mạng xã hội: Bộ Công an xác định 3 đối tượng liên quan"
+          }
+        ],
+        "label": "false"
+      },
+      "all_claims_results": [
+        {
+          "claim": "Ngày 26/3, các đối tượng liên quan đến vụ việc đã được công an xác định.",
+          "evidence_count": 5,
+          "verdict": "false",
+          "confidence": 1.0,
+          "reasoning": "Tuyên bố đưa ra một mốc thời gian cụ thể là 'Ngày 26/3'. Tuy nhiên, qua rà soát tất cả các bằng chứng được cung cấp: Evidence 1 không đề cập đến ngày cụ thể; Evidence 2 đề cập đến ngày 26/6/2025; Evidence 3 đề cập đến ngày 06/02/2025; Evidence 5 đề cập đến ngày 06/7. Không có bằng chứng nào xác nhận mốc thời gian 'Ngày 26/3' như tuyên bố. Theo quy tắc đánh giá bắt buộc: 'Nếu claim đưa ra CON SỐ CỤ THỂ (ngày, số tiền, số lượng...) mà evidence KHÔNG XÁC NHẬN con số đó → FALSE'."
+        },
+        {
+          "claim": "Các đối tượng liên quan gồm bé Th. (SN 2020), mẹ ruột của bé và một người đàn ông chung sống như vợ chồng với mẹ bé.",
+          "evidence_count": 4,
+          "verdict": "uncertain",
+          "confidence": 1.0,
+          "reasoning": "Các bằng chứng được cung cấp hoàn toàn không liên quan đến nội dung của tuyên bố. Tuyên bố đề cập đến các cá nhân cụ thể (bé Th., mẹ bé và một người đàn ông), trong khi các bằng chứng (Evidence 1, 3, 4) chỉ cung cấp các quy định pháp luật chung về thuế thu nhập cá nhân (người phụ thuộc) và chế độ bảo hiểm thai sản. Evidence 2 là dữ liệu rác từ giao diện Google Dịch. Vì bằng chứng không đề cập đến các đối tượng hay sự việc được nêu trong claim, nên không đủ thông tin để kết luận là đúng hay sai."
+        },
+        {
+          "claim": "Cả 3 đối tượng được cho là ở tại Hóc Môn khi sự việc xảy ra.",
+          "evidence_count": 4,
+          "verdict": "uncertain",
+          "confidence": 1.0,
+          "reasoning": "Các bằng chứng được cung cấp không đủ để xác nhận hoặc bác bỏ tuyên bố này. Evidence 1 đề cập đến một vụ cướp tại Hóc Môn với 3 đối tượng có quê quán tại Bình Dương, Vĩnh Long và Bến Tre, nhưng chỉ nói họ 'đến' ngân hàng tại Hóc Môn để gây án chứ không nói họ đang 'ở tại' (cư trú hoặc lưu trú) Hóc Môn. Evidence 3 đề cập đến một vụ cướp khác tại Hóc Môn với các đối tượng có quê quán tại Đắk Lắk, Hóc Môn và Đồng Nai. Không có bằng chứng nào khẳng định hay phủ nhận việc cả 3 đối tượng đang ở tại Hóc Môn vào thời điểm xảy ra sự việc. Do đó, thông tin không đủ để kết luận."
+        }
+      ],
+      "mode": "multi"
+    },
+    {
+      "status": "success",
+      "elapsed_time": 114.03472232818604,
+      "claims_extracted": 2,
+      "claims": [
+        "Ban Cán sự đảng UBND TP được giao chỉ đạo hoàn thiện báo cáo, đề xuất chính thức thành lập Đội Quản lý trật tự xây dựng đô thị thuộc UBND quận, huyện, thị xã.",
+        "Việc thí điểm kết thúc vào ngày 10/8/2024."
+      ],
+      "evidence_count": 3,
+      "verdict": "false",
+      "confidence": 1.0,
+      "expected_label": "REAL",
+      "verdict_label": "FAKE",
+      "correct": false,
+      "full_report": {
+        "verdict": "false",
+        "confidence": 1.0,
+        "summary": "Thông tin cho rằng Ban Cán sự đảng UBND Thành phố được giao chỉ đạo hoàn thiện báo cáo, đề xuất thành lập Đội Quản lý trật tự xây dựng đô thị thuộc UBND các quận, huyện, thị xã là không chính xác.",
+        "detailed_explanation": "Dựa trên các nguồn tài liệu được cung cấp để kiểm chứng, không có bất kỳ thông tin nào xác nhận nội dung khẳng định trên. Các nguồn tin hiện có tập trung vào các chủ đề khác nhau: \n1. Nguồn 1 đề cập đến hoạt động tiếp công dân định kỳ của Thường trực HĐND Thành phố Hà Nội.\n2. Nguồn 2 đề cập đến các hoạt động tri ân của Đại tướng Nguyễn Tân Cương đối với các lãnh đạo tiền nhiệm.\n3. Nguồn 3 nói về vai trò và sự đóng góp chung của Đảng bộ UBND Thành phố Hà Nội trong sự phát triển của Thủ đô.\nKhông có tài liệu nào nhắc đến việc Ban Cán sự đảng UBND Thành phố nhận chỉ đạo về việc lập báo cáo hay đề xuất thành lập Đội Quản lý trật tự xây dựng đô thị như nội dung tuyên bố. Do đó, khẳng định này là không có căn cứ.",
+        "citations": [
+          {
+            "source_idx": 1,
+            "text": "Thường trực HĐND Thành phố tiếp công dân định kỳ"
+          },
+          {
+            "source_idx": 2,
+            "text": "Đại tướng Nguyễn Tân Cương tri ân các đồng chí nguyên lãnh đạo Đảng, Nhà nước, Quân đội"
+          },
+          {
+            "source_idx": 3,
+            "text": "Với tinh thần đoàn kết, đổi mới, bản lĩnh và trí tuệ, Đảng bộ đã phát huy tốt vai trò là hạt nhân..."
+          }
+        ],
+        "label": "false"
+      },
+      "all_claims_results": [
+        {
+          "claim": "Ban Cán sự đảng UBND TP được giao chỉ đạo hoàn thiện báo cáo, đề xuất chính thức thành lập Đội Quản lý trật tự xây dựng đô thị thuộc UBND quận, huyện, thị xã.",
+          "evidence_count": 2,
+          "verdict": "uncertain",
+          "confidence": 1.0,
+          "reasoning": "Evidence 1 nói về việc Đại tướng Nguyễn Tân Cương tri ân các đồng chí nguyên lãnh đạo Đảng, Nhà nước, Quân đội. Evidence 2 là danh sách các tiêu đề tin tức từ website Văn phòng UBND TP.HCM liên quan đến Đề án 06, bổ nhiệm cán bộ, phân công nhiệm vụ văn phòng, lịch nghỉ lễ và kiểm tra công vụ. Không có bất kỳ thông tin nào trong các bằng chứng được cung cấp đề cập đến việc 'Ban Cán sự đảng UBND TP được giao chỉ đạo hoàn thiện báo cáo, đề xuất chính thức thành lập Đội Quản lý trật tự xây dựng đô thị'. Do đó, bằng chứng không liên quan đến nội dung tuyên bố, không đủ cơ sở để xác nhận hay bác bỏ."
+        },
+        {
+          "claim": "Việc thí điểm kết thúc vào ngày 10/8/2024.",
+          "evidence_count": 5,
+          "verdict": "false",
+          "confidence": 1.0,
+          "reasoning": "Tuyên bố đưa ra một mốc thời gian cụ thể là 'ngày 10/8/2024'. Tuy nhiên, qua rà soát tất cả các bằng chứng được cung cấp (các văn bản, thông tư của Bộ Giáo dục và Đào tạo), không có bất kỳ thông tin nào đề cập đến ngày 10/8/2024 hoặc xác nhận việc kết thúc thí điểm vào ngày này. Theo quy tắc đánh giá bắt buộc: 'Nếu claim đưa ra CON SỐ CỤ THỂ (ngày, số tiền, số lượng...) mà evidence KHÔNG XÁC NHẬN con số đó → FALSE'."
+        }
+      ],
+      "mode": "multi"
+    },
+    {
+      "status": "success",
+      "elapsed_time": 114.09578824043274,
+      "claims_extracted": 3,
+      "claims": [
+        "NASA đã công bố bức hình của WR 124 vào ngày 15/3",
+        "WR 124 được bao quanh bởi mây khí bụi",
+        "Mây khí bụi là vật chất thoát ra từ ngôi sao già cỗi trong các vụ phóng hỗn loạn và ngẫu nhiên"
+      ],
+      "evidence_count": 4,
+      "verdict": "false",
+      "confidence": 1.0,
+      "expected_label": "REAL",
+      "verdict_label": "FAKE",
+      "correct": false,
+      "full_report": {
+        "verdict": "false",
+        "confidence": 1.0,
+        "summary": "Mặc dù NASA đã thực sự công bố hình ảnh về ngôi sao Wolf-Rayet 124 (WR 124) từ kính viễn vọng James Webb, nhưng thời điểm công bố chính xác là ngày 14/3, không phải ngày 15/3 như tuyên bố.",
+        "detailed_explanation": "Dựa trên các bằng chứng được cung cấp, chúng tôi xác nhận rằng NASA đã công bố những hình ảnh ấn tượng về ngôi sao đang chết Wolf-Rayet 124 (WR 124) được chụp bởi Kính viễn vọng không gian James Webb [Nguồn 1, 2, 3]. Tuy nhiên, thông tin về ngày công bố là ngày 15/3 là không chính xác. Theo các báo cáo tin tức, sự kiện công bố này đã diễn ra vào ngày 14/3 tại hội nghị South by Southwest diễn ra ở Austin, Texas, Mỹ [Nguồn 4]. Vì sai lệch về mốc thời gian quan trọng, khẳng định này được đánh giá là sai.",
+        "citations": [
+          {
+            "source_idx": 4,
+            "text": "Ngày 14-3, tại hội nghị South by Southwest ở TP Austin (bang Texas, Mỹ), Cơ quan Hàng không và Vũ trụ..."
+          },
+          {
+            "source_idx": 3,
+            "text": "Wolf-Rayet 124 (MIRI image)"
+          }
+        ],
+        "label": "false"
+      },
+      "all_claims_results": [
+        {
+          "claim": "NASA đã công bố bức hình của WR 124 vào ngày 15/3",
+          "evidence_count": 4,
+          "verdict": "false",
+          "confidence": 1.0,
+          "reasoning": "Tuyên bố cho rằng NASA công bố bức hình vào ngày 15/3. Tuy nhiên, các bằng chứng (Evidence 1, 2 và 4) đều khẳng định trực tiếp rằng NASA đã công bố bức ảnh này vào ngày 14/3 tại hội nghị South by Southwest ở Austin, Texas. Vì có sự mâu thuẫn trực tiếp về ngày tháng cụ thể, tuyên bố này là SAI."
+        },
+        {
+          "claim": "WR 124 được bao quanh bởi mây khí bụi",
+          "evidence_count": 4,
+          "verdict": "true",
+          "confidence": 1.0,
+          "reasoning": "Evidence 1 khẳng định trực tiếp rằng WR 124 'được bao quanh bởi mây khí bụi hay tinh vân'. Evidence 3 cũng xác nhận WR 124 là một ngôi sao được bao quanh bởi một tinh vân vòng (ring nebula) từ vật chất bị đẩy ra."
+        },
+        {
+          "claim": "Mây khí bụi là vật chất thoát ra từ ngôi sao già cỗi trong các vụ phóng hỗn loạn và ngẫu nhiên",
+          "evidence_count": 4,
+          "verdict": "true",
+          "confidence": 1.0,
+          "reasoning": "Evidence 1 chứa câu khẳng định trực tiếp và trùng khớp hoàn toàn với nội dung của claim: 'Những đám mây khổng lồ này là vật chất thoát ra từ ngôi sao già cỗi trong các vụ phóng hỗn loạn và ngẫu nhiên.' Các evidence khác (2, 3, 4) cũng bổ trợ cho ý niệm rằng tinh vân/mây khí bụi có thể được hình thành từ vật chất phóng ra khi một ngôi sao kết thúc vòng đời."
+        }
+      ],
+      "mode": "multi"
+    },
+    {
+      "status": "success",
+      "elapsed_time": 143.0876021385193,
+      "claims_extracted": 2,
+      "claims": [
+        "Họ có 1 trận thắng",
+        "Họ có 1 trận thất bại 1-2 trước New Zealand"
+      ],
+      "evidence_count": 5,
+      "verdict": "true",
+      "confidence": 1.0,
+      "expected_label": "REAL",
+      "verdict_label": "REAL",
+      "correct": true,
+      "full_report": {
+        "verdict": "true",
+        "confidence": 1.0,
+        "summary": "Các bằng chứng từ các nguồn tin xác nhận rằng các đội bóng được đề cập (như ĐT Việt Nam và Arsenal) đều đã giành được chiến thắng trong các trận đấu của họ, hỗ trợ cho khẳng định về việc có trận thắng.",
+        "detailed_explanation": "Dựa trên việc phân tích các nguồn tài liệu được cung cấp, chúng ta có thể thấy các bằng chứng cụ thể về các trận thắng như sau:\n\n1. **Đội tuyển Việt Nam:** Có bằng chứng về hai trận thắng rõ rệt. Nguồn 1 xác nhận ĐT Việt Nam đã giành chiến thắng 3-1 trước Malaysia tại vòng loại Asian Cup 2027. Nguồn 3 cũng xác nhận ĐT Việt Nam đã thắng Lào với tỷ số 4-1.\n2. **Arsenal:** Nguồn 2 cho biết Arsenal đã giành chiến thắng trước Newcastle để chiếm lại ngôi đầu bảng.\n\nMặc dù các nguồn tin đề cập đến nhiều hơn một trận thắng của các đội khác nhau, nhưng về mặt thực tế, khẳng định 'Họ có 1 trận thắng' là đúng vì các dữ liệu đều xác nhận sự tồn tại của các chiến thắng trong các trận đấu được nhắc đến.",
+        "citations": [
+          {
+            "source_idx": 1,
+            "text": "Chiến thắng 3-1 trước Malaysia tại vòng loại Asian Cup 2027..."
+          },
+          {
+            "source_idx": 2,
+            "text": "Thắng Newcastle ở vòng đấu cuối tuần qua, Arsenal đã chiếm lại ngôi đầu bảng từ tay Man.City."
+          },
+          {
+            "source_idx": 3,
+            "text": "...thắng Lào 4-1."
+          }
+        ],
+        "label": "true"
+      },
+      "all_claims_results": [
+        {
+          "claim": "Họ có 1 trận thắng",
+          "evidence_count": 4,
+          "verdict": "uncertain",
+          "confidence": 1.0,
+          "reasoning": "Tuyên bố 'Họ có 1 trận thắng' không xác định rõ đối tượng 'Họ' là ai. Các bằng chứng được cung cấp đề cập đến nhiều thực thể khác nhau: Arsenal (Evidence 1), Đội tuyển Việt Nam dưới thời HLV Park Hang-seo (Evidence 2), Đội tuyển Việt Nam dưới thời HLV Kim Sang-sik (Evidence 3) và Đội tuyển Việt Nam tại vòng loại Asian Cup 2027 (Evidence 4). Do tuyên bố thiếu chủ thể cụ thể, không thể đối chiếu với bất kỳ bằng chứng nào để xác nhận hoặc bác bỏ, dẫn đến việc không đủ thông tin để kết luận."
+        },
+        {
+          "claim": "Họ có 1 trận thất bại 1-2 trước New Zealand",
+          "evidence_count": 5,
+          "verdict": "true",
+          "confidence": 1.0,
+          "reasoning": "Evidence 1 xác nhận đội tuyển Trung Quốc đã có hai trận đấu với New Zealand, kết quả là một trận hòa 0-0 và một trận thất bại với tỷ số 1-2. Điều này trực tiếp xác nhận tuyên bố 'có 1 trận thất bại 1-2 trước New Zealand'. Ngoài ra, Evidence 2 cũng cho thấy U20 Indonesia có một trận thua với tỷ số 1-2 trước New Zealand (ghi 1 bàn và thủng lưới 2 bàn), càng củng cố tính đúng đắn của thông tin này trong các ngữ cảnh được cung cấp."
+        }
+      ],
+      "mode": "multi"
+    },
+    {
+      "status": "success",
+      "elapsed_time": 270.6031608581543,
+      "claims_extracted": 7,
+      "claims": [
+        "Tượng cố nhạc sĩ Trịnh Công Sơn nặng 700 kg",
+        "Tượng cố nhạc sĩ Trịnh Công Sơn cao 1,7 m",
+        "Tượng cố nhạc sĩ Trịnh Công Sơn rộng 1,6 m",
+        "Tượng cố nhạc sĩ Trịnh Công Sơn dài 2,3 m",
+        "Tượng cố nhạc sĩ Trịnh Công Sơn mang dáng vẻ đang ngồi, cầm đàn guitar",
+        "Tượng cố nhạc sĩ Trịnh Công Sơn được làm bằng đồng",
+        "Chủ tịch TP Huế đã yêu cầu sớm chỉnh trang để chuẩn bị đặt tượng cố nhạc sĩ"
+      ],
+      "evidence_count": 3,
+      "verdict": "false",
+      "confidence": 1.0,
+      "expected_label": "REAL",
+      "verdict_label": "FAKE",
+      "correct": false,
+      "full_report": {
+        "verdict": "false",
+        "confidence": 1.0,
+        "summary": "Thông tin cho rằng tượng cố nhạc sĩ Trịnh Công Sơn nặng 700 kg là không chính xác.",
+        "detailed_explanation": "Dựa trên các nguồn tin báo chí chính thống về lễ khánh thành tượng nghệ thuật cố nhạc sĩ Trịnh Công Sơn tại công viên Trịnh Công Sơn (phường Gia Hội, TP. Huế), các báo cáo chỉ tập trung vào chiều cao của bức tượng là 1,7 mét. Không có bất kỳ thông tin hay bằng chứng xác thực nào từ các cơ quan chức năng hoặc đơn vị tổ chức đề cập đến trọng lượng của bức tượng là 700 kg. Do đó, con số này được xác định là không có căn cứ.",
+        "citations": [
+          {
+            "source_idx": 1,
+            "text": "Ngắm tượng đài nhạc sĩ Trịnh Công Sơn cao 1,7 m..."
+          },
+          {
+            "source_idx": 3,
+            "text": "Ngắm tượng đài cao 1,7 m của cố nhạc sĩ Trịnh Công Sơn..."
+          }
+        ],
+        "label": "false"
+      },
+      "all_claims_results": [
+        {
+          "claim": "Tượng cố nhạc sĩ Trịnh Công Sơn nặng 700 kg",
+          "evidence_count": 3,
+          "verdict": "false",
+          "confidence": 1.0,
+          "reasoning": "Claim đưa ra con số cụ thể về trọng lượng của tượng là 700 kg. Tuy nhiên, Evidence 2 cung cấp thông tin trực tiếp và mâu thuẫn với claim khi nêu rõ: 'Tượng có chất liệu bằng đồng, chiều cao 1,7m, chiều rộng 1,6m, chiều dài 2,3m, trọng lượng 500kg'. Do đó, tuyên bố này là sai."
+        },
+        {
+          "claim": "Tượng cố nhạc sĩ Trịnh Công Sơn cao 1,7 m",
+          "evidence_count": 5,
+          "verdict": "true",
+          "confidence": 1.0,
+          "reasoning": "Tất cả các bằng chứng được cung cấp (Evidence 1, 2, 3, 4, 5) đều chứa thông tin xác nhận trực tiếp rằng bức tượng cố nhạc sĩ Trịnh Công Sơn cao 1,7 m."
+        },
+        {
+          "claim": "Tượng cố nhạc sĩ Trịnh Công Sơn rộng 1,6 m",
+          "evidence_count": 5,
+          "verdict": "true",
+          "confidence": 1.0,
+          "reasoning": "Tất cả các nguồn bằng chứng (Evidence 1, 2, 3, 4 và 5) đều cung cấp thông tin xác nhận trực tiếp rằng bức tượng cố nhạc sĩ Trịnh Công Sơn có kích thước rộng 1,6 m."
+        },
+        {
+          "claim": "Tượng cố nhạc sĩ Trịnh Công Sơn dài 2,3 m",
+          "evidence_count": 4,
+          "verdict": "true",
+          "confidence": 1.0,
+          "reasoning": "Tất cả các bằng chứng được cung cấp (Evidence 1, 2, 3, và 4) đều xác nhận trực tiếp và đồng nhất rằng bức tượng cố nhạc sĩ Trịnh Công Sơn có kích thước dài 2,3 m."
+        },
+        {
+          "claim": "Tượng cố nhạc sĩ Trịnh Công Sơn mang dáng vẻ đang ngồi, cầm đàn guitar",
+          "evidence_count": 4,
+          "verdict": "true",
+          "confidence": 1.0,
+          "reasoning": "Các bằng chứng đều xác nhận trực tiếp nội dung của tuyên bố. Cụ thể, Evidence 2 nêu rõ: 'Bức tượng cố nhạc sĩ Trịnh Công Sơn đang ngồi, cầm đàn guitar'. Evidence 3 cũng xác nhận về 'dáng ngồi' và sự hiện diện của 'cây đàn guitar quen thuộc của ông'."
+        },
+        {
+          "claim": "Tượng cố nhạc sĩ Trịnh Công Sơn được làm bằng đồng",
+          "evidence_count": 5,
+          "verdict": "true",
+          "confidence": 1.0,
+          "reasoning": "Tất cả các bằng chứng (Evidence 1, 2, 3, 4, 5) đều khẳng định trực tiếp và đồng nhất rằng bức tượng cố nhạc sĩ Trịnh Công Sơn được làm bằng đồng (đúc bằng đồng)."
+        },
+        {
+          "claim": "Chủ tịch TP Huế đã yêu cầu sớm chỉnh trang để chuẩn bị đặt tượng cố nhạc sĩ",
+          "evidence_count": 4,
+          "verdict": "uncertain",
+          "confidence": 1.0,
+          "reasoning": "Các bằng chứng được cung cấp không chứa thông tin nào xác nhận hoặc phủ nhận tuyên bố trên. Evidence 1 có nhắc đến công viên Trịnh Công Sơn và tình trạng chưa chỉnh trang ở một số khu vực, nhưng không đề cập đến việc Chủ tịch TP Huế yêu cầu chỉnh trang hay kế hoạch đặt tượng nhạc sĩ. Evidence 2 nói về việc chỉnh trang vỉa hè và chặt cây trên đường Lê Duẩn. Evidence 3 và 4 là thông tin về hành chính và địa chỉ đỏ. Do đó, không đủ thông tin để kết luận."
+        }
+      ],
+      "mode": "multi"
+    },
+    {
+      "status": "success",
+      "elapsed_time": 166.97279024124146,
+      "claims_extracted": 3,
+      "claims": [
+        "Tính đến ngày 1-3-2023, có 304.170 tài khoản được kích hoạt thành công.",
+        "Tổng số tài khoản định danh điện tử do TP tổ chức cấp là 1.497.360 tài khoản.",
+        "Tỉ lệ tài khoản được kích hoạt thành công đạt 20,3% trong tổng số tài khoản định danh điện tử do TP tổ chức cấp."
+      ],
+      "evidence_count": 4,
+      "verdict": "false",
+      "confidence": 1.0,
+      "expected_label": "REAL",
+      "verdict_label": "FAKE",
+      "correct": false,
+      "full_report": {
+        "verdict": "false",
+        "confidence": 1.0,
+        "summary": "Thông tin về việc có 304.170 tài khoản được kích hoạt thành công tính đến ngày 1-3-2023 là không chính xác dựa trên các bằng chứng được cung cấp.",
+        "detailed_explanation": "Sau khi tiến hành rà soát và đối soát các nguồn tài liệu được cung cấp, chúng tôi không tìm thấy bất kỳ dữ liệu, báo cáo hay con số thống kê nào xác nhận việc có 304.170 tài khoản được kích hoạt thành công vào ngày 1-3-2023. Các nguồn tin được sử dụng để kiểm chứng bao gồm: thông tin dịch vụ của Traveloka, bài viết về kỷ nguyên AI trên Vietnam Finance, thông tin địa chỉ showroom của TTGShop và trang sản phẩm của Thế Giới Di Động. Tất cả các nguồn này đều không chứa nội dung liên quan đến số lượng tài khoản người dùng hay các số liệu thống kê về việc kích hoạt tài khoản như khẳng định đã nêu.",
+        "citations": [
+          {
+            "source_idx": 1,
+            "text": "https://www.traveloka.com/vi-vn/flight"
+          },
+          {
+            "source_idx": 2,
+            "text": "https://vietnamfinance.vn/"
+          },
+          {
+            "source_idx": 3,
+            "text": "https://ttgshop.vn/"
+          },
+          {
+            "source_idx": 4,
+            "text": "https://www.thegioididong.com/may-tinh-bang/xiaomi-pad-8-8gb-128gb"
+          }
+        ],
+        "label": "false"
+      },
+      "all_claims_results": [
+        {
+          "claim": "Tính đến ngày 1-3-2023, có 304.170 tài khoản được kích hoạt thành công.",
+          "evidence_count": 1,
+          "verdict": "false",
+          "confidence": 1.0,
+          "reasoning": "Claim đưa ra các thông tin định lượng cụ thể bao gồm ngày tháng (1-3-2023) và số lượng tài khoản (304.170). Tuy nhiên, Evidence hoàn toàn không đề cập đến các con số hay mốc thời gian này (im lặng về thông tin cụ thể). Theo quy tắc đánh giá bắt buộc: Nếu claim đưa ra con số cụ thể mà evidence không xác nhận thì kết luận là FALSE."
+        },
+        {
+          "claim": "Tổng số tài khoản định danh điện tử do TP tổ chức cấp là 1.497.360 tài khoản.",
+          "evidence_count": 5,
+          "verdict": "false",
+          "confidence": 1.0,
+          "reasoning": "Tuyên bố đưa ra một con số cụ thể là 1.497.360 tài khoản. Tuy nhiên, qua rà soát tất cả các bằng chứng được cung cấp, không có bất kỳ thông tin nào đề cập hoặc xác nhận con số 1.497.360 này. Evidence 4 có đề cập đến các mục tiêu triển khai tại TP.HCM theo tỷ lệ phần trăm (100%, 80%, 50%) nhưng không cung cấp số lượng tài khoản định danh cụ thể. Theo quy tắc đánh giá bắt buộc: 'Nếu claim đưa ra CON SỐ CỤ THỂ mà evidence KHÔNG XÁC NHẬN con số đó → FALSE'."
+        },
+        {
+          "claim": "Tỉ lệ tài khoản được kích hoạt thành công đạt 20,3% trong tổng số tài khoản định danh điện tử do TP tổ chức cấp.",
+          "evidence_count": 3,
+          "verdict": "false",
+          "confidence": 1.0,
+          "reasoning": "Tuyên bố đưa ra một con số cụ thể là '20,3%'. Tuy nhiên, khi đối chiếu với các bằng chứng được cung cấp: Evidence 1 nói về số liệu toàn quốc (57,9 triệu tài khoản); Evidence 2 nói về TP.HCM nhưng chỉ đề cập tỉ lệ đạt 'khoảng 30% so với lộ trình'; Evidence 3 nói về Hà Tĩnh với tỉ lệ 38,9%. Không có bất kỳ bằng chứng nào xác nhận con số '20,3%' như tuyên bố. Theo quy tắc đánh giá bắt buộc: Nếu claim đưa ra con số cụ thể mà evidence không xác nhận con số đó thì kết luận là FALSE."
+        }
+      ],
+      "mode": "multi"
+    },
+    {
+      "status": "success",
+      "elapsed_time": 187.41797256469727,
+      "claims_extracted": 3,
+      "claims": [
+        "UBKT Trung ương có kết luận tại Kỳ họp thứ 23 đối với Ban cán sự đảng UBND tỉnh Đồng Nai và một số tổ chức đảng, đảng viên có liên quan",
+        "Kết luận thi hành kỷ luật Ban Thường vụ Tỉnh ủy Đồng Nai",
+        "Có 2 cá nhân trong tổ chức bị phạt nặng nhất"
+      ],
+      "evidence_count": 3,
+      "verdict": "false",
+      "confidence": 1.0,
+      "expected_label": "UNCERTAIN",
+      "verdict_label": "FAKE",
+      "correct": false,
+      "full_report": {
+        "verdict": "false",
+        "confidence": 1.0,
+        "summary": "Thông tin cho rằng Ủy ban Kiểm tra (UBKT) Trung ương có kết luận tại Kỳ họp thứ 23 liên quan đến Ban cán sự đảng UBND tỉnh Đồng Nai là không chính xác.",
+        "detailed_explanation": "Qua kiểm chứng các nguồn tin chính thống, chúng tôi xác định được các điểm sau: \n1. UBKT Trung ương thực sự có tổ chức Kỳ họp thứ 23 để xem xét các nội dung về công tác kiểm tra, giám sát và kỷ luật Đảng (theo thông tin từ VTV và Báo Giáo dục).\n2. Tuy nhiên, nội dung thông cáo báo chí chính thức về Kỳ họp thứ 23 này không hề đề cập đến việc đưa ra kết luận đối với Ban cán sự đảng UBND tỉnh Đồng Nai hay các tổ chức đảng, đảng viên tại tỉnh này.\n3. Việc kết hợp sự kiện 'Kỳ họp thứ 23 của UBKT Trung ương' với đối tượng 'Ban cán sự đảng UBND tỉnh Đồng Nai' là sự sai lệch thông tin, không có căn cứ trong các văn bản công bố chính thức.",
+        "citations": [
+          {
+            "source_idx": 2,
+            "text": "Thông cáo báo chí Kỳ họp thứ 23 của Ủy ban Kiểm tra Trung ương - VTV.vn"
+          },
+          {
+            "source_idx": 3,
+            "text": "Toàn văn thông báo Kỳ họp thứ 23 của Ủy ban Kiểm tra Trung ương - giaoduc.net.vn"
+          }
+        ],
+        "label": "false"
+      },
+      "all_claims_results": [
+        {
+          "claim": "UBKT Trung ương có kết luận tại Kỳ họp thứ 23 đối với Ban cán sự đảng UBND tỉnh Đồng Nai và một số tổ chức đảng, đảng viên có liên quan",
+          "evidence_count": 3,
+          "verdict": "true",
+          "confidence": 1.0,
+          "reasoning": "Evidence 3 xác nhận trực tiếp và đầy đủ các thành phần của tuyên bố: (1) Sự kiện diễn ra tại Kỳ họp thứ 23 của Ủy ban Kiểm tra Trung ương; (2) Nội dung kết luận liên quan đến Ban cán sự đảng UBND tỉnh Đồng Nai; (3) Có đề cập đến các tổ chức và cá nhân (đảng viên) có liên quan bị xem xét kỷ luật."
+        },
+        {
+          "claim": "Kết luận thi hành kỷ luật Ban Thường vụ Tỉnh ủy Đồng Nai",
+          "evidence_count": 3,
+          "verdict": "true",
+          "confidence": 1.0,
+          "reasoning": "Evidence 2 xác nhận trực tiếp nội dung tuyên bố: 'Bộ Chính trị thi hành kỷ luật Cảnh cáo Ban Thường vụ Tỉnh ủy Đồng Nai các nhiệm kỳ 2010-2015, 2015-2020'. Do đó, tuyên bố về việc có kết luận thi hành kỷ luật đối với Ban Thường vụ Tỉnh ủy Đồng Nai là chính xác."
+        },
+        {
+          "claim": "Có 2 cá nhân trong tổ chức bị phạt nặng nhất",
+          "evidence_count": 5,
+          "verdict": "false",
+          "confidence": 1.0,
+          "reasoning": "Tuyên bố đưa ra một con số cụ thể là '2 cá nhân' và một sự kiện cụ thể (bị phạt nặng nhất trong một tổ chức). Tuy nhiên, tất cả các bằng chứng được cung cấp (Evidence 1 đến 5) đều là các văn bản quy phạm pháp luật, quy định chung về nguyên tắc xử phạt, thẩm quyền và các tình tiết tăng nặng/giảm nhẹ trong xử lý vi phạm hành chính. Không có bất kỳ bằng chứng nào đề cập đến một vụ việc cụ thể, một tổ chức cụ thể hay xác nhận con số '2 cá nhân' như tuyên bố. Theo quy tắc đánh giá bắt buộc: 'Nếu claim đưa ra CON SỐ CỤ THỂ mà evidence KHÔNG XÁC NHẬN con số đó → FALSE', do đó tuyên bố này là FALSE."
+        }
+      ],
+      "mode": "multi"
+    },
+    {
+      "status": "success",
+      "elapsed_time": 207.69954681396484,
+      "claims_extracted": 4,
+      "claims": [
+        "Từ năm 2019 đến 2023, Phòng Cảnh sát môi trường, Công an TP Đà Nẵng đã xử lý 18 trường hợp vi phạm về tiếng ồn.",
+        "Từ năm 2019 đến 2023, có 9 cá nhân và 5 tổ chức bị xử phạt về vi phạm tiếng ồn.",
+        "Tổng số tiền xử phạt vi phạm tiếng ồn từ năm 2019 đến 2023 là hơn 232 triệu đồng.",
+        "Quán Food&Drink đã bị buộc thôi kinh doanh."
+      ],
+      "evidence_count": 5,
+      "verdict": "false",
+      "confidence": 1.0,
+      "expected_label": "UNCERTAIN",
+      "verdict_label": "FAKE",
+      "correct": false,
+      "full_report": {
+        "verdict": "false",
+        "confidence": 1.0,
+        "summary": "Thông tin cho rằng Phòng Cảnh sát môi trường, Công an TP Đà Nẵng đã xử lý 18 trường hợp vi phạm về tiếng ồn trong giai đoạn 2019-2023 là không chính xác.",
+        "detailed_explanation": "Qua quá trình kiểm chứng dựa trên các nguồn tin chính thống, không có bằng chứng nào xác nhận con số cụ thể là '18 trường hợp vi phạm về tiếng ồn' do Phòng Cảnh sát môi trường, Công an TP Đà Nẵng xử lý trong giai đoạn từ năm 2019 đến 2023. Các nguồn tin được cung cấp (như Cổng thông tin điện tử thành phố Đà Nẵng và các báo lớn) chỉ tập trung vào việc khẳng định nỗ lực của lực lượng Công an trong việc đấu tranh chống tội phạm môi trường nói chung và xử lý các vụ án gây ô nhiễm môi trường nghiêm trọng, chứ không đưa ra số liệu thống kê chi tiết về các vi phạm liên quan đến tiếng ồn như khẳng định trên. Do đó, con số 18 được xác định là không có căn cứ xác thực.",
+        "citations": [
+          {
+            "source_idx": 1,
+            "text": "Công an thành phố đẩy mạnh đấu tranh tội phạm môi trường"
+          },
+          {
+            "source_idx": 3,
+            "text": "Phòng Cảnh sát điều tra tội phạm về kinh tế, tham nhũng, buôn lậu và môi trường [tại Đà Nẵng]..."
+          }
+        ],
+        "label": "false"
+      },
+      "all_claims_results": [
+        {
+          "claim": "Từ năm 2019 đến 2023, Phòng Cảnh sát môi trường, Công an TP Đà Nẵng đã xử lý 18 trường hợp vi phạm về tiếng ồn.",
+          "evidence_count": 5,
+          "verdict": "false",
+          "confidence": 1.0,
+          "reasoning": "Tuyên bố đưa ra một con số cụ thể là '18 trường hợp vi phạm về tiếng ồn' trong một khoảng thời gian xác định (2019-2023) tại một đơn vị cụ thể (Phòng Cảnh sát môi trường, Công an TP Đà Nẵng). Tuy nhiên, sau khi rà soát tất cả các bằng chứng được cung cấp, không có bất kỳ bằng chứng nào đề cập đến con số '18', cũng như không có thông tin nào xác nhận về các vụ vi phạm liên quan đến 'tiếng ồn' của đơn vị này trong giai đoạn nêu trên. Theo quy tắc bắt buộc: 'Nếu claim đưa ra CON SỐ CỤ THỂ mà evidence KHÔNG XÁC NHẬN con số đó → FALSE', do đó tuyên bố này bị đánh giá là SAI."
+        },
+        {
+          "claim": "Từ năm 2019 đến 2023, có 9 cá nhân và 5 tổ chức bị xử phạt về vi phạm tiếng ồn.",
+          "evidence_count": 3,
+          "verdict": "false",
+          "confidence": 1.0,
+          "reasoning": "Tuyên bố đưa ra các con số cụ thể (9 cá nhân, 5 tổ chức, giai đoạn 2019-2023) và một chủ đề cụ thể (vi phạm tiếng ồn). Tuy nhiên, tất cả các bằng chứng (Evidence 1, 2, 3) đều tập trung vào chủ đề lừa đảo qua mạng, lộ lọt thông tin cá nhân và tội phạm công nghệ cao, hoàn toàn không đề cập đến vấn đề vi phạm tiếng ồn hay các số liệu thống kê liên quan. Theo quy tắc bắt buộc: 'Nếu claim đưa ra CON SỐ CỤ THỂ mà evidence KHÔNG XÁC NHẬN con số đó → FALSE', do đó tuyên bố này bị đánh giá là SAI."
+        },
+        {
+          "claim": "Tổng số tiền xử phạt vi phạm tiếng ồn từ năm 2019 đến 2023 là hơn 232 triệu đồng.",
+          "evidence_count": 5,
+          "verdict": "true",
+          "confidence": 1.0,
+          "reasoning": "Evidence 1 cung cấp thông tin trực tiếp và khớp hoàn toàn với tuyên bố. Cụ thể, Evidence 1 trích dẫn thống kê của Phòng Cảnh sát môi trường, Công an TP Đà Nẵng cho biết: từ năm 2019 đến nay (tính đến thời điểm báo cáo năm 2023), đơn vị đã xử lý các vi phạm về tiếng ồn với tổng số tiền xử phạt là hơn 232 triệu đồng. Điều này xác nhận cả con số cụ thể và mốc thời gian bắt đầu trong claim."
+        },
+        {
+          "claim": "Quán Food&Drink đã bị buộc thôi kinh doanh.",
+          "evidence_count": 3,
+          "verdict": "uncertain",
+          "confidence": 1.0,
+          "reasoning": "Các bằng chứng được cung cấp chỉ thảo luận về tình hình chung của ngành F&B tại Việt Nam trong năm 2025 và liệt kê một số thương hiệu cụ thể đã đóng cửa hoặc rời thị trường (như Café Amazon, Bready, Hot&Cold, Bobapop, Dodo Pizza...). Không có bất kỳ thông tin nào trong các bằng chứng đề cập đến thực thể có tên là 'Quán Food&Drink'. Do đó, không đủ thông tin để kết luận tuyên bố này là đúng hay sai."
+        }
+      ],
+      "mode": "multi"
+    },
+    {
+      "status": "success",
+      "elapsed_time": 403.513142824173,
+      "claims_extracted": 4,
+      "claims": [
+        "Giám đốc Đài Khí tượng thủy văn khu vực Nam Bộ là ông Lê Ngọc Quyền",
+        "Ông Lê Ngọc Quyền năm nay 60 tuổi",
+        "Đài Khí tượng thủy văn khu vực Nam Bộ được thành lập theo Quyết định số 133/TTg ngày 30-3-1993 của Thủ tướng Chính phủ",
+        "Đài Khí tượng thủy văn khu vực Nam Bộ được thành lập trên cơ sở sáp nhập 13 đài Khí tượng thủy văn các tỉnh tại Nam Bộ"
+      ],
+      "evidence_count": 4,
+      "verdict": "false",
+      "confidence": 1.0,
+      "expected_label": "UNCERTAIN",
+      "verdict_label": "FAKE",
+      "correct": false,
+      "full_report": {
+        "verdict": "false",
+        "confidence": 1.0,
+        "summary": "Khẳng định ông Lê Ngọc Quyền là Giám đốc Đài Khí tượng thủy văn khu vực Nam Bộ là không chính xác.",
+        "detailed_explanation": "Dựa trên kết quả kiểm chứng từ các nguồn tài liệu liên quan đến Đài Khí tượng thủy văn khu vực Nam Bộ, thông tin về việc ông Lê Ngọc Quyền giữ chức vụ Giám đốc đơn vị này là sai sự thật. Các nguồn tin chính thống cung cấp thông tin về lịch sử thành lập (kỷ niệm 30 năm), các hoạt động hợp tác với các tổ chức giáo dục (như Đại học Văn Lang) và các chuyến thăm làm việc của lãnh đạo cấp cao, nhưng không có bất kỳ dữ liệu nào xác nhận ông Lê Ngọc Quyền đang đảm nhiệm vị trí Giám đốc tại Đài. Do đó, tuyên bố trên không có cơ sở thực tế.",
+        "citations": [
+          {
+            "source_idx": 1,
+            "text": "Kỷ niệm 30 năm thành lập Đài Khí tượng Thủy văn khu vực Nam Bộ"
+          },
+          {
+            "source_idx": 2,
+            "text": "Tham gia Đoàn công tác cùng Bộ trưởng Đặng Quốc Khánh có Chánh Văn phòng Ban Cán sự Đảng, Chánh Văn..."
+          },
+          {
+            "source_idx": 3,
+            "text": "ĐÀI KHÍ TƯỢNG THỦY VĂN KHU VỰC NAM BỘ (SOUTHERN REGIONAL HYDROMETEOROLOGICAL CENTER)"
+          },
+          {
+            "source_idx": 4,
+            "text": "Ngày 28/03/2025, Trường Đại học Văn Lang đã ký kết thỏa thuận hợp tác với Đài Khí tượng Thủy văn K..."
+          }
+        ],
+        "label": "false"
+      },
+      "all_claims_results": [
+        {
+          "claim": "Giám đốc Đài Khí tượng thủy văn khu vực Nam Bộ là ông Lê Ngọc Quyền",
+          "evidence_count": 4,
+          "verdict": "true",
+          "confidence": 1.0,
+          "reasoning": "Tất cả các bằng chứng được cung cấp (Evidence 1, 2, 3 và 4) đều trực tiếp và nhất quán xác nhận ông Lê Ngọc Quyền là Giám đốc Đài Khí tượng thủy văn khu vực Nam Bộ."
+        },
+        {
+          "claim": "Ông Lê Ngọc Quyền năm nay 60 tuổi",
+          "evidence_count": 2,
+          "verdict": "false",
+          "confidence": 1.0,
+          "reasoning": "Tuyên bố đưa ra một con số cụ thể về tuổi tác (60 tuổi). Tuy nhiên, trong cả hai bằng chứng được cung cấp, không có thông tin nào nhắc đến ông 'Lê Ngọc Quyền' hay xác nhận con số 60 tuổi. Theo quy tắc đánh giá bắt buộc: 'Nếu claim đưa ra CON SỐ CỤ THỂ mà evidence KHÔNG XÁC NHẬN con số đó → FALSE'."
+        },
+        {
+          "claim": "Đài Khí tượng thủy văn khu vực Nam Bộ được thành lập theo Quyết định số 133/TTg ngày 30-3-1993 của Thủ tướng Chính phủ",
+          "evidence_count": 4,
+          "verdict": "true",
+          "confidence": 1.0,
+          "reasoning": "Evidence 1 và Evidence 3 đều xác nhận trực tiếp và đầy đủ các chi tiết trong tuyên bố: tên đơn vị (Đài Khí tượng thủy văn khu vực Nam Bộ), số quyết định (133/TTg), ngày ban hành (30-3-1993) và cơ quan ban hành (Thủ tướng Chính phủ)."
+        },
+        {
+          "claim": "Đài Khí tượng thủy văn khu vực Nam Bộ được thành lập trên cơ sở sáp nhập 13 đài Khí tượng thủy văn các tỉnh tại Nam Bộ",
+          "evidence_count": 4,
+          "verdict": "true",
+          "confidence": 1.0,
+          "reasoning": "Evidence 2 xác nhận trực tiếp và đầy đủ nội dung của tuyên bố, bao gồm cả con số cụ thể '13 đài Khí tượng thủy văn các tỉnh tại Nam Bộ' thông qua phát biểu của Giám đốc Đài Lê Ngọc Quyền về quá trình hình thành của đơn vị."
+        }
+      ],
+      "mode": "multi"
+    },
+    {
+      "status": "success",
+      "elapsed_time": 140.8839671611786,
+      "claims_extracted": 2,
+      "claims": [
+        "Sản phẩm nhẫn kim cương của DOJI được ra mắt vào năm 2022.",
+        "Khách hàng có thể sử dụng dịch vụ ứng dụng công nghệ khắc chữ lên trên mặt kim cương."
+      ],
+      "evidence_count": 4,
+      "verdict": "true",
+      "confidence": 1.0,
+      "expected_label": "UNCERTAIN",
+      "verdict_label": "REAL",
+      "correct": false,
+      "full_report": {
+        "verdict": "true",
+        "confidence": 1.0,
+        "summary": "Thông tin về việc DOJI ra mắt các sản phẩm mới (bao gồm các dòng trang sức kim cương) vào năm 2022 là chính xác.",
+        "detailed_explanation": "Dựa trên các bằng chứng được cung cấp, đặc biệt là từ báo Dân trí (Nguồn 3), DOJI và Thế Giới Kim Cương đã tham gia Hội chợ Trang sức Quốc tế Việt Nam (VIJF) năm 2022. Tại sự kiện này, thương hiệu đã chính thức mang đến các công nghệ và 'sản phẩm mới' cho người tiêu dùng. Kết hợp với thông tin từ website chính thức của DOJI (Nguồn 2) cho thấy danh mục sản phẩm chủ đạo của họ là trang sức kim cương, có thể khẳng định việc ra mắt các sản phẩm mới trong năm 2022 bao gồm các dòng sản phẩm kim cương (như nhẫn kim cương) là hoàn toàn phù hợp với thực tế hoạt động của thương hiệu tại thời điểm đó.",
+        "citations": [
+          {
+            "source_idx": 3,
+            "text": "DOJI và Thế Giới Kim Cương mang công nghệ, sản phẩm mới đến VIJF 2022"
+          }
+        ],
+        "label": "true"
+      },
+      "all_claims_results": [
+        {
+          "claim": "Sản phẩm nhẫn kim cương của DOJI được ra mắt vào năm 2022.",
+          "evidence_count": 4,
+          "verdict": "true",
+          "confidence": 1.0,
+          "reasoning": "Evidence 1 xác nhận trực tiếp rằng vào năm 2022, DOJI và Thế giới Kim cương đã ra mắt hàng nghìn mẫu nhẫn cưới và nhẫn đính hôn xu hướng. Evidence 3 cũng bổ trợ thông tin về việc DOJI mang các sản phẩm mới đến hội chợ VIJF 2022. Do đó, thông tin về việc ra mắt các sản phẩm nhẫn kim cương vào năm 2022 là chính xác và được các bằng chứng xác nhận."
+        },
+        {
+          "claim": "Khách hàng có thể sử dụng dịch vụ ứng dụng công nghệ khắc chữ lên trên mặt kim cương.",
+          "evidence_count": 5,
+          "verdict": "uncertain",
+          "confidence": 1.0,
+          "reasoning": "Tất cả các bằng chứng được cung cấp (Evidence 1, 2, 3, 4, 5) đều tập trung vào việc khắc laser trên các chất liệu như kim loại (inox, sắt, thép, vàng, bạc...), gỗ, mica, da và vải. Không có bất kỳ thông tin nào trong các bằng chứng đề cập đến việc khắc chữ trên kim cương. Vì bằng chứng không liên quan đến đối tượng 'kim cương' trong tuyên bố, nên không đủ cơ sở để xác nhận là đúng hay sai."
+        }
+      ],
+      "mode": "multi"
+    },
+    {
+      "status": "success",
+      "elapsed_time": 328.9040162563324,
+      "claims_extracted": 5,
+      "claims": [
+        "Báo Tuổi trẻ Online đưa tin về sự việc.",
+        "Sự kiện diễn ra vào ngày 26.3.",
+        "Đồn biên phòng Hướng Lập phối hợp với các nhà tài trợ tổ chức khánh thành, bàn giao tổng cộng 4 căn nhà mái ấm biên cương.",
+        "Các căn nhà được bàn giao cho các hộ gia đình tại xã Hướng Lập và Hướng Việt trên địa bàn biên giới Bảo Khánh.",
+        "Tổng kinh phí là 210 triệu đồng."
+      ],
+      "evidence_count": 1,
+      "verdict": "false",
+      "confidence": 1.0,
+      "expected_label": "UNCERTAIN",
+      "verdict_label": "FAKE",
+      "correct": false,
+      "full_report": {
+        "verdict": "false",
+        "confidence": 1.0,
+        "summary": "Khẳng định báo Tuổi trẻ Online đưa tin về sự việc là không chính xác.",
+        "detailed_explanation": "Dựa trên kết quả kiểm chứng, mặc dù các thông tin về sự kiện khánh thành và bàn giao 4 căn nhà mái ấm biên cương tại Bảo Khánh (do Đồn biên phòng Hướng Lập phối hợp với các nhà tài trợ thực hiện vào ngày 26.3) là có thật, nhưng khẳng định báo Tuổi trẻ Online là đơn vị đưa tin về sự việc này là sai. Quá trình kiểm chứng chi tiết 5 luận điểm liên quan cho thấy có những thông tin không khớp với thực tế (cụ thể là luận điểm 3 và luận điểm 5 bị xác định là sai), dẫn đến kết luận chung về tính xác thực của thông tin này là không chính xác.",
+        "citations": [
+          {
+            "source_idx": 1,
+            "text": "Khánh thành, bàn giao 4 căn nhà mái ấm biên cương cho các hộ gia đình khó khăn trên địa bàn biên giới BẢO KHÁNH Cũng trong ngày 26.3, Đồn biên phòng Hướng Lập đã phối hợp với các nhà tài trợ tổ chức khánh thành, bàn giao 4 căn nhà..."
+          }
+        ],
+        "label": "false"
+      },
+      "all_claims_results": [
+        {
+          "claim": "Báo Tuổi trẻ Online đưa tin về sự việc.",
+          "evidence_count": 4,
+          "verdict": "true",
+          "confidence": 1.0,
+          "reasoning": "Dựa trên Evidence 3, 'Tuổi Trẻ Online' là một phần trong hệ sinh thái báo điện tử của báo Tuổi Trẻ. Evidence 4 cung cấp một danh sách các tiêu đề tin tức và tất cả đều được ghi nguồn là 'Báo Tuổi Trẻ'. Đặc biệt, có sự trùng khớp về nội dung giữa Evidence 1 và Evidence 4 liên quan đến sự việc 'TP.HCM công bố chỉ tiêu lớp 10 công lập năm học 2026-2027', trong đó Evidence 4 xác nhận đây là tin do Báo Tuổi Trẻ đưa tin. Do đó, tuyên bố Báo Tuổi trẻ Online đưa tin về sự việc là đúng với các bằng chứng được cung cấp."
+        },
+        {
+          "claim": "Sự kiện diễn ra vào ngày 26.3.",
+          "evidence_count": 4,
+          "verdict": "true",
+          "confidence": 1.0,
+          "reasoning": "Tuyên bố cho biết sự kiện diễn ra vào ngày 26.3. Mặc dù tuyên bố không chỉ rõ là sự kiện cụ thể nào, nhưng tất cả các bằng chứng được cung cấp (Evidence 1, 2, 3, và 4) đều tập trung vào các sự kiện lịch sử diễn ra vào ngày 26 tháng 3 (ví dụ: ngày thành lập Đoàn TNCS Hồ Chí Minh, ngày giải phóng Thừa Thiên - Huế, ngày mất của Beethoven, v.v.). Vì các bằng chứng đều chủ động xác nhận các sự kiện diễn ra vào đúng ngày 26/3, nên thông tin về ngày tháng trong tuyên bố là chính xác."
+        },
+        {
+          "claim": "Đồn biên phòng Hướng Lập phối hợp với các nhà tài trợ tổ chức khánh thành, bàn giao tổng cộng 4 căn nhà mái ấm biên cương.",
+          "evidence_count": 4,
+          "verdict": "false",
+          "confidence": 1.0,
+          "reasoning": "Tuyên bố đưa ra một con số cụ thể là 'tổng cộng 4 căn nhà mái ấm biên cương'. Tuy nhiên, qua rà soát tất cả các bằng chứng được cung cấp (Evidence 1, 2, 3, 4), không có bất kỳ thông tin nào đề cập đến việc khánh thành, bàn giao nhà hay con số '4' này. Theo quy tắc đánh giá bắt buộc: 'Nếu claim đưa ra CON SỐ CỤ THỂ mà evidence KHÔNG XÁC NHẬN con số đó → FALSE', do đó tuyên bố này bị đánh giá là SAI."
+        },
+        {
+          "claim": "Các căn nhà được bàn giao cho các hộ gia đình tại xã Hướng Lập và Hướng Việt trên địa bàn biên giới Bảo Khánh.",
+          "evidence_count": 1,
+          "verdict": "true",
+          "confidence": 1.0,
+          "reasoning": "Evidence 1 xác nhận trực tiếp việc khánh thành và bàn giao các căn nhà mái ấm biên cương cho các hộ gia đình tại xã Hướng Lập và Hướng Việt thuộc địa bàn biên giới Bảo Khánh."
+        },
+        {
+          "claim": "Tổng kinh phí là 210 triệu đồng.",
+          "evidence_count": 5,
+          "verdict": "false",
+          "confidence": 1.0,
+          "reasoning": "Tuyên bố đưa ra một con số cụ thể là '210 triệu đồng'. Tuy nhiên, qua rà soát toàn bộ các bằng chứng được cung cấp (từ Evidence 1 đến Evidence 5), không có bất kỳ thông tin nào đề cập đến con số 210 triệu đồng, cũng như không có dữ liệu nào cho phép tính toán ra tổng kinh phí bằng con số này. Theo quy tắc đánh giá bắt buộc: 'Nếu claim đưa ra CON SỐ CỤ THỂ mà evidence KHÔNG XÁC NHẬN con số đó → FALSE'."
+        }
+      ],
+      "mode": "multi"
+    }
+  ],
+  "samples": [
+    {
+      "sample_id": 21,
+      "expected_label": "FAKE",
+      "statement": "Tại họp báo thường kỳ Bộ Ngoại giao chiều 23/3, Phó Phát ngôn Bộ Ngoại giao Phạm Thu Hằng trả lời câu hỏi của phóng viên về việc Việt Nam có sẵn lòng nâng cấp quan hệ với Hoa Kỳ từ quan hệ hiện tại là đối tác toàn diện, lên quan hệ chiến lược hay không.",
+      "statement_length": 253,
+      "hardness_score": 5,
+      "hardness_reasons": [
+        "Long"
+      ],
+      "evidence": "Phó Phát ngôn Bộ Ngoại giao Phạm Thu Hằng Chiều 23/3, tại họp báo thường kỳ Bộ Ngoại giao, trả lời câu hỏi của phóng viên về việc Việt Nam có sẵn lòng nâng cấp quan hệ với Hoa Kỳ từ quan hệ hiện tại là đối tác toàn diện, lên quan hệ chiến lược hay không",
+      "claim": "Tại họp báo thường kỳ Bộ Ngoại giao chiều 23/3, Phó Phát ngôn Bộ Ngoại giao Phạm Thu Hằng trả lời câu hỏi của phóng viên về việc Việt Nam có sẵn lòng nâng cấp quan hệ với Hoa Kỳ từ quan hệ hiện tại là đối tác toàn diện, lên quan hệ chiến lược hay không."
+    },
+    {
+      "sample_id": 44,
+      "expected_label": "FAKE",
+      "statement": "Kỷ niệm 1980 năm Ngày mất Hai Bà Trưng (6-2-43 – 6-2-2023 âm lịch) do Hội Liên hiệp Phụ nữ (LHPN) TP.HCM phối hợp Sở Văn hóa - Thể thao và Công viên Lịch sử Văn hóa Dân tộc TP tổ chức vào ngày 25-2.",
+      "statement_length": 198,
+      "hardness_score": 5,
+      "hardness_reasons": [
+        "Medium"
+      ],
+      "evidence": "Ngày 25-2, Hội Liên hiệp Phụ nữ (LHPN) TP.HCM phối hợp Sở Văn hóa - Thể thao và Công viên Lịch sử Văn hóa Dân tộc TP tổ chức kỷ niệm 1980 năm Ngày mất Hai Bà Trưng (6-2-43 – 6-2-2023 âm lịch).",
+      "claim": "Kỷ niệm 1980 năm Ngày mất Hai Bà Trưng (6-2-43 – 6-2-2023 âm lịch) do Hội Liên hiệp Phụ nữ (LHPN) TP.HCM phối hợp Sở Văn hóa - Thể thao và Công viên Lịch sử Văn hóa Dân tộc TP tổ chức vào ngày 25-2."
+    },
+    {
+      "sample_id": 57,
+      "expected_label": "FAKE",
+      "statement": "Chiều 23/3, Chánh văn Phòng Sở Giáo dục và Đào tạo TP Hồ Chí Minh ông Hồ Tấn Minh khẳng định nếu trong trường hợp bất khả kháng, học sinh không có mã định danh cá nhân thì ngành giáo dục sẽ cấp một mã tạm cho các em để tham gia công tác tuyển sinh.",
+      "statement_length": 248,
+      "hardness_score": 5,
+      "hardness_reasons": [
+        "Long"
+      ],
+      "evidence": "Chiều 23/3, ông Hồ Tấn Minh, Chánh văn Phòng Sở Giáo dục và Đào tạo TP Hồ Chí Minh khẳng định: Nếu trường hợp bất khả kháng, học sinh không có mã định danh cá nhân, ngành giáo dục sẽ cấp một mã tạm cho các em để tham gia công tác tuyển sinh.",
+      "claim": "Chiều 23/3, Chánh văn Phòng Sở Giáo dục và Đào tạo TP Hồ Chí Minh ông Hồ Tấn Minh khẳng định nếu trong trường hợp bất khả kháng, học sinh không có mã định danh cá nhân thì ngành giáo dục sẽ cấp một mã tạm cho các em để tham gia công tác tuyển sinh."
+    },
+    {
+      "sample_id": 142,
+      "expected_label": "FAKE",
+      "statement": "Ngân sách của TP Cần Thơ năm 2023 là 1.000 cho dự án tuyến cao tốc Châu Đốc - Cần Thơ - Sóc Trăng đi qua địa bàn 3 huyện là Vĩnh Thạnh, Cờ Đỏ và Thới Lai với trường hợp bị ảnh hưởng là 952, dự kiến nền TĐC là khoảng 260.",
+      "statement_length": 220,
+      "hardness_score": 5,
+      "hardness_reasons": [
+        "Long"
+      ],
+      "evidence": "Cần Thơ đã bố trí vốn ngân sách địa phương năm 2023 là 1.000 tỉ đồng cho dự án này. Công trình đi qua địa bàn 3 huyện: Vĩnh Thạnh, Cờ Đỏ và Thới Lai với khoảng 952 trường hợp bị ảnh hưởng, dự kiến có khoảng 260 nền TĐC. tuyến cao tốc Châu Đốc - Cần Thơ - Sóc Trăng",
+      "claim": "Ngân sách của TP Cần Thơ năm 2023 là 1.000 cho dự án tuyến cao tốc Châu Đốc - Cần Thơ - Sóc Trăng đi qua địa bàn 3 huyện là Vĩnh Thạnh, Cờ Đỏ và Thới Lai với trường hợp bị ảnh hưởng là 952, dự kiến nền TĐC là khoảng 260."
+    },
+    {
+      "sample_id": 190,
+      "expected_label": "FAKE",
+      "statement": "Ngày 26/3, các đối tượng liên quan đến vụ việc đã được công an xác định là bé Th. (SN 2020), mẹ ruột của bé và một người đàn ông chung sống như vợ chồng với mẹ bé; cả 3 được cho là ở tại Hóc Môn khi sự việc xảy ra.",
+      "statement_length": 214,
+      "hardness_score": 5,
+      "hardness_reasons": [
+        "Long"
+      ],
+      "evidence": "Ngày 26/3, Công an huyện Hóc Môn (TPHCM) đã phối hợp với Phòng Cảnh sát Hình sự (Công an TPHCM) xác định được hai người liên quan trong vụ việc được cho là xảy ra tại huyện Hóc Môn Hai người này là L.V.B (SN 1979) và N.T.N (SN 2000, trú tại quận Tân Bình). Trong đó, N. được xác định là mẹ ruột của bé Th. (SN 2020), B. là người sống như vợ chồng với N",
+      "claim": "Ngày 26/3, các đối tượng liên quan đến vụ việc đã được công an xác định là bé Th. (SN 2020), mẹ ruột của bé và một người đàn ông chung sống như vợ chồng với mẹ bé; cả 3 được cho là ở tại Hóc Môn khi sự việc xảy ra."
+    },
+    {
+      "sample_id": 526,
+      "expected_label": "REAL",
+      "statement": "Ban Cán sự đảng UBND TP được giao chỉ đạo hoàn thiện báo cáo, đề xuất chính thức thành lập Đội Quản lý trật tự xây dựng đô thị thuộc UBND quận, huyện, thị xã sau khi kết thúc thí điểm vào ngày 10/8/2024. ",
+      "statement_length": 204,
+      "hardness_score": 5,
+      "hardness_reasons": [
+        "Long"
+      ],
+      "evidence": "Ban Chỉ đạo giao Ban Cán sự đảng UBND TP chỉ đạo hoàn thiện báo cáo, đề xuất chính thức thành lập Đội Quản lý trật tự xây dựng đô thị thuộc UBND quận, huyện, thị xã sau khi kết thúc thí điểm vào ngày 10/8/2023",
+      "claim": "Ban Cán sự đảng UBND TP được giao chỉ đạo hoàn thiện báo cáo, đề xuất chính thức thành lập Đội Quản lý trật tự xây dựng đô thị thuộc UBND quận, huyện, thị xã sau khi kết thúc thí điểm vào ngày 10/8/2024. "
+    },
+    {
+      "sample_id": 79,
+      "expected_label": "REAL",
+      "statement": "NASA đã công bố bức hình tuyệt đẹp của WR 124 vào ngày 15/3, với hình ảnh ngôi sao này được bao quanh bởi mây khí bụi, là vật chất thoát ra từ ngôi sao già cỗi trong các vụ phóng hỗn loạn và ngẫu nhiên.",
+      "statement_length": 202,
+      "hardness_score": 4,
+      "hardness_reasons": [
+        "Long"
+      ],
+      "evidence": "Trong bức ảnh tuyệt đẹp được NASA công bố hôm 14/3 Những đám mây khổng lồ này là vật chất thoát ra từ ngôi sao già cỗi trong các vụ phóng hỗn loạn và ngẫu nhiên. WR 124 được bao quanh bởi mây khí bụi",
+      "claim": "NASA đã công bố bức hình tuyệt đẹp của WR 124 vào ngày 15/3, với hình ảnh ngôi sao này được bao quanh bởi mây khí bụi, là vật chất thoát ra từ ngôi sao già cỗi trong các vụ phóng hỗn loạn và ngẫu nhiên."
+    },
+    {
+      "sample_id": 101,
+      "expected_label": "REAL",
+      "statement": "Hai trận đấu họ thua kém hoàn toàn đối thủ về lối chơi và những thống kê quan trọng như cầm bóng, dứt điểm cầu môn và dĩ nhiên là bàn thắng khiến họ có 1 trận thắng và 1 trận thất bại 1-2 trước New Zealand.",
+      "statement_length": 206,
+      "hardness_score": 4,
+      "hardness_reasons": [
+        "Long"
+      ],
+      "evidence": "một trận hòa không bàn thắng thất bại 1-2 trước New Zealand hai trận đấu họ thua kém hoàn toàn đối thủ về lối chơi và những thống kê quan trọng như cầm bóng, dứt điểm cầu môn và dĩ nhiên là bàn thắng.",
+      "claim": "Hai trận đấu họ thua kém hoàn toàn đối thủ về lối chơi và những thống kê quan trọng như cầm bóng, dứt điểm cầu môn và dĩ nhiên là bàn thắng khiến họ có 1 trận thắng và 1 trận thất bại 1-2 trước New Zealand."
+    },
+    {
+      "sample_id": 166,
+      "expected_label": "REAL",
+      "statement": "Nặng 700 kg, cao 1,7 m, rộng 1,6 m, dài 2,3 m, tượng cố nhạc sĩ Trịnh Công Sơn mang dáng vẻ đang ngồi, cầm đàn guitar, được làm bằng đồng. Chủ tịch TP Huế, đã yêu cầu sớm chỉnh trang để chuẩn bị đặt tượng cố nhạc sĩ.",
+      "statement_length": 216,
+      "hardness_score": 4,
+      "hardness_reasons": [
+        "Long"
+      ],
+      "evidence": "Chủ tịch TP Huế, đã yêu cầu sớm chỉnh trang để chuẩn bị đặt tượng cố nhạc sĩ. Tượng cố nhạc sĩ Trịnh Công Sơn đang ngồi, cầm đàn guitar, được làm bằng đồng, nặng 500 kg, cao 1,7 m, rộng 1,6 m, dài 2,3 m.",
+      "claim": "Nặng 700 kg, cao 1,7 m, rộng 1,6 m, dài 2,3 m, tượng cố nhạc sĩ Trịnh Công Sơn mang dáng vẻ đang ngồi, cầm đàn guitar, được làm bằng đồng. Chủ tịch TP Huế, đã yêu cầu sớm chỉnh trang để chuẩn bị đặt tượng cố nhạc sĩ."
+    },
+    {
+      "sample_id": 187,
+      "expected_label": "REAL",
+      "statement": "Tính đến ngày 1-3-2023, chỉ mới có 304.170 tài khoản được kích hoạt thành công, đạt tỉ lệ 20,3% trong tổng số 1.497.360 tài khoản định danh điện tử do TP tổ chức cấp.",
+      "statement_length": 166,
+      "hardness_score": 4,
+      "hardness_reasons": [
+        "Medium"
+      ],
+      "evidence": "Tính đến ngày 1-3-2023, TP tổ chức cấp 1.497.360 tài khoản định danh điện tử. Tuy nhiên chỉ mới có 304.191 tài khoản được kích hoạt thành công, đạt tỉ lệ 20,3%.",
+      "claim": "Tính đến ngày 1-3-2023, chỉ mới có 304.170 tài khoản được kích hoạt thành công, đạt tỉ lệ 20,3% trong tổng số 1.497.360 tài khoản định danh điện tử do TP tổ chức cấp."
+    },
+    {
+      "sample_id": 36,
+      "expected_label": "UNCERTAIN",
+      "statement": "Kết luận của UBKT Trung ương tại Kỳ họp thứ 23 đối với Ban cán sự đảng UBND tỉnh Đồng Nai và một số tổ chức đảng, đảng viên có liên quan là thi hành kỷ luật Ban Thường vụ Tỉnh ủy Đồng Nai, trong đó có 2 cá nhân trong tổ chức bị phạt nặng nhất.",
+      "statement_length": 243,
+      "hardness_score": 4,
+      "hardness_reasons": [
+        "Long"
+      ],
+      "evidence": "kết luận của UBKT Trung ương tại Kỳ họp thứ 23 đối với Ban cán sự đảng UBND tỉnh Đồng Nai và một số tổ chức đảng, đảng viên có liên quan thi hành kỷ luật Ban Thường vụ Tỉnh ủy Đồng Nai",
+      "claim": "Kết luận của UBKT Trung ương tại Kỳ họp thứ 23 đối với Ban cán sự đảng UBND tỉnh Đồng Nai và một số tổ chức đảng, đảng viên có liên quan là thi hành kỷ luật Ban Thường vụ Tỉnh ủy Đồng Nai, trong đó có 2 cá nhân trong tổ chức bị phạt nặng nhất."
+    },
+    {
+      "sample_id": 47,
+      "expected_label": "UNCERTAIN",
+      "statement": "Theo thống kê của Phòng Cảnh sát môi trường, Công an TP Đà Nẵng, từ năm 2019 đến 2023, đơn vị đã xử lý 18 trường hợp vi phạm về tiếng ồn, xử phạt 9 cá nhân và 5 tổ chức  với tổng số tiền hơn 232 triệu đồng., có nhiều quán còn tái phạm nhiều lần, điển hình như quán Food&Drink đã bị buộc thôi kinh doanh.",
+      "statement_length": 303,
+      "hardness_score": 4,
+      "hardness_reasons": [
+        "Long"
+      ],
+      "evidence": "Theo thống kê của Phòng Cảnh sát môi trường, Công an TP Đà Nẵng, từ năm 2019 đến nay, đơn vị đã xử lý 18 trường hợp vi phạm về tiếng ồn, xử phạt 9 cá nhân và 5 tổ chức với tổng số tiền hơn 232 triệu đồng.",
+      "claim": "Theo thống kê của Phòng Cảnh sát môi trường, Công an TP Đà Nẵng, từ năm 2019 đến 2023, đơn vị đã xử lý 18 trường hợp vi phạm về tiếng ồn, xử phạt 9 cá nhân và 5 tổ chức  với tổng số tiền hơn 232 triệu đồng., có nhiều quán còn tái phạm nhiều lần, điển hình như quán Food&Drink đã bị buộc thôi kinh doanh."
+    },
+    {
+      "sample_id": 65,
+      "expected_label": "UNCERTAIN",
+      "statement": "Giám đốc Đài Khí tượng thủy văn khu vực Nam Bộ ông Lê Ngọc Quyền năm nay 60 tuổi cho biết đài được thành lập theo Quyết định số 133/TTg ngày 30-3-1993 của Thủ tướng Chính phủ, trên cơ sở sáp nhập 13 đài Khí tượng thủy văn các tỉnh tại Nam Bộ.",
+      "statement_length": 242,
+      "hardness_score": 4,
+      "hardness_reasons": [
+        "Long"
+      ],
+      "evidence": "ông Lê Ngọc Quyền - Giám đốc Đài Khí tượng thủy văn khu vực Nam Bộ cho biết đài được thành lập theo Quyết định số 133/TTg ngày 30-3-1993 của Thủ tướng Chính phủ, trên cơ sở sáp nhập 13 đài Khí tượng thủy văn các tỉnh tại Nam Bộ.",
+      "claim": "Giám đốc Đài Khí tượng thủy văn khu vực Nam Bộ ông Lê Ngọc Quyền năm nay 60 tuổi cho biết đài được thành lập theo Quyết định số 133/TTg ngày 30-3-1993 của Thủ tướng Chính phủ, trên cơ sở sáp nhập 13 đài Khí tượng thủy văn các tỉnh tại Nam Bộ."
+    },
+    {
+      "sample_id": 177,
+      "expected_label": "UNCERTAIN",
+      "statement": "Theo các chuyên gia của IIDGR, sản phẩm nhẫn kim cương của DOJI được ra mắt vào năm 2022 không chỉ đa dạng về kiểu dáng và chất lượng cao, mà còn được áp dụng công nghệ kiểm định hoàn toàn khác biệt và vượt trội so với IGI, GIA. Điều này cho phép khách hàng có thể sử dụng dịch vụ ứng dụng công nghệ khắc chữ lên trên mặt kim cương, tạo thêm sự cá nhân hóa và độc đáo cho chiếc nhẫn. Mỗi chiếc nhẫn của DOJI không chỉ là một sản phẩm mỹ thuật, mà còn là một tuyệt phẩm hội tụ những kỹ thuật đính đá và gia công tinh xảo bậc nhất, tạo nên sự hoàn hảo và sang trọng.",
+      "statement_length": 564,
+      "hardness_score": 4,
+      "hardness_reasons": [
+        "Long"
+      ],
+      "evidence": "Theo các chuyên gia của IIDGR, sản phẩm được áp dụng công nghệ kiểm định hoàn toàn khác biệt và vượt trội so với IGI, GIA. cho phép khách hàng có thể sử dụng dịch vụ ứng dụng công nghệ khắc chữ lên trên mặt kim cương. Mỗi chiếc nhẫn của DOJI như một tuyệt phẩm hội tụ những kỹ thuật đính đá và gia công tinh xảo bậc nhất.",
+      "claim": "Theo các chuyên gia của IIDGR, sản phẩm nhẫn kim cương của DOJI được ra mắt vào năm 2022 không chỉ đa dạng về kiểu dáng và chất lượng cao, mà còn được áp dụng công nghệ kiểm định hoàn toàn khác biệt và vượt trội so với IGI, GIA. Điều này cho phép khách hàng có thể sử dụng dịch vụ ứng dụng công nghệ khắc chữ lên trên mặt kim cương, tạo thêm sự cá nhân hóa và độc đáo cho chiếc nhẫn. Mỗi chiếc nhẫn của DOJI không chỉ là một sản phẩm mỹ thuật, mà còn là một tuyệt phẩm hội tụ những kỹ thuật đính đá và gia công tinh xảo bậc nhất, tạo nên sự hoàn hảo và sang trọng."
+    },
+    {
+      "sample_id": 339,
+      "expected_label": "UNCERTAIN",
+      "statement": "Theo thông tin từ Báo Tuổi trẻ Online đưa tin, trong ngày 26.3, Đồn biên phòng Hướng Lập phối hợp với các nhà tài trợ tổ chức khánh thành, bàn giao tổng cộng 4 căn nhà mái ấm biên cương cho các hộ gia đình nằm tại xã Hướng Lập và Hướng Việt có hoàn cảnh đặc biệt khó khăn trên địa bàn biên giới Bảo Khánh, với tổng kinh phí 210 triệu đồng. Thông tin này được đăng trên trang web của Báo Tuổi trẻ Online và thu hút sự quan tâm của nhiều người dân trong và ngoài khu vực.",
+      "statement_length": 469,
+      "hardness_score": 4,
+      "hardness_reasons": [
+        "Long"
+      ],
+      "evidence": "Khánh thành, bàn giao 4 căn nhà mái ấm biên cương cho các hộ gia đình khó khăn trên địa bàn biên giới BẢO KHÁNH Cũng trong ngày 26.3, Đồn biên phòng Hướng Lập đã phối hợp với các nhà tài trợ tổ chức khánh thành, bàn giao 4 căn nhà mái ấm biên cương cho hộ gia đình đặc biệt khó khăn với tổng số tiền 210 triệu đồng ở xã Hướng Lập và Hướng Việt.",
+      "claim": "Theo thông tin từ Báo Tuổi trẻ Online đưa tin, trong ngày 26.3, Đồn biên phòng Hướng Lập phối hợp với các nhà tài trợ tổ chức khánh thành, bàn giao tổng cộng 4 căn nhà mái ấm biên cương cho các hộ gia đình nằm tại xã Hướng Lập và Hướng Việt có hoàn cảnh đặc biệt khó khăn trên địa bàn biên giới Bảo Khánh, với tổng kinh phí 210 triệu đồng. Thông tin này được đăng trên trang web của Báo Tuổi trẻ Online và thu hút sự quan tâm của nhiều người dân trong và ngoài khu vực."
+    }
+  ],
+  "summary": {
+    "total": 15,
+    "correct": 5,
+    "accuracy": 33.33333333333333,
+    "avg_time": 213.47492187817892
+  }
+}

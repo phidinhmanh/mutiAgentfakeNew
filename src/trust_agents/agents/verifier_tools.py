@@ -246,7 +246,7 @@ async def aggregate_evidence_tool(claim: str, evidence_list: str) -> str:
             ]
         )
 
-        prompt = f"""You are a fact-checker. Aggregate the following evidence to verify the claim.
+        prompt = f"""You are a professional fact-checker. Aggregate the following evidence to verify the claim.
 
 Claim: {claim}
 
@@ -254,29 +254,41 @@ Evidence Passages:
 {evidence_summary}
 
 INSTRUCTIONS:
-- If the MAJORITY of evidence supports the claim → verdict: "supported"
-- If the MAJORITY of evidence contradicts the claim → verdict: "contradicted"
-- ONLY use "insufficient" if evidence is truly ambiguous or off-topic
-- Be decisive - favor "supported" or "contradicted" when you have ANY relevant evidence
-- Confidence should reflect strength of evidence (0.3-0.5 = weak, 0.5-0.7 = moderate, 0.7-1.0 = strong)
+1. Pay close attention to SPECIFIC DETAILS: names, dates, numbers, and especially the PROCESS/METHOD (the "how").
+2. A claim is "supported" if the evidence confirms the core assertion and the specific details are plausible within the confirmed context.
+   - For timeframes (e.g., "within 6 hours"), if the evidence shows a process taking a similar or shorter time (e.g., "3 hours"), it is SUPPORTED. Different people may take different amounts of time for the same process.
+   - If the claim describes a process as "labor-intensive" or "elaborate" and gives a duration (e.g., "6 hours"), and evidence confirms the process is indeed elaborate, accept the duration as plausible even if other sources show "quick" versions exist.
+3. A claim is "contradicted" only if:
+   - The evidence directly says the opposite (e.g., "X is NOT Y").
+   - The evidence describes a DIFFERENT, INCOMPATIBLE process/method than the one in the claim. 
+     * Example: Claim says "transported fully assembled", evidence says "shipped in 32 crates". These are mutually exclusive. Mark as CONTRADICTED.
+   - The numbers in the claim are LOGICALLY IMPOSSIBLE or PHYSICALLY INCOMPATIBLE given the evidence.
+   - IMPORTANT: Individual variations in speed (3h vs 6h) are NOT contradictions.
+4. If the evidence confirms the main topic exists but does NOT mention the specific detail, use your best judgment based on the plausibility of the detail within the confirmed context. UNUSUAL details (like "assembled dinosaur") should be treated with more skepticism than COMMON details.
+5. IMPORTANT: Distinguish between similar entities. "Bánh gạo" (rice crackers) is NOT "Bánh cuốn" (rice rolls).
+6. Be extremely decisive. Avoid "insufficient" if there is any relevant evidence about the event.
+7. Confidence should reflect the strength of alignment:
+   - 0.8-1.0: Direct, clear support/contradiction of the specific method.
+   - 0.5-0.8: Strong inference or plausible alignment/conflict.
+   - 0.1-0.5: Weak evidence or partial match.
 
 Return ONLY valid JSON:
 {{
 "overall_verdict": "supported|contradicted|insufficient",
-"confidence": 0.3-1.0,
+"confidence": 0.1-1.0,
 "supporting_count": 0,
 "contradicting_count": 0,
 "key_points": ["point1", "point2"],
 "conflicts": ["conflict1"],
-"reasoning": "explanation"
+"reasoning": "Explain your decision, focusing on why specific details match or conflict."
 }}
 
-IMPORTANT: Make a decision (supported/contradicted) unless evidence is truly ambiguous."""
+IMPORTANT: You MUST make a decision (supported/contradicted) if the evidence discusses the same entity or event as the claim."""
 
         result = call_llm_json(
             prompt,
-            system_prompt="You are a decisive fact verification expert. Make clear judgments based on available evidence.",  # noqa: E501
-            max_tokens=600,
+            system_prompt="You are a decisive, detail-oriented fact-checker. You spot subtle contradictions in claims and prioritize accuracy over broad topic matches.",  # noqa: E501
+            max_tokens=1000,
         )
 
         # Boost confidence slightly if we have multiple pieces of evidence
@@ -332,12 +344,18 @@ async def generate_verdict_tool(claim: str, aggregated_assessment: str) -> str:
         verdict = verdict_map.get(overall_verdict, "uncertain")
         confidence = assessment.get("confidence", 0.3)
 
-        # Lower threshold from 0.4 to 0.25
-        # Only force "uncertain" if confidence is VERY low
-        if confidence < 0.25:
-            logger.warning(f"Low confidence ({confidence:.3f}), forcing uncertain")
+        # For Vietnamese context, be more decisive
+        # Only force "uncertain" if confidence is VERY low (virtually no relevant evidence)
+        if confidence < 0.08:
+            logger.warning(f"Very low confidence ({confidence:.3f}), forcing uncertain")
             verdict = "uncertain"
-            confidence = 0.25
+            confidence = max(0.08, confidence)
+        # If evidence exists (supporting_count + contradicting_count > 0), increase confidence
+        # This prevents "uncertain" when there IS evidence available
+        elif assessment.get("supporting_count", 0) + assessment.get("contradicting_count", 0) > 0:
+            if confidence < 0.25:
+                confidence = min(0.25, 0.15 + confidence)
+                logger.info(f"Evidence exists but low confidence, boosting to {confidence:.3f}")
 
         result = {
             "claim": claim,
@@ -395,11 +413,28 @@ async def confidence_calibration_tool(verdict: str, evidence_quality: str) -> st
             quality = {"relevance": 0.5, "consistency": 0.5, "quantity": 1}
 
         # Calibration factors
-        relevance = quality.get("relevance", 0.5)
-        consistency = quality.get("consistency", 0.5)
-        quantity = min(quality.get("quantity", 1) / 5.0, 1.0)
+        try:
+            relevance = float(quality.get("relevance", 0.5))
+        except (ValueError, TypeError):
+            relevance = 0.5
 
-        base_confidence = quality.get("base_confidence", 0.5)
+        try:
+            consistency = float(quality.get("consistency", 0.5))
+        except (ValueError, TypeError):
+            consistency = 0.5
+
+        try:
+            raw_quantity = quality.get("quantity", 1)
+            if isinstance(raw_quantity, (list, dict)):
+                raw_quantity = len(raw_quantity)
+            quantity = min(float(raw_quantity) / 5.0, 1.0)
+        except (ValueError, TypeError):
+            quantity = 0.2
+
+        try:
+            base_confidence = float(quality.get("base_confidence", 0.5))
+        except (ValueError, TypeError):
+            base_confidence = 0.5
 
         # Apply calibration
         calibrated = base_confidence * (

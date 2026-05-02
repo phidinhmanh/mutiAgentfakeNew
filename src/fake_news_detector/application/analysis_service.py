@@ -63,43 +63,6 @@ def analyze_with_trust(
     return response
 
 
-def analyze_with_legacy(
-    article: str,
-    extract_claims_fn,
-    filter_verifiable_claims_fn,
-    retrieve_evidence_for_claims_fn,
-    enrich_evidence_with_context_fn,
-) -> dict[str, Any]:
-    """Run baseline, legacy pipeline, and stylistic analysis."""
-    processed_article, summarized = _prepare_article(article)
-    baseline_model = get_baseline_model()
-    baseline_result = baseline_model.predict_with_sliding_window(processed_article)
-
-    claims = extract_claims_fn(processed_article)
-    verifiable_claims = filter_verifiable_claims_fn(claims)
-
-    response: dict[str, Any] = {
-        "baseline": baseline_result,
-        "claims": claims,
-        "verifiable_claims": verifiable_claims,
-        "stylistic_features": extract_stylistic_features(processed_article),
-    }
-
-    if verifiable_claims:
-        claims_with_evidence = retrieve_evidence_for_claims_fn(verifiable_claims)
-        for claim_with_evidence in claims_with_evidence:
-            claim_with_evidence["evidence"] = enrich_evidence_with_context_fn(
-                claim_with_evidence.get("evidence", []),
-                claim_with_evidence.get("text", ""),
-            )
-
-        merged_evidence: list[dict[str, Any]] = []
-        for claim_with_evidence in claims_with_evidence:
-            merged_evidence.extend(claim_with_evidence.get("evidence", []))
-
-        response["claims_with_evidence"] = claims_with_evidence
-        response["evidence"] = merged_evidence[:10]
-
     if summarized:
         response["summarized"] = True
     return response
