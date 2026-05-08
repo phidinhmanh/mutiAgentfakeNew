@@ -1,0 +1,32 @@
+[
+  {
+    "sample_id": 21,
+    "expected_label": "FAKE",
+    "statement": "Tại họp báo thường kỳ Bộ Ngoại giao chiều 23/3, Phó Phát ngôn Bộ Ngoại giao Phạm Thu Hằng trả lời câu hỏi của phóng viên về việc Việt Nam có sẵn lòng nâng cấp quan hệ với Hoa Kỳ từ quan hệ hiện tại là đối tác toàn diện, lên quan hệ chiến lược hay không.",
+    "statement_length": 253,
+    "hardness_score": 5,
+    "hardness_reasons": [
+      "Long"
+    ]
+  },
+  {
+    "sample_id": 44,
+    "expected_label": "REAL",
+    "statement": "Kỷ niệm 1980 năm Ngày mất Hai Bà Trưng (6-2-43 – 6-2-2023 âm lịch) do Hội Liên hiệp Phụ nữ (LHPN) TP.HCM phối hợp Sở Văn hóa - Thể thao và Công viên Lịch sử Văn hóa Dân tộc TP tổ chức vào ngày 25-2.",
+    "statement_length": 198,
+    "hardness_score": 5,
+    "hardness_reasons": [
+      "Medium"
+    ]
+  },
+  {
+    "sample_id": 57,
+    "expected_label": "FAKE",
+    "statement": "Chiều 23/3, Chánh văn Phòng Sở Giáo dục và Đào tạo TP Hồ Chí Minh ông Hồ Tấn Minh khẳng định nếu trong trường hợp bất khả kháng, học sinh không có mã định danh cá nhân thì ngành giáo dục sẽ cấp một mã tạm cho các em để tham gia công tác tuyển sinh.",
+    "statement_length": 248,
+    "hardness_score": 5,
+    "hardness_reasons": [
+      "Long"
+    ]
+  }
+]

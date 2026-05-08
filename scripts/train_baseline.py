@@ -1,17 +1,17 @@
 """Train baseline model (PhoBERT fine-tuning placeholder)."""
+
 import argparse
 import logging
 from pathlib import Path
 
-from datasets import load_dataset
+from datasets import Dataset, load_dataset
 from transformers import (
     AutoModelForSequenceClassification,
     AutoTokenizer,
+    DataCollatorWithPadding,
     Trainer,
     TrainingArguments,
-    DataCollatorWithPadding,
 )
-from datasets import Dataset
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -20,7 +20,9 @@ DATASET_NAME = "tranthaihoa/vifactcheck"
 MODEL_NAME = "vinai/phobert-base"
 
 
-def prepare_dataset(tokenizer: AutoTokenizer, max_length: int = 256) -> tuple[Dataset, Dataset]:
+def prepare_dataset(
+    tokenizer: AutoTokenizer, max_length: int = 256
+) -> tuple[Dataset, Dataset]:
     """Prepare dataset for training.
 
     Args:

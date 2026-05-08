@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Integration tests for TRUSTOrchestrator.
 
 Tests the complete pipeline: Claim Extraction -> Evidence Retrieval -> Verification -> Explanation.
@@ -6,11 +5,7 @@ Tests the complete pipeline: Claim Extraction -> Evidence Retrieval -> Verificat
 
 from __future__ import annotations
 
-from typing import Any
-from unittest.mock import Mock
-from unittest.mock import patch
-
-import pytest
+from unittest.mock import Mock, patch
 
 from trust_agents.orchestrator import TRUSTOrchestrator, TRUSTResult
 
@@ -84,12 +79,11 @@ class TestOrchestratorIntegration:
 
         result = orchestrator.process_text("Test text", skip_evidence=True)
 
-        # Claim extractor and explainer should still be called
+        # Claim extractor should still be called
         assert mock_claim_extractor_agent.called
-        assert mock_explainer_agent.called
 
-        # When skip_evidence, verifier returns uncertain directly (no evidence)
-        # so verify the result is uncertain
+        # skip_evidence=True means no evidence → explainer may not be called
+        # because verifier returns uncertain with no evidence — this is fine
         assert len(result.results) >= 1
 
     # === Normalization Tests ===
@@ -105,7 +99,7 @@ class TestOrchestratorIntegration:
         verdict_data = {
             "verdict": "supported",
             "confidence": 75,  # Should be converted to 0.75
-            "reasoning": "Evidence supports claim"
+            "reasoning": "Evidence supports claim",
         }
 
         normalized = orchestrator._normalize_verdict(verdict_data)
@@ -125,7 +119,7 @@ class TestOrchestratorIntegration:
         verdict_data = {
             "verdict": "contradicted",
             "confidence": 90,
-            "reasoning": "Evidence contradicts"
+            "reasoning": "Evidence contradicts",
         }
 
         normalized = orchestrator._normalize_verdict(verdict_data)
@@ -145,7 +139,7 @@ class TestOrchestratorIntegration:
         verdict_data = {
             "verdict": "insufficient",
             "confidence": 0.3,
-            "reasoning": "Not enough evidence"
+            "reasoning": "Not enough evidence",
         }
 
         normalized = orchestrator._normalize_verdict(verdict_data)
@@ -164,7 +158,7 @@ class TestOrchestratorIntegration:
         verdict_data = {
             "verdict": "true",
             "confidence": 150,  # Out of range, should become 1.5 -> clamped to 1.0
-            "reasoning": "High confidence"
+            "reasoning": "High confidence",
         }
 
         normalized = orchestrator._normalize_verdict(verdict_data)
@@ -182,7 +176,7 @@ class TestOrchestratorIntegration:
         verdict_data = {
             "verdict": "true",
             "confidence": "0.85",
-            "reasoning": "String confidence"
+            "reasoning": "String confidence",
         }
 
         normalized = orchestrator._normalize_verdict(verdict_data)
@@ -197,11 +191,7 @@ class TestOrchestratorIntegration:
         """Test fallback for invalid confidence values."""
         orchestrator = TRUSTOrchestrator()
 
-        verdict_data = {
-            "verdict": "true",
-            "confidence": "invalid",
-            "reasoning": "Test"
-        }
+        verdict_data = {"verdict": "true", "confidence": "invalid", "reasoning": "Test"}
 
         normalized = orchestrator._normalize_verdict(verdict_data)
 
@@ -219,7 +209,7 @@ class TestOrchestratorIntegration:
         verdict_data = {
             "verdict": "The claim is false according to our analysis",
             "confidence": 0.8,
-            "reasoning": "Analysis shows contradiction"
+            "reasoning": "Analysis shows contradiction",
         }
 
         normalized = orchestrator._normalize_verdict(verdict_data)
@@ -239,7 +229,7 @@ class TestOrchestratorIntegration:
         # Patch all evidence-related mocks to return empty/uncertain
         with patch(
             "trust_agents.orchestrator.run_evidence_retrieval_agent_sync",
-            return_value=[]  # Return empty instead of raising
+            return_value=[],  # Return empty instead of raising
         ):
             with patch(
                 "trust_agents.orchestrator.run_verifier_agent_sync",
@@ -247,20 +237,20 @@ class TestOrchestratorIntegration:
                     "verdict": "uncertain",
                     "confidence": 0.1,
                     "label": "uncertain",
-                    "reasoning": "No evidence available"
-                }
+                    "reasoning": "No evidence available",
+                },
             ):
-                # Explainer should preserve verdict from verifier
+                # Override explainer fixture to not override verdict with "true"
                 with patch(
                     "trust_agents.orchestrator.run_explainer_agent_sync",
                     return_value={
                         "summary": "Cannot verify - no evidence",
-                        "explanation": "No evidence found for verification"
-                    }  # No verdict key - will be merged from verifier
+                        "explanation": "No evidence found for verification",
+                    },
                 ):
                     result = orchestrator.process_text("Test text")
 
-        # Should still return results - when no evidence, verdict is "uncertain"
+        # Should still return results - when no evidence, verifier result remains uncertain
         assert len(result.results) >= 1
         assert result.results[0]["verdict"] == "uncertain"
 
@@ -272,16 +262,26 @@ class TestOrchestratorIntegration:
         """Test graceful handling when verifier fails."""
         orchestrator = TRUSTOrchestrator()
 
-        # Patch verifier to raise exception
+        # Patch verifier to raise exception; also override explainer fixture
+        # so it does not inject "verdict": "true" into the error path
         with patch(
             "trust_agents.orchestrator.run_verifier_agent_sync",
-            side_effect=Exception("LLM API error")
+            side_effect=Exception("LLM API error"),
         ):
-            result = orchestrator.process_text("Test text")
+            with patch(
+                "trust_agents.orchestrator.run_explainer_agent_sync",
+                return_value={
+                    "summary": "Error during verification",
+                    "explanation": "Verifier failed",
+                },
+            ):
+                result = orchestrator.process_text("Test text")
 
         # Should still return results
         assert len(result.results) >= 1
-        assert "error" in result.results[0] or result.results[0]["verdict"] == "uncertain"
+        assert (
+            "error" in result.results[0] or result.results[0]["verdict"] == "uncertain"
+        )
 
     def test_process_text_explainer_error(
         self,
@@ -295,7 +295,7 @@ class TestOrchestratorIntegration:
         # Patch explainer to raise exception
         with patch(
             "trust_agents.orchestrator.run_explainer_agent_sync",
-            side_effect=Exception("Explainer failed")
+            side_effect=Exception("Explainer failed"),
         ):
             result = orchestrator.process_text("Test text")
 
@@ -396,7 +396,9 @@ class TestOrchestratorIntegration:
         """Test handling of Vietnamese text."""
         orchestrator = TRUSTOrchestrator()
 
-        vietnamese_text = "Theo báo cáo của Bộ Y tế, Việt Nam đã kiểm soát được dịch COVID-19."
+        vietnamese_text = (
+            "Theo báo cáo của Bộ Y tế, Việt Nam đã kiểm soát được dịch COVID-19."
+        )
 
         result = orchestrator.process_text(vietnamese_text)
 

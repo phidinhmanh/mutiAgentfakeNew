@@ -1,12 +1,13 @@
 """Word cloud visualization for text analysis."""
-import logging
+
 from typing import Any
 
-from wordcloud import WordCloud
+try:
+    from wordcloud import WordCloud
+except ImportError:  # pragma: no cover - optional UI dependency
+    WordCloud = None
 
 from fake_news_detector.data.preprocessing import tokenize_words
-
-logger = logging.getLogger(__name__)
 
 
 def generate_wordcloud(
@@ -15,23 +16,13 @@ def generate_wordcloud(
     height: int = 400,
     background_color: str = "white",
 ) -> WordCloud:
-    """Generate word cloud from text.
-
-    Args:
-        text: Input text
-        width: Image width
-        height: Image height
-        background_color: Background color
-
-    Returns:
-        WordCloud object
-    """
+    """Generate word cloud from text."""
+    if WordCloud is None:
+        raise ImportError("wordcloud package is required to generate word clouds")
     if not text:
         return WordCloud(width=width, height=height)
 
     tokens = tokenize_words(text)
-    text_content = " ".join(tokens)
-
     wc = WordCloud(
         width=width,
         height=height,
@@ -40,8 +31,7 @@ def generate_wordcloud(
         colormap="viridis",
         min_font_size=10,
     )
-
-    return wc.generate(text_content)
+    return wc.generate(" ".join(tokens))
 
 
 def get_top_words(text: str, n: int = 20) -> list[tuple[str, int]]:
@@ -57,9 +47,27 @@ def get_top_words(text: str, n: int = 20) -> list[tuple[str, int]]:
     tokens = tokenize_words(text)
 
     stopwords = {
-        "và", "của", "là", "có", "được", "trong", "cho", "với",
-        "theo", "này", "đã", "không", "tại", "về", "sau",
-        "các", "những", "một", "cũng", "như", "đến",
+        "và",
+        "của",
+        "là",
+        "có",
+        "được",
+        "trong",
+        "cho",
+        "với",
+        "theo",
+        "này",
+        "đã",
+        "không",
+        "tại",
+        "về",
+        "sau",
+        "các",
+        "những",
+        "một",
+        "cũng",
+        "như",
+        "đến",
     }
 
     filtered = [t for t in tokens if t.lower() not in stopwords and len(t) > 2]
@@ -90,9 +98,9 @@ def analyze_text_length(text: str) -> dict[str, Any]:
         }
 
     tokens = tokenize_words(text)
-    words = text.split()
 
     from fake_news_detector.data.preprocessing import split_sentences
+
     sentences = split_sentences(text)
 
     char_count = len(text)

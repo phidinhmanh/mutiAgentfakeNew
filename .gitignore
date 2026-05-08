@@ -1,6 +1,3 @@
-# Junk files (pip/pip install errors)
-=*
-
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -49,3 +46,23 @@ htmlcov/
 
 # UV
 .uv/
+
+# Release packages
+TRUST_AGENT*FINAL*.zip
+release_v10/
+release_v11_plus/
+scratch/
+
+# Benchmark reports (generated artifacts)
+benchmarks/*_report.json
+benchmarks/final/
+benchmarks/v15_6_*.json
+
+# Claude local files
+.claude/settings.local.json
+.claude/scheduled_tasks.lock
+.claude/worktrees/
+
+# Root demo/dev artifacts
+examples/
+scripts/archive/

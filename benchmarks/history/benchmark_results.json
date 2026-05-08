@@ -1,0 +1,63 @@
+{
+  "benchmark": "Baseline vs Single-Agent vs Multi-Agent (Fake) vs TRUST Orchestrator",
+  "test_samples": 2,
+  "train_samples_baseline": 500,
+  "results": [
+    {
+      "approach": "Baseline (Keyword-based)",
+      "samples": 2,
+      "total_time": 0.003963947296142578,
+      "avg_time_per_sample": 0.001981973648071289,
+      "correct": 1,
+      "accuracy": 0.5,
+      "undecided": 0,
+      "undecided_rate": 0.0,
+      "predictions": [
+        {
+          "id": 1,
+          "claim": "Phần vỏ bánh được làm rất công phu, từ giai đoạn xay gạo đến cuốn bánh hết tổng ",
+          "true_label": "REAL",
+          "predicted_label": "REAL",
+          "correct": true
+        },
+        {
+          "id": 0,
+          "claim": "Bộ xương bản sao được đưa đến Lodon bằng cách nghép thành con hoàn chỉnh rồi vận",
+          "true_label": "FAKE",
+          "predicted_label": "REAL",
+          "correct": false
+        }
+      ],
+      "status": "completed",
+      "error_message": ""
+    },
+    {
+      "approach": "TRUST Orchestrator (Real Multi-Agent)",
+      "samples": 2,
+      "total_time": 693.0579290390015,
+      "avg_time_per_sample": 346.52896451950073,
+      "correct": 0,
+      "accuracy": 0.0,
+      "undecided": 1,
+      "undecided_rate": 0.5,
+      "predictions": [
+        {
+          "id": 1,
+          "claim": "Phần vỏ bánh được làm rất công phu, từ giai đoạn xay gạo đến cuốn bánh hết tổng ",
+          "true_label": "REAL",
+          "predicted_label": "UNCERTAIN",
+          "correct": false
+        },
+        {
+          "id": 0,
+          "claim": "Bộ xương bản sao được đưa đến Lodon bằng cách nghép thành con hoàn chỉnh rồi vận",
+          "true_label": "FAKE",
+          "predicted_label": "ERROR",
+          "correct": false
+        }
+      ],
+      "status": "error",
+      "error_message": "[###] Unknown Error\n>\r\n<head><title>502 Bad Gateway</title></head>\r\n<body>\r\n<center><h1>502 Bad Gate"
+    }
+  ]
+}

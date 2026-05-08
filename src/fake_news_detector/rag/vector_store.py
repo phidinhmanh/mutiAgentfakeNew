@@ -1,12 +1,12 @@
 """FAISS vector store for semantic search."""
+
 import logging
-import os
+import pickle
 from pathlib import Path
 from typing import Any
 
 import faiss
 import numpy as np
-import pickle
 from sentence_transformers import SentenceTransformer
 
 from fake_news_detector.config import settings
@@ -51,9 +51,7 @@ class VectorStore:
 
         logger.info(f"Added {len(documents)} documents, total: {self.index.ntotal}")
 
-    def similarity_search(
-        self, query: str, k: int = 5
-    ) -> list[dict[str, Any]]:
+    def similarity_search(self, query: str, k: int = 5) -> list[dict[str, Any]]:
         """Search for similar documents.
 
         Args:
@@ -71,12 +69,10 @@ class VectorStore:
         faiss.normalize_L2(query_embedding)
 
         k = min(k, self.index.ntotal)
-        scores, indices = self.index.search(
-            query_embedding.astype(np.float32), k
-        )
+        scores, indices = self.index.search(query_embedding.astype(np.float32), k)
 
         results = []
-        for i, (score, idx) in enumerate(zip(scores[0], indices[0])):
+        for i, (score, idx) in enumerate(zip(scores[0], indices[0], strict=False)):
             if idx < len(self.documents):
                 doc = self.documents[idx].copy()
                 doc["score"] = float(score)

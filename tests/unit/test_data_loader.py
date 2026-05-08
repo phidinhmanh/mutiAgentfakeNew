@@ -1,10 +1,8 @@
 """Tests for data loader."""
+
 from __future__ import annotations
 
-from typing import Any
 from unittest.mock import Mock, patch
-
-import pytest
 
 from fake_news_detector.data.loader import (
     DATASET_NAME,
@@ -17,20 +15,20 @@ from fake_news_detector.data.loader import (
 class TestLoadViFactCheck:
     """Test load_vifactcheck function."""
 
-    @patch("fake_news_detector.data.loader.load_dataset")
+    @patch("trust_agents.data.loader.load_dataset")
     def test_load_train_split(self, mock_load: Mock) -> None:
         """Loads train split by default."""
         mock_dataset = Mock()
         mock_dataset.__len__ = Mock(return_value=100)
         mock_load.return_value = mock_dataset
 
-        result = load_vifactcheck("train")
+        load_vifactcheck("train")
         mock_load.assert_called_once()
         assert mock_load.call_args[1].get("split") == "train" or "train" in str(
             mock_load.call_args
         )
 
-    @patch("fake_news_detector.data.loader.load_dataset")
+    @patch("trust_agents.data.loader.load_dataset")
     def test_load_dataset_name(self, mock_load: Mock) -> None:
         """Loads correct dataset name."""
         mock_dataset = Mock()
@@ -41,7 +39,7 @@ class TestLoadViFactCheck:
         call_args = mock_load.call_args
         assert DATASET_NAME in str(call_args) or call_args[0][0] == DATASET_NAME
 
-    @patch("fake_news_detector.data.loader.load_dataset")
+    @patch("trust_agents.data.loader.load_dataset")
     def test_returns_dataset_object(self, mock_load: Mock) -> None:
         """Returns dataset object."""
         mock_dataset = Mock()

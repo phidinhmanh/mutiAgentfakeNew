@@ -1,0 +1,45 @@
+{
+  "debug_results": [
+    {
+      "status": "success",
+      "elapsed_time": 131.03017902374268,
+      "claims_extracted": 1,
+      "claims": [
+        "Bộ xương bản sao được đưa đến Lodon bằng cách nghép thành con hoàn chỉnh rồi vận chuyển đến."
+      ],
+      "evidence_count": 5,
+      "verdict": "uncertain",
+      "confidence": 0,
+      "expected_label": "FAKE",
+      "correct": false,
+      "full_report": {
+        "fact_check_report": {
+          "claim": "Bộ xương bản sao được đưa đến Lodon bằng cách nghép thành con hoàn chỉnh rồi vận chuyển đến.",
+          "verdict": "uncertain",
+          "confidence": 0.8,
+          "summary": "Tuyên bố cho rằng bộ xương bản sao được lắp ráp thành một cá thể hoàn chỉnh trước khi vận chuyển đến London là chưa thể xác định (uncertain). Mặc dù các bằng chứng xác nhận các mảnh xương đã được quét 3D, tạo bản sao và gắn trên cấu trúc thép để đưa đến London, nhưng không có thông tin cụ thể về việc việc lắp ráp thành một 'cá thể hoàn chỉnh' diễn ra trước hay sau quá trình vận chuyển.",
+          "explanation": "Để kiểm chứng tuyên bố này, chúng ta cần xem xét hai yếu tố: phương thức chế tạo bản sao và trình tự vận chuyển. \n\nTheo các dữ liệu hiện có, các chuyên gia đã thực hiện quét 3D từng mảnh xương riêng lẻ từ Argentina để tạo ra các bản sao bằng nhựa polyester và sợi thủy tinh. Các bản sao này sau đó được gắn trên một cấu trúc thép. Tài liệu cũng xác nhận rằng bộ xương bản sao này đã được đưa đến London để phục vụ trưng bày.\n\nTuy nhiên, điểm mấu chốt của tuyên bố nằm ở cụm từ 'ghép thành con hoàn chỉnh rồi vận chuyển'. Các bằng chứng chỉ cho biết các mảnh xương được gắn trên cấu trúc thép, nhưng không làm rõ liệu cấu trúc thép này đã là một bộ xương hoàn chỉnh (đã lắp ráp xong toàn bộ các bộ phận) hay chỉ là các phần xương được gắn vào khung để đảm bảo an toàn trong quá trình vận chuyển, sau đó mới được lắp ráp hoàn thiện tại London. Do thiếu thông tin về trình tự thời gian giữa việc lắp ráp hoàn chỉnh và việc vận chuyển, chúng ta không thể khẳng định tuyên bố này là đúng hay sai.",
+          "citations": [
+            {
+              "id": 1,
+              "content": "Sau phát hiện ở Argentina, các chuyên gia về khủng long đã quét 3D từng mảnh xương riêng lẻ để tạo ra các bản sao làm từ nhựa polyester và sợi thủy tinh, chúng được gắn trên một cấu trúc thép. Một công ty ở Canada đã mất hơn 6 tháng để thực hiện công việc đúc khuôn khổng lồ, dựa trên số lượng xương hóa thạch được khai quật. Để chuẩn bị cho cuộc trưng bày đặc biệt này, bà Sinead Marron, đại diện Bảo tàng Lịch sử tự nhiên London cho biết bộ xương bản sao đã được đưa đến London..."
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "samples": [
+    {
+      "claim": "Bộ xương bản sao được đưa đến Lodon bằng cách nghép thành con hoàn chỉnh rồi vận chuyển đến.",
+      "evidence": "đại diện Bảo tàng Lịch sử tự nhiên London cho biết bộ xương bản sao đã được đưa đến London trong 32 thùng riêng biệt, nghĩa là \"mỗi mảnh phải được ghép lại với nhau như một trò chơi ghép hình khổng lồ\".",
+      "true_label": "FAKE",
+      "sample_id": 0
+    }
+  ],
+  "summary": {
+    "total": 1,
+    "success": 1,
+    "correct": 0
+  }
+}

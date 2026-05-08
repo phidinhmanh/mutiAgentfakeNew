@@ -1,11 +1,11 @@
 """Tests for PhoBERT baseline model."""
+
 from __future__ import annotations
 
 from unittest.mock import Mock, patch
 
-import pytest
-
 from fake_news_detector.models.baseline import LABEL_MAP, PhoBERTBaseline
+from trust_agents.models import baseline as trust_baseline
 
 
 class TestLabelMap:
@@ -25,9 +25,9 @@ class TestLabelMap:
 class TestPhoBERTBaselineInit:
     """Test PhoBERTBaseline initialization."""
 
-    @patch("fake_news_detector.models.baseline.AutoModelForSequenceClassification")
-    @patch("fake_news_detector.models.baseline.AutoTokenizer")
-    @patch("fake_news_detector.models.baseline.settings")
+    @patch("trust_agents.models.baseline.AutoModelForSequenceClassification")
+    @patch("trust_agents.models.baseline.AutoTokenizer")
+    @patch("trust_agents.models.baseline.settings")
     def test_init_loads_tokenizer(
         self, mock_settings: Mock, mock_tokenizer: Mock, mock_model: Mock
     ) -> None:
@@ -38,14 +38,14 @@ class TestPhoBERTBaselineInit:
         mock_model_instance = Mock()
         mock_model.from_pretrained.return_value = mock_model_instance
 
-        model = PhoBERTBaseline()
+        PhoBERTBaseline()
 
         mock_tokenizer.from_pretrained.assert_called_once_with("vinai/phobert-base")
         mock_model.from_pretrained.assert_called_once()
 
-    @patch("fake_news_detector.models.baseline.AutoModelForSequenceClassification")
-    @patch("fake_news_detector.models.baseline.AutoTokenizer")
-    @patch("fake_news_detector.models.baseline.settings")
+    @patch("trust_agents.models.baseline.AutoModelForSequenceClassification")
+    @patch("trust_agents.models.baseline.AutoTokenizer")
+    @patch("trust_agents.models.baseline.settings")
     def test_init_loads_model(
         self, mock_settings: Mock, mock_tokenizer: Mock, mock_model: Mock
     ) -> None:
@@ -55,15 +55,15 @@ class TestPhoBERTBaselineInit:
         mock_model_instance = Mock()
         mock_model.from_pretrained.return_value = mock_model_instance
 
-        model = PhoBERTBaseline()
+        PhoBERTBaseline()
 
         call_kwargs = mock_model.from_pretrained.call_args.kwargs
         assert call_kwargs.get("num_labels") == 2
         assert call_kwargs.get("ignore_mismatched_sizes") is True
 
-    @patch("fake_news_detector.models.baseline.AutoModelForSequenceClassification")
-    @patch("fake_news_detector.models.baseline.AutoTokenizer")
-    @patch("fake_news_detector.models.baseline.settings")
+    @patch("trust_agents.models.baseline.AutoModelForSequenceClassification")
+    @patch("trust_agents.models.baseline.AutoTokenizer")
+    @patch("trust_agents.models.baseline.settings")
     def test_init_sets_model_eval(
         self, mock_settings: Mock, mock_tokenizer: Mock, mock_model: Mock
     ) -> None:
@@ -73,16 +73,16 @@ class TestPhoBERTBaselineInit:
         mock_model_instance = Mock()
         mock_model.from_pretrained.return_value = mock_model_instance
 
-        model = PhoBERTBaseline()
+        PhoBERTBaseline()
         mock_model_instance.eval.assert_called_once()
 
 
 class TestPhoBERTBaselineEmptyInput:
     """Test PhoBERTBaseline with empty input."""
 
-    @patch("fake_news_detector.models.baseline.AutoModelForSequenceClassification")
-    @patch("fake_news_detector.models.baseline.AutoTokenizer")
-    @patch("fake_news_detector.models.baseline.settings")
+    @patch("trust_agents.models.baseline.AutoModelForSequenceClassification")
+    @patch("trust_agents.models.baseline.AutoTokenizer")
+    @patch("trust_agents.models.baseline.settings")
     def test_predict_empty_text(
         self, mock_settings: Mock, mock_tokenizer: Mock, mock_model: Mock
     ) -> None:
@@ -98,9 +98,9 @@ class TestPhoBERTBaselineEmptyInput:
         assert result["fake_prob"] == 0.5
         assert result["real_prob"] == 0.5
 
-    @patch("fake_news_detector.models.baseline.AutoModelForSequenceClassification")
-    @patch("fake_news_detector.models.baseline.AutoTokenizer")
-    @patch("fake_news_detector.models.baseline.settings")
+    @patch("trust_agents.models.baseline.AutoModelForSequenceClassification")
+    @patch("trust_agents.models.baseline.AutoTokenizer")
+    @patch("trust_agents.models.baseline.settings")
     def test_predict_whitespace_only(
         self, mock_settings: Mock, mock_tokenizer: Mock, mock_model: Mock
     ) -> None:
@@ -113,9 +113,9 @@ class TestPhoBERTBaselineEmptyInput:
         result = model.predict("   \n\t   ")
         assert result["label"] == "UNKNOWN"
 
-    @patch("fake_news_detector.models.baseline.AutoModelForSequenceClassification")
-    @patch("fake_news_detector.models.baseline.AutoTokenizer")
-    @patch("fake_news_detector.models.baseline.settings")
+    @patch("trust_agents.models.baseline.AutoModelForSequenceClassification")
+    @patch("trust_agents.models.baseline.AutoTokenizer")
+    @patch("trust_agents.models.baseline.settings")
     def test_predict_with_sliding_window_empty(
         self, mock_settings: Mock, mock_tokenizer: Mock, mock_model: Mock
     ) -> None:
@@ -136,11 +136,9 @@ class TestGetBaselineModel:
         """Returns PhoBERTBaseline instance."""
         from fake_news_detector.models.baseline import get_baseline_model
 
-        with patch(
-            "fake_news_detector.models.baseline._baseline_model", None
-        ):
+        with patch("trust_agents.models.baseline._baseline_model", None):
             with patch(
-                "fake_news_detector.models.baseline.PhoBERTBaseline.__init__",
+                "trust_agents.models.baseline.PhoBERTBaseline.__init__",
                 return_value=None,
             ):
                 model = get_baseline_model()
@@ -151,8 +149,6 @@ class TestGetBaselineModel:
         from fake_news_detector.models.baseline import get_baseline_model
 
         mock_model = Mock(spec=PhoBERTBaseline)
-        with patch(
-            "fake_news_detector.models.baseline._baseline_model", mock_model
-        ):
+        with patch("trust_agents.models.baseline._baseline_model", mock_model):
             result = get_baseline_model()
             assert result is mock_model

@@ -1,0 +1,68 @@
+{
+  "debug_results": [
+    {
+      "status": "success",
+      "elapsed_time": 67.6819999217987,
+      "claims_extracted": 2,
+      "claims": [
+        "Bộ xương bản sao được đưa đến Lodon",
+        "Bộ xương bản sao được nghép thành con hoàn chỉnh rồi vận chuyển đến"
+      ],
+      "evidence_count": 5,
+      "verdict": "uncertain",
+      "confidence": 0,
+      "expected_label": "FAKE",
+      "correct": false,
+      "full_report": {
+        "fact_check_report": {
+          "claim": "Bộ xương bản sao được đưa đến Lodon",
+          "verdict": "true",
+          "confidence": 1.0,
+          "summary": "The claim that the replica skeleton was brought to London is true. A representative from the Natural History Museum London has confirmed that the replica has arrived for a special exhibition.",
+          "detailed_explanation": "The claim is verified as true based on direct confirmation from museum officials. Following the initial fossil discovery in Argentina, dinosaur experts utilized advanced 3D scanning technology on individual bone fragments to create highly accurate replicas. These replicas were constructed from polyester resin and fiberglass and mounted on specialized steel structures. A Canadian company spent more than six months performing the complex task of molding these massive components based on the excavated fossils. To facilitate a special upcoming exhibition, Sinead Marron, a representative of the Natural History Museum London, explicitly confirmed that the replica skeleton has been transported to London [1].",
+          "citations": [
+            "[1] Natural History Museum London representative Sinead Marron confirmed the arrival of the replica skeleton in London."
+          ]
+        }
+      }
+    },
+    {
+      "status": "success",
+      "elapsed_time": 89.92793273925781,
+      "claims_extracted": 1,
+      "claims": [
+        "Từ giai đoạn xay gạo đến cuốn bánh hết tổng 4 tiếng đồng hồ"
+      ],
+      "evidence_count": 5,
+      "verdict": "uncertain",
+      "confidence": 0,
+      "expected_label": "REAL",
+      "correct": false,
+      "full_report": {
+        "summary": "The claim that the process from rice milling to rolling the cake takes 4 hours is rated as true with 50% confidence. While the evidence primarily details a 3-4 hour soaking period that occurs *before* milling, the 4-hour timeframe for the subsequent steps is considered a reasonable and non-contradicted estimate.",
+        "citations": "[Evidence 1]",
+        "explanation": "The claim states that the duration from the rice milling stage to the completion of rolling the cake is 4 hours. Based on the available evidence, the preparation process begins with soaking the rice for 3 to 4 hours to ensure it softens properly before it is milled [Evidence 1]. \n\nIt is important to note that the evidence focuses on the pre-milling stage (soaking) rather than providing a specific stopwatch measurement for the period starting from milling through to rolling. However, the 4-hour estimate for these subsequent steps—which include milling, mixing the batter (potentially with tapioca starch), steaming, and rolling—is a plausible duration for such culinary tasks. Because no information provided contradicts this timeframe, the claim is classified as true, though the confidence level is set at 50% due to the lack of direct temporal data for that specific window of time.",
+        "report": "### Fact-Check Report\n\n**Claim:** Từ giai đoạn xay gạo đến cuốn bánh hết tổng 4 tiếng đồng hồ (From the rice milling stage to rolling the cake takes a total of 4 hours)\n\n**Verdict:** True\n**Confidence:** 50.0%\n\n---\n\n#### Summary\nThe claim that the process from rice milling to rolling the cake takes 4 hours is rated as true with 50% confidence. While the evidence primarily details a 3-4 hour soaking period that occurs *before* milling, the 4-hour timeframe for the subsequent steps is considered a reasonable and non-contradicted estimate.\n\n#### Detailed Explanation\nThe claim states that the duration from the rice milling stage to the completion of rolling the cake is 4 hours. Based on the available evidence, the preparation process begins with soaking the rice for 3 to 4 hours to ensure it softens properly before it is milled [Evidence 1]. \n\nIt is important to note that the evidence focuses on the pre-milling stage (soaking) rather than providing a specific stopwatch measurement for the period starting from milling through to rolling. However, the 4-hour estimate for these subsequent steps—which include milling, mixing the batter (potentially with tapioca starch), steaming, and rolling—is a plausible duration for such culinary tasks. Because no information provided contradicts this timeframe, the claim is classified as true, though the confidence level is set at 50% due to the lack of direct temporal data for that specific window of time.\n\n#### Citations\n- [Evidence 1]: Mentions that rice needs to be soaked for 3-4 hours to soften before milling."
+      }
+    }
+  ],
+  "samples": [
+    {
+      "claim": "Bộ xương bản sao được đưa đến Lodon bằng cách nghép thành con hoàn chỉnh rồi vận chuyển đến.",
+      "evidence": "đại diện Bảo tàng Lịch sử tự nhiên London cho biết bộ xương bản sao đã được đưa đến London trong 32 thùng riêng biệt, nghĩa là \"mỗi mảnh phải được ghép lại với nhau như một trò chơi ghép hình khổng lồ\".",
+      "true_label": "FAKE",
+      "sample_id": 0
+    },
+    {
+      "claim": "Phần vỏ bánh được làm rất công phu, từ giai đoạn xay gạo đến cuốn bánh hết tổng 4 tiếng đồng hồ.",
+      "evidence": "Gạo tẻ ngon được xay nhuyễn bằng cối đá từ xưa, sau đó loại bỏ tạp chất bằng cách lọc qua nước để lấy bột nõn. Đây là công thức từ thời mẹ ông để lại và vẫn được ông duy trì những năm qua. Khách đến gọi mới được phục vụ. Bột tráng bánh được múc theo từng muôi rưới lên mặt nồi hấp, tráng đều rồi đậy vung. Hấp khoảng một phút vỏ bánh vừa chín tới, có độ dai nhẹ. Ông Chính dùng que tre dẹt cuốn lấy vỏ bánh đặt lên đĩa, cho phần nhân đã được xào chín vào rồi cẩn thận cuộn tròn sao cho vỏ không bị rách, cắt đôi và rắc thêm chút hành khô.",
+      "true_label": "REAL",
+      "sample_id": 1
+    }
+  ],
+  "summary": {
+    "total": 2,
+    "success": 2,
+    "correct": 0
+  }
+}

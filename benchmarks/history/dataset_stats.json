@@ -1,0 +1,19 @@
+{
+  "train_size": 5062,
+  "test_size": 1447,
+  "test_label_distribution": {
+    "1": 468,
+    "2": 471,
+    "0": 508
+  },
+  "label_names": {
+    "0": "FAKE (Refuted)",
+    "1": "REAL (Supported)",
+    "2": "Uncertain (Not enough info)"
+  },
+  "statement_length": {
+    "min": 29,
+    "max": 610,
+    "avg": 161.43469246717345
+  }
+}

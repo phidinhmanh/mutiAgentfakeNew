@@ -1,0 +1,43 @@
+{
+  "debug_results": [
+    {
+      "status": "success",
+      "elapsed_time": 89.71821308135986,
+      "claims_extracted": 1,
+      "claims": [
+        "Từ giai đoạn xay gạo đến cuốn bánh hết tổng 4 tiếng đồng hồ"
+      ],
+      "evidence_count": 5,
+      "verdict": "uncertain",
+      "confidence": 1.0,
+      "expected_label": "REAL",
+      "correct": false,
+      "full_report": {
+        "claim": "Từ giai đoạn xay gạo đến cuốn bánh hết tổng 4 tiếng đồng hồ",
+        "verdict": "uncertain",
+        "confidence": 1.0,
+        "summary": "The claim that the process from milling rice to rolling the cake takes 4 hours is uncertain. The available evidence only specifies a 3-4 hour soaking period that occurs *before* the milling stage, but provides no information regarding the duration of the milling and rolling processes themselves.",
+        "explanation": "To determine the accuracy of the claim, we must compare the stages mentioned in the claim with the timeline provided in the evidence:\n\n1. **The Claim's Timeline:** The claim focuses on the duration starting from the **milling stage** and ending at the **rolling stage** (totaling 4 hours).\n2. **The Evidence's Timeline:** The evidence describes the preparation process, stating that rice must be washed and then **soaked for 3-4 hours** to soften before it can be milled. \n3. **The Gap in Information:** There is a critical distinction between the stages. The 3-4 hour period mentioned in the evidence refers to the *soaking* phase, which is a prerequisite that happens *before* milling begins. The evidence does not provide any data on how long the actual milling, mixing, steaming, or rolling stages take. \n\nBecause the evidence only covers the pre-milling preparation and lacks any information regarding the time required for the post-milling production steps, it is impossible to confirm or refute whether the period from milling to rolling takes 4 hours.",
+        "citations": [
+          {
+            "content": "Gạo dùng để đem đi xay cần vo sạch, loại bỏ chất bẩn bám trong đó. Sau đó ngâm 3 - 4 giờ để gạo nở mềm và đạt chất lượng.",
+            "source_index": 1
+          }
+        ]
+      }
+    }
+  ],
+  "samples": [
+    {
+      "claim": "Phần vỏ bánh được làm rất công phu, từ giai đoạn xay gạo đến cuốn bánh hết tổng 4 tiếng đồng hồ.",
+      "evidence": "Gạo tẻ ngon được xay nhuyễn bằng cối đá từ xưa, sau đó loại bỏ tạp chất bằng cách lọc qua nước để lấy bột nõn. Đây là công thức từ thời mẹ ông để lại và vẫn được ông duy trì những năm qua. Khách đến gọi mới được phục vụ. Bột tráng bánh được múc theo từng muôi rưới lên mặt nồi hấp, tráng đều rồi đậy vung. Hấp khoảng một phút vỏ bánh vừa chín tới, có độ dai nhẹ. Ông Chính dùng que tre dẹt cuốn lấy vỏ bánh đặt lên đĩa, cho phần nhân đã được xào chín vào rồi cẩn thận cuộn tròn sao cho vỏ không bị rách, cắt đôi và rắc thêm chút hành khô.",
+      "true_label": "REAL",
+      "sample_id": 1
+    }
+  ],
+  "summary": {
+    "total": 1,
+    "success": 1,
+    "correct": 0
+  }
+}

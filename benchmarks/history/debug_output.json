@@ -1,0 +1,35 @@
+{
+  "debug_results": [
+    {
+      "status": "failed",
+      "stage": 1,
+      "error": "No claims extracted",
+      "elapsed_time": 14.334113121032715
+    },
+    {
+      "status": "failed",
+      "stage": 1,
+      "error": "No claims extracted",
+      "elapsed_time": 4.537299871444702
+    }
+  ],
+  "samples": [
+    {
+      "claim": "Bộ xương bản sao được đưa đến Lodon bằng cách nghép thành con hoàn chỉnh rồi vận chuyển đến.",
+      "evidence": "đại diện Bảo tàng Lịch sử tự nhiên London cho biết bộ xương bản sao đã được đưa đến London trong 32 thùng riêng biệt, nghĩa là \"mỗi mảnh phải được ghép lại với nhau như một trò chơi ghép hình khổng lồ\".",
+      "true_label": "FAKE",
+      "sample_id": 0
+    },
+    {
+      "claim": "Phần vỏ bánh được làm rất công phu, từ giai đoạn xay gạo đến cuốn bánh hết tổng 4 tiếng đồng hồ.",
+      "evidence": "Gạo tẻ ngon được xay nhuyễn bằng cối đá từ xưa, sau đó loại bỏ tạp chất bằng cách lọc qua nước để lấy bột nõn. Đây là công thức từ thời mẹ ông để lại và vẫn được ông duy trì những năm qua. Khách đến gọi mới được phục vụ. Bột tráng bánh được múc theo từng muôi rưới lên mặt nồi hấp, tráng đều rồi đậy vung. Hấp khoảng một phút vỏ bánh vừa chín tới, có độ dai nhẹ. Ông Chính dùng que tre dẹt cuốn lấy vỏ bánh đặt lên đĩa, cho phần nhân đã được xào chín vào rồi cẩn thận cuộn tròn sao cho vỏ không bị rách, cắt đôi và rắc thêm chút hành khô.",
+      "true_label": "REAL",
+      "sample_id": 1
+    }
+  ],
+  "summary": {
+    "total": 2,
+    "success": 0,
+    "correct": 0
+  }
+}

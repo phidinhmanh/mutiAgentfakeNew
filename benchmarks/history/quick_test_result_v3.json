@@ -1,0 +1,160 @@
+{
+  "mode": "multi",
+  "benchmark_results": [
+    {
+      "status": "success",
+      "elapsed_time": 88.78254842758179,
+      "claims_extracted": 1,
+      "claims": [
+        "Phó Phát ngôn Bộ Ngoại giao Phạm Thu Hằng trả lời câu hỏi của phóng viên về việc Việt Nam có sẵn lòng nâng cấp quan hệ với Hoa Kỳ từ quan hệ hiện tại là đối tác toàn diện lên quan hệ chiến lược tại họp báo thường kỳ Bộ Ngoại giao chiều 23/3"
+      ],
+      "evidence_count": 1,
+      "verdict": "true",
+      "confidence": 1.0,
+      "expected_label": "FAKE",
+      "verdict_label": "REAL",
+      "correct": false,
+      "full_report": {
+        "verdict": "true",
+        "confidence": 1.0,
+        "summary": "Thông tin về việc Phó Phát ngôn Bộ Ngoại giao Phạm Thu Hằng trả lời câu hỏi của phóng viên về việc nâng cấp quan hệ Việt Nam - Hoa Kỳ tại họp báo chiều 23/3 là chính xác.",
+        "detailed_explanation": "Dựa trên các bằng chứng xác thực, vào chiều ngày 23/3, trong khuôn khổ cuộc họp báo thường kỳ của Bộ Ngoại giao, Phó Phát ngôn Phạm Thu Hằng đã thực hiện việc trả lời các câu hỏi từ phía phóng viên. Một trong những nội dung trọng tâm được đề cập là câu hỏi liên quan đến quan điểm và sự sẵn lòng của Việt Nam trong việc nâng cấp mối quan hệ song phương với Hoa Kỳ, từ cấp độ Đối tác Toàn diện hiện tại lên cấp độ cao hơn (Đối tác Chiến lược). Sự việc này đã diễn ra đúng như nội dung được nêu trong yêu cầu kiểm chứng.",
+        "citations": [
+          {
+            "source_idx": 1,
+            "text": "Phó Phát ngôn Bộ Ngoại giao Phạm Thu Hằng Chiều 23/3, tại họp báo thường kỳ Bộ Ngoại giao, trả lời câu hỏi của phóng viên về việc Việt Nam có sẵn lòng nâng cấp quan hệ với Hoa Kỳ từ quan hệ hiện tại là đối tác toàn diện, lên quan..."
+          }
+        ],
+        "label": "true"
+      },
+      "all_claims_results": [
+        {
+          "claim": "Phó Phát ngôn Bộ Ngoại giao Phạm Thu Hằng trả lời câu hỏi của phóng viên về việc Việt Nam có sẵn lòng nâng cấp quan hệ với Hoa Kỳ từ quan hệ hiện tại là đối tác toàn diện lên quan hệ chiến lược tại họp báo thường kỳ Bộ Ngoại giao chiều 23/3",
+          "evidence_count": 1,
+          "verdict": "true",
+          "confidence": 1.0,
+          "reasoning": "Evidence 1 xác nhận trực tiếp và đầy đủ tất cả các chi tiết trong claim, bao gồm: tên người phát ngôn (Phó Phát ngôn Phạm Thu Hằng), thời gian (chiều 23/3), địa điểm (họp báo thường kỳ Bộ Ngoại giao), và nội dung cụ thể về việc nâng cấp quan hệ Việt Nam - Hoa Kỳ từ đối tác toàn diện lên quan hệ chiến lược."
+        }
+      ],
+      "mode": "multi"
+    },
+    {
+      "status": "success",
+      "elapsed_time": 80.16150856018066,
+      "claims_extracted": 1,
+      "claims": [
+        "Hội Liên hiệp Phụ nữ (LHPN) TP.HCM phối hợp Sở Văn hóa - Thể thao và Công viên Lịch sử Văn hóa Dân tộc TP tổ chức kỷ niệm 1980 năm Ngày mất Hai Bà Trưng (6-2-43 – 6-2-2023 âm lịch) vào ngày 25-2."
+      ],
+      "evidence_count": 1,
+      "verdict": "true",
+      "confidence": 1.0,
+      "expected_label": "REAL",
+      "verdict_label": "REAL",
+      "correct": true,
+      "full_report": {
+        "verdict": "true",
+        "confidence": 1.0,
+        "summary": "Thông tin về việc Hội Liên hiệp Phụ nữ TP.HCM phối hợp tổ chức lễ kỷ niệm 1980 năm Ngày mất Hai Bà Trưng vào ngày 25/2 là chính xác.",
+        "detailed_explanation": "Dựa trên các bằng chứng xác thực, vào ngày 25/2, Hội Liên hiệp Phụ nữ (LHPN) TP.HCM đã phối hợp cùng Sở Văn hóa - Thể thao và Công viên Lịch sử Văn hóa Dân tộc TP.HCM tổ chức chương trình kỷ niệm 1980 năm Ngày mất của Hai Bà Trưng. Sự kiện này đánh dấu mốc thời gian lịch sử từ năm 43 đến năm 2023 (tính theo âm lịch). Các thông tin về đơn vị phối hợp, nội dung kỷ niệm và thời gian tổ chức đều hoàn toàn trùng khớp với dữ liệu thực tế.",
+        "citations": [
+          {
+            "source_idx": 1,
+            "text": "Ngày 25-2, Hội Liên hiệp Phụ nữ (LHPN) TP.HCM phối hợp Sở Văn hóa - Thể thao và Công viên Lịch sử Văn hóa Dân tộc TP tổ chức kỷ niệm 1980 năm Ngày mất Hai Bà Trưng (6-2-43 – 6-2-2023 âm lịch)."
+          }
+        ],
+        "label": "true"
+      },
+      "all_claims_results": [
+        {
+          "claim": "Hội Liên hiệp Phụ nữ (LHPN) TP.HCM phối hợp Sở Văn hóa - Thể thao và Công viên Lịch sử Văn hóa Dân tộc TP tổ chức kỷ niệm 1980 năm Ngày mất Hai Bà Trưng (6-2-43 – 6-2-2023 âm lịch) vào ngày 25-2.",
+          "evidence_count": 1,
+          "verdict": "true",
+          "confidence": 1.0,
+          "reasoning": "Evidence 1 cung cấp thông tin trùng khớp hoàn toàn với claim về tất cả các chi tiết: chủ thể tổ chức (Hội LHPN TP.HCM, Sở Văn hóa - Thể thao, Công viên Lịch sử Văn hóa Dân tộc TP), nội dung sự kiện (kỷ niệm 1980 năm Ngày mất Hai Bà Trưng), mốc thời gian kỷ niệm (6-2-43 – 6-2-2023 âm lịch) và ngày tổ chức (25-2)."
+        }
+      ],
+      "mode": "multi"
+    },
+    {
+      "status": "success",
+      "elapsed_time": 98.76343059539795,
+      "claims_extracted": 1,
+      "claims": [
+        "Chiều 23/3, ông Hồ Tấn Minh, Chánh văn phòng Sở Giáo dục và Đào tạo TP Hồ Chí Minh, khẳng định ngành giáo dục sẽ cấp mã tạm cho học sinh không có mã định danh cá nhân trong trường hợp bất khả kháng để tham gia công tác tuyển sinh."
+      ],
+      "evidence_count": 1,
+      "verdict": "true",
+      "confidence": 1.0,
+      "expected_label": "FAKE",
+      "verdict_label": "REAL",
+      "correct": false,
+      "full_report": {
+        "verdict": "true",
+        "confidence": 1.0,
+        "summary": "Ông Hồ Tấn Minh, Chánh văn phòng Sở Giáo dục và Đào tạo TP.HCM, đã khẳng định ngành giáo dục sẽ cấp mã tạm cho học sinh thiếu mã định danh cá nhân trong các trường hợp bất khả kháng để đảm bảo quyền lợi tuyển sinh.",
+        "detailed_explanation": "Thông tin này là chính xác. Theo xác nhận từ ông Hồ Tấn Minh, Chánh văn phòng Sở Giáo dục và Đào tạo TP.HCM vào chiều ngày 23/3, ngành giáo dục đã có phương án dự phòng cho các tình huống phát sinh liên quan đến thủ tục hành chính. Cụ thể, trong trường hợp bất khả kháng khi học sinh chưa có mã định danh cá nhân, cơ quan giáo dục sẽ cấp một mã số tạm thời. Giải pháp này nhằm đảm bảo quá trình tuyển sinh diễn ra thông suốt và không làm ảnh hưởng đến quyền lợi học tập của các em học sinh do các vấn đề về giấy tờ định danh.",
+        "citations": [
+          {
+            "source_idx": 1,
+            "text": "Chiều 23/3, ông Hồ Tấn Minh, Chánh văn Phòng Sở Giáo dục và Đào tạo TP Hồ Chí Minh khẳng định: Nếu trường hợp bất khả kháng, học sinh không có mã định danh cá nhân, ngành giáo dục sẽ cấp một mã tạm cho các em để tham gia công tác ..."
+          }
+        ],
+        "label": "true"
+      },
+      "all_claims_results": [
+        {
+          "claim": "Chiều 23/3, ông Hồ Tấn Minh, Chánh văn phòng Sở Giáo dục và Đào tạo TP Hồ Chí Minh, khẳng định ngành giáo dục sẽ cấp mã tạm cho học sinh không có mã định danh cá nhân trong trường hợp bất khả kháng để tham gia công tác tuyển sinh.",
+          "evidence_count": 1,
+          "verdict": "true",
+          "confidence": 1.0,
+          "reasoning": "Tất cả các chi tiết trong tuyên bố (claim) bao gồm: thời gian (chiều 23/3), nhân vật (ông Hồ Tấn Minh), chức danh (Chánh văn phòng Sở Giáo dục và Đào tạo TP Hồ Chí Minh) và nội dung khẳng định (cấp mã tạm cho học sinh không có mã định danh trong trường hợp bất khả kháng để tuyển sinh) đều trùng khớp hoàn toàn với thông tin được cung cấp trong Evidence 1."
+        }
+      ],
+      "mode": "multi"
+    }
+  ],
+  "samples": [
+    {
+      "sample_id": 21,
+      "expected_label": "FAKE",
+      "statement": "Tại họp báo thường kỳ Bộ Ngoại giao chiều 23/3, Phó Phát ngôn Bộ Ngoại giao Phạm Thu Hằng trả lời câu hỏi của phóng viên về việc Việt Nam có sẵn lòng nâng cấp quan hệ với Hoa Kỳ từ quan hệ hiện tại là đối tác toàn diện, lên quan hệ chiến lược hay không.",
+      "statement_length": 253,
+      "hardness_score": 5,
+      "hardness_reasons": [
+        "Long"
+      ],
+      "evidence": "Phó Phát ngôn Bộ Ngoại giao Phạm Thu Hằng Chiều 23/3, tại họp báo thường kỳ Bộ Ngoại giao, trả lời câu hỏi của phóng viên về việc Việt Nam có sẵn lòng nâng cấp quan hệ với Hoa Kỳ từ quan hệ hiện tại là đối tác toàn diện, lên quan hệ chiến lược hay không",
+      "claim": "Tại họp báo thường kỳ Bộ Ngoại giao chiều 23/3, Phó Phát ngôn Bộ Ngoại giao Phạm Thu Hằng trả lời câu hỏi của phóng viên về việc Việt Nam có sẵn lòng nâng cấp quan hệ với Hoa Kỳ từ quan hệ hiện tại là đối tác toàn diện, lên quan hệ chiến lược hay không."
+    },
+    {
+      "sample_id": 44,
+      "expected_label": "REAL",
+      "statement": "Kỷ niệm 1980 năm Ngày mất Hai Bà Trưng (6-2-43 – 6-2-2023 âm lịch) do Hội Liên hiệp Phụ nữ (LHPN) TP.HCM phối hợp Sở Văn hóa - Thể thao và Công viên Lịch sử Văn hóa Dân tộc TP tổ chức vào ngày 25-2.",
+      "statement_length": 198,
+      "hardness_score": 5,
+      "hardness_reasons": [
+        "Medium"
+      ],
+      "evidence": "Ngày 25-2, Hội Liên hiệp Phụ nữ (LHPN) TP.HCM phối hợp Sở Văn hóa - Thể thao và Công viên Lịch sử Văn hóa Dân tộc TP tổ chức kỷ niệm 1980 năm Ngày mất Hai Bà Trưng (6-2-43 – 6-2-2023 âm lịch).",
+      "claim": "Kỷ niệm 1980 năm Ngày mất Hai Bà Trưng (6-2-43 – 6-2-2023 âm lịch) do Hội Liên hiệp Phụ nữ (LHPN) TP.HCM phối hợp Sở Văn hóa - Thể thao và Công viên Lịch sử Văn hóa Dân tộc TP tổ chức vào ngày 25-2."
+    },
+    {
+      "sample_id": 57,
+      "expected_label": "FAKE",
+      "statement": "Chiều 23/3, Chánh văn Phòng Sở Giáo dục và Đào tạo TP Hồ Chí Minh ông Hồ Tấn Minh khẳng định nếu trong trường hợp bất khả kháng, học sinh không có mã định danh cá nhân thì ngành giáo dục sẽ cấp một mã tạm cho các em để tham gia công tác tuyển sinh.",
+      "statement_length": 248,
+      "hardness_score": 5,
+      "hardness_reasons": [
+        "Long"
+      ],
+      "evidence": "Chiều 23/3, ông Hồ Tấn Minh, Chánh văn Phòng Sở Giáo dục và Đào tạo TP Hồ Chí Minh khẳng định: Nếu trường hợp bất khả kháng, học sinh không có mã định danh cá nhân, ngành giáo dục sẽ cấp một mã tạm cho các em để tham gia công tác tuyển sinh.",
+      "claim": "Chiều 23/3, Chánh văn Phòng Sở Giáo dục và Đào tạo TP Hồ Chí Minh ông Hồ Tấn Minh khẳng định nếu trong trường hợp bất khả kháng, học sinh không có mã định danh cá nhân thì ngành giáo dục sẽ cấp một mã tạm cho các em để tham gia công tác tuyển sinh."
+    }
+  ],
+  "summary": {
+    "total": 3,
+    "correct": 1,
+    "accuracy": 33.33333333333333,
+    "avg_time": 89.2358291943868
+  }
+}

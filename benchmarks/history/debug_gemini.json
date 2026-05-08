@@ -1,0 +1,41 @@
+{
+  "debug_results": [
+    {
+      "status": "success",
+      "elapsed_time": 129.955171585083,
+      "claims_extracted": 2,
+      "claims": [
+        "Bộ xương bản sao được đưa đến Lodon",
+        "Bộ xương bản sao được đưa đến Lodon bằng cách nghép thành con hoàn chỉnh rồi vận chuyển đến."
+      ],
+      "evidence_count": 0,
+      "verdict": "uncertain",
+      "confidence": 0,
+      "expected_label": "FAKE",
+      "correct": false,
+      "full_report": {
+        "fact_check_report": {
+          "claim": "Bộ xương bản sao được đưa đến Lodon",
+          "verdict": "uncertain",
+          "confidence": 0.0,
+          "summary": "The claim that a replica skeleton was brought to London cannot be verified or refuted due to a lack of available evidence.",
+          "detailed_explanation": "The investigation into the claim 'Bộ xương bản sao được đưa đến Lodon' (A replica skeleton was brought to London) has resulted in an 'uncertain' verdict. This determination is based on the fact that no verifiable evidence, such as news reports, museum documentation, or historical records, was found to either support or contradict the statement. Without specific details regarding the identity of the skeleton, the timeframe of the event, or the institution involved, it is impossible to provide a definitive confirmation or denial of the claim.",
+          "citations": []
+        }
+      }
+    }
+  ],
+  "samples": [
+    {
+      "claim": "Bộ xương bản sao được đưa đến Lodon bằng cách nghép thành con hoàn chỉnh rồi vận chuyển đến.",
+      "evidence": "đại diện Bảo tàng Lịch sử tự nhiên London cho biết bộ xương bản sao đã được đưa đến London trong 32 thùng riêng biệt, nghĩa là \"mỗi mảnh phải được ghép lại với nhau như một trò chơi ghép hình khổng lồ\".",
+      "true_label": "FAKE",
+      "sample_id": 0
+    }
+  ],
+  "summary": {
+    "total": 1,
+    "success": 1,
+    "correct": 0
+  }
+}

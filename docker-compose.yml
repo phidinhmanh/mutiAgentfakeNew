@@ -1,0 +1,21 @@
+services:
+  backend:
+    build: .
+    container_name: trust-backend
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    volumes:
+      - models_cache:/app/models_cache
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+
+volumes:
+  models_cache:
+    name: trust_models_cache
