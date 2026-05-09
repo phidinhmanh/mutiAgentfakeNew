@@ -61,17 +61,13 @@ class TestVectorStoreAddDocuments:
 class TestVectorStoreSimilaritySearch:
     """Test VectorStore.similarity_search method."""
 
-    def test_similarity_search_empty_index(
-        self, mock_sentence_transformer: Mock
-    ) -> None:
+    def test_similarity_search_empty_index(self, mock_sentence_transformer: Mock) -> None:
         """Empty index returns empty list."""
         vs = VectorStore()
         results = vs.similarity_search("test query")
         assert results == []
 
-    def test_similarity_search_single_result(
-        self, mock_sentence_transformer: Mock
-    ) -> None:
+    def test_similarity_search_single_result(self, mock_sentence_transformer: Mock) -> None:
         """Search returns results with scores."""
         vs = VectorStore()
         vs.add_documents([{"content": "Test content", "id": "1"}])
@@ -80,18 +76,14 @@ class TestVectorStoreSimilaritySearch:
         assert "score" in results[0]
         assert "content" in results[0]
 
-    def test_similarity_search_k_limits_results(
-        self, mock_sentence_transformer: Mock
-    ) -> None:
+    def test_similarity_search_k_limits_results(self, mock_sentence_transformer: Mock) -> None:
         """k parameter limits results."""
         vs = VectorStore()
         vs.add_documents([{"content": f"Content {i}", "id": str(i)} for i in range(5)])
         results = vs.similarity_search("test", k=2)
         assert len(results) <= 2
 
-    def test_similarity_search_includes_rank(
-        self, mock_sentence_transformer: Mock
-    ) -> None:
+    def test_similarity_search_includes_rank(self, mock_sentence_transformer: Mock) -> None:
         """Results include rank field."""
         vs = VectorStore()
         vs.add_documents(
@@ -107,9 +99,7 @@ class TestVectorStoreSimilaritySearch:
 class TestVectorStoreSaveLoad:
     """Test VectorStore save/load methods."""
 
-    def test_save_creates_directory(
-        self, mock_sentence_transformer: Mock, tmp_path: Path
-    ) -> None:
+    def test_save_creates_directory(self, mock_sentence_transformer: Mock, tmp_path: Path) -> None:
         """Save creates parent directories."""
         vs = VectorStore()
         vs.add_documents([{"content": "Test", "id": "1"}])
@@ -117,9 +107,7 @@ class TestVectorStoreSaveLoad:
         vs.save(save_path)
         assert save_path.exists()
 
-    def test_load_reads_existing_index(
-        self, mock_sentence_transformer: Mock, tmp_path: Path
-    ) -> None:
+    def test_load_reads_existing_index(self, mock_sentence_transformer: Mock, tmp_path: Path) -> None:
         """Load reads from disk."""
         vs = VectorStore()
         vs.add_documents([{"content": "Test content", "id": "1"}])
@@ -130,9 +118,7 @@ class TestVectorStoreSaveLoad:
         new_vs.load(save_path)
         assert len(new_vs.documents) == 1
 
-    def test_load_nonexistent_path(
-        self, mock_sentence_transformer: Mock, tmp_path: Path
-    ) -> None:
+    def test_load_nonexistent_path(self, mock_sentence_transformer: Mock, tmp_path: Path) -> None:
         """Load from nonexistent path does nothing."""
         vs = VectorStore()
         vs.load(tmp_path / "nonexistent")
@@ -146,9 +132,7 @@ class TestGetVectorStore:
     @patch("fake_news_detector.rag.vector_store.VectorStore")
     @patch("fake_news_detector.rag.vector_store._vector_store", None)
     @patch("fake_news_detector.rag.vector_store.settings")
-    def test_returns_vector_store_instance(
-        self, mock_settings: Mock, mock_vs_class: Mock
-    ) -> None:
+    def test_returns_vector_store_instance(self, mock_settings: Mock, mock_vs_class: Mock) -> None:
         """Returns VectorStore instance."""
         mock_settings.faiss_index_path = "/tmp/nonexistent"
         mock_settings.embedding_model = "mock-model"

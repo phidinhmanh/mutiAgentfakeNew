@@ -337,13 +337,7 @@ def generate_keyword_query(claim: str) -> str:
     parts.extend(important_numbers[:3])
     parts.extend(keywords[:4])
 
-    non_stop_tokens = [
-        token.strip(',.():;!?"').lower()
-        for token in claim.split()
-        if token.strip(',.():;!?"')
-        and token.strip(',.():;!?"').lower() not in QUERY_STOPWORDS
-        and len(token.strip(',.():;!?"')) >= 4
-    ]
+    non_stop_tokens = [token.strip(',.():;!?"').lower() for token in claim.split() if token.strip(',.():;!?"') and token.strip(',.():;!?"').lower() not in QUERY_STOPWORDS and len(token.strip(',.():;!?"')) >= 4]
     if len(parts) <= 1 and non_stop_tokens:
         lexical_fallback: list[str] = []
         for token in non_stop_tokens:

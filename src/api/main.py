@@ -7,14 +7,15 @@ Architecture:
 - SSE generator reads from queue and yields events to client
 - Result is sent after all logs (or on error)
 """
+
 import asyncio
 import concurrent.futures
 import json
 import logging
+import os
 from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
 from datetime import datetime
-from typing import Any
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -36,6 +37,7 @@ def _get_backend():
     global _backend
     if _backend is None:
         from trust_agents.http_adapter import TRUSTBackend
+
         _backend = TRUSTBackend(top_k_evidence=2)
     return _backend
 
@@ -53,6 +55,7 @@ class AnalysisRequest(BaseModel):
 # SSE Event format: "data: {json}\n\n"
 # ─────────────────────────────────────────────────────────────────
 
+
 async def _stream_trust_analysis(text: str) -> AsyncGenerator[str, None]:
     """
     Stream TRUST analysis via SSE.
@@ -67,7 +70,7 @@ async def _stream_trust_analysis(text: str) -> AsyncGenerator[str, None]:
     from trust_agents.http_adapter import _normalize_verdict
     from trust_agents.orchestrator import TRUSTOrchestrator
 
-    queue: asyncio.Queue[tuple[str, dict] | str] = asyncio.Queue()
+    queue: asyncio.Queue[tuple[str, dict]] = asyncio.Queue()
 
     # Capture the running event loop from the main thread
     loop = asyncio.get_running_loop()
@@ -75,19 +78,20 @@ async def _stream_trust_analysis(text: str) -> AsyncGenerator[str, None]:
     def _emit(event_type: str, data: dict):
         """Called from sync thread to enqueue SSE event."""
         try:
-            loop.call_soon_threadsafe(
-                lambda: queue.put_nowait((event_type, data))
-            )
+            loop.call_soon_threadsafe(lambda: queue.put_nowait((event_type, data)))
         except RuntimeError:
             pass  # Event loop might be closed
 
     def _emit_log(level: str, agent: str, msg: str):
-        _emit("log", {
-            "time": _format_time(),
-            "level": level,
-            "agent": agent,
-            "msg": msg,
-        })
+        _emit(
+            "log",
+            {
+                "time": _format_time(),
+                "level": level,
+                "agent": agent,
+                "msg": msg,
+            },
+        )
 
     def analysis_thread():
         """Runs in thread pool — emits logs in real-time as steps complete."""
@@ -146,7 +150,7 @@ async def _stream_trust_analysis(text: str) -> AsyncGenerator[str, None]:
                 _emit_log(
                     "ERROR" if v_label == "FAKE" else "SUCCESS",
                     "Verifier",
-                    f"Tuyên bố {i}: {v_label} ({v_conf*100:.1f}%)"
+                    f"Tuyên bố {i}: {v_label} ({v_conf * 100:.1f}%)",
                 )
 
                 _emit_log("INFO", "Explainer", "Đang tạo báo cáo giải thích...")
@@ -157,13 +161,15 @@ async def _stream_trust_analysis(text: str) -> AsyncGenerator[str, None]:
                     _emit_log("ERROR", "Explainer", f"Lỗi tạo báo cáo: {str(e)}")
                     report = verdict_data.copy()
 
-                results.append({
-                    "claim": claim,
-                    "verdict": report.get("verdict", verdict_data.get("verdict", "uncertain")),
-                    "confidence": float(report.get("confidence", verdict_data.get("confidence", 0.0))),
-                    "reasoning": report.get("reasoning", report.get("summary", v_reasoning)),
-                    "evidence": evidence if isinstance(evidence, list) else [],
-                })
+                results.append(
+                    {
+                        "claim": claim,
+                        "verdict": report.get("verdict", verdict_data.get("verdict", "uncertain")),
+                        "confidence": float(report.get("confidence", verdict_data.get("confidence", 0.0))),
+                        "reasoning": report.get("reasoning", report.get("summary", v_reasoning)),
+                        "evidence": evidence if isinstance(evidence, list) else [],
+                    }
+                )
 
             # Step 4: Create summary
             _emit_log("INFO", "Orchestrator", "Đang tổng hợp kết quả cuối cùng...")
@@ -181,45 +187,51 @@ async def _stream_trust_analysis(text: str) -> AsyncGenerator[str, None]:
             _emit_log(
                 "SUCCESS",
                 "Orchestrator",
-                f"Phân tích hoàn tất. Kết luận: {final_verdict} — Độ tin cậy {final_confidence*100:.0f}%"
+                f"Phân tích hoàn tất. Kết luận: {final_verdict} — Độ tin cậy {final_confidence * 100:.0f}%",
             )
 
             # Send final result
-            _emit("result", {
-                "verdict": final_verdict,
-                "confidence": final_confidence,
-                "summary": summary.get("explanation", ""),
-                "claims": [
-                    {
-                        "claim": r["claim"],
-                        "verdict": _normalize_verdict(r.get("verdict", "uncertain")),
-                        "confidence": r.get("confidence", 0.0),
-                        "reasoning": r.get("reasoning", ""),
-                        "evidence": [
-                            {
-                                "content": ev.get("content", ev.get("text", "")),
-                                "source": ev.get("source", ev.get("url", "")),
-                                "url": ev.get("url", ""),
-                                "authority": get_domain_authority(ev.get("url") or ""),
-                            }
-                            for ev in (r.get("evidence") or [])
-                        ],
-                    }
-                    for r in results
-                ],
-                "processingMs": 0,
-            })
+            _emit(
+                "result",
+                {
+                    "verdict": final_verdict,
+                    "confidence": final_confidence,
+                    "summary": summary.get("explanation", ""),
+                    "claims": [
+                        {
+                            "claim": r["claim"],
+                            "verdict": _normalize_verdict(r.get("verdict", "uncertain")),
+                            "confidence": r.get("confidence", 0.0),
+                            "reasoning": r.get("reasoning", ""),
+                            "evidence": [
+                                {
+                                    "content": ev.get("content", ev.get("text", "")),
+                                    "source": ev.get("source", ev.get("url", "")),
+                                    "url": ev.get("url", ""),
+                                    "authority": get_domain_authority(ev.get("url") or ""),
+                                }
+                                for ev in (r.get("evidence") or [])
+                            ],
+                        }
+                        for r in results
+                    ],
+                    "processing_ms": 0,
+                },
+            )
 
         except Exception as e:
             logger.error(f"[ANALYSIS] Unhandled error: {e}", exc_info=True)
             _emit_log("ERROR", "Orchestrator", f"Lỗi nghiêm trọng: {str(e)}")
-            _emit("result", {
-                "verdict": "UNKNOWN",
-                "confidence": 0.0,
-                "summary": str(e),
-                "claims": [],
-                "processingMs": 0,
-            })
+            _emit(
+                "result",
+                {
+                    "verdict": "UNKNOWN",
+                    "confidence": 0.0,
+                    "summary": str(e),
+                    "claims": [],
+                    "processing_ms": 0,
+                },
+            )
         finally:
             _is_busy = False
             _emit("done", {})  # Signal end of stream
@@ -231,12 +243,13 @@ async def _stream_trust_analysis(text: str) -> AsyncGenerator[str, None]:
     # Stream events as they come from the queue
     while True:
         try:
-            item = await asyncio.wait_for(queue.get(), timeout=60.0)
+            item = await asyncio.wait_for(queue.get(), timeout=15.0)
         except asyncio.TimeoutError:
-            # Keep the connection alive during long-running analysis.
+            # Keep-alive ping for Railway (closes connection after 30s silence).
+            # Emit SSE comment every 15s to prevent timeout.
             if analysis_task.done():
                 break
-            yield ": keep-alive\n\n"
+            yield ": ping\n\n"
             continue
 
         event_type, data = item
@@ -255,6 +268,7 @@ async def _stream_trust_analysis(text: str) -> AsyncGenerator[str, None]:
 # Routes
 # ─────────────────────────────────────────────────────────────────
 
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     logger.info("[API] Starting up — TRUST backend ready")
@@ -270,11 +284,23 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-# CORS for Next.js frontend
+# CORS for Next.js frontend ( Railway )
+# Require FRONTEND_URL in production; allow wildcard only in development.
+_frontend_url = os.getenv("FRONTEND_URL", "").strip()
+_env = os.getenv("ENVIRONMENT", "development").lower()
+_is_railway = bool(os.getenv("RAILWAY_ENVIRONMENT") or os.getenv("RAILWAY_PROJECT_ID"))
+if _frontend_url:
+    _cors_origins = [origin.strip().rstrip("/") for origin in _frontend_url.split(",")]
+elif _env == "development" and not _is_railway:
+    _cors_origins = ["*"]
+else:
+    raise RuntimeError("FRONTEND_URL must be set on Railway or when ENVIRONMENT != development. Set FRONTEND_URL=https://your-app.railway.app")
+_allow_credentials = _cors_origins != ["*"]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
+    allow_origins=_cors_origins,
+    allow_credentials=_allow_credentials,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -304,9 +330,19 @@ async def get_status():
     """Return agent status including busy state."""
     return {
         "agents": {
-            "orchestrator": {"id": "orchestrator", "label": "Orchestrator", "status": "active" if not _is_busy else "busy", "tasks": 0},
+            "orchestrator": {
+                "id": "orchestrator",
+                "label": "Orchestrator",
+                "status": "active" if not _is_busy else "busy",
+                "tasks": 0,
+            },
             "claim-extractor": {"id": "claim-extractor", "label": "Claim Extractor", "status": "idle", "tasks": 0},
-            "evidence-retriever": {"id": "evidence-retriever", "label": "Evidence Retriever", "status": "idle", "tasks": 0},
+            "evidence-retriever": {
+                "id": "evidence-retriever",
+                "label": "Evidence Retriever",
+                "status": "idle",
+                "tasks": 0,
+            },
             "verifier": {"id": "verifier", "label": "Verifier", "status": "idle", "tasks": 0},
             "explainer": {"id": "explainer", "label": "Explainer", "status": "idle", "tasks": 0},
         },

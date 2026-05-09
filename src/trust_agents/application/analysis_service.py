@@ -32,9 +32,7 @@ def analyze_with_trust(
     try:
         trust_result = process_text(processed_article)
     except NotImplementedError as exc:
-        raise TypeError(
-            "Invalid TRUST orchestrator: process_text is not implemented"
-        ) from exc
+        raise TypeError("Invalid TRUST orchestrator: process_text is not implemented") from exc
 
     verdicts = [
         {

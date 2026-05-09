@@ -14,16 +14,19 @@ from dotenv import load_dotenv
 
 from shared_fact_checking.llm_utils import run_async_in_thread
 from trust_agents.agents.evidence_query_utils import (
-    extract_context_topic_terms as _extract_context_topic_terms,
-    extract_context_years as _extract_context_years,
     filter_urls_by_strict_domains as _filter_urls_by_strict_domains,
+)
+from trust_agents.agents.evidence_query_utils import (
     generate_broader_query as _generate_broader_query,
+)
+from trust_agents.agents.evidence_query_utils import (
     generate_contradiction_queries as _generate_contradiction_queries,
+)
+from trust_agents.agents.evidence_query_utils import (
     generate_keyword_query,
-    generate_news_site_query as _generate_news_site_query,
-    generate_number_focused_query as _generate_number_focused_query,
+)
+from trust_agents.agents.evidence_query_utils import (
     inject_context_anchors as _inject_context_anchors,
-    strip_bias_words as _strip_bias_words,
 )
 from trust_agents.llm.factory import create_chat_model
 
@@ -34,9 +37,7 @@ logger = logging.getLogger("EvidenceRetriever.Agent")
 def _extract_svo_from_claim(claim: str) -> dict[str, list[str]]:
     numbers = __import__("re").findall(r"\b\d+(?:[.,]\d+)*%?\b", claim)
     dates = __import__("re").findall(r"\b\d{1,2}[/.-]\d{1,2}(?:[/.-]\d{2,4})?\b", claim)
-    proper_nouns = __import__("re").findall(
-        r"\b[A-ZÀ-Ỹ][a-zà-ỹ]*(?:\s+[A-ZÀ-Ỹ][a-zà-ỹ]*){0,3}\b", claim
-    )
+    proper_nouns = __import__("re").findall(r"\b[A-ZÀ-Ỹ][a-zà-ỹ]*(?:\s+[A-ZÀ-Ỹ][a-zà-ỹ]*){0,3}\b", claim)
     action_verbs = __import__("re").findall(
         r"(?:ký|ký kết|phê duyệt|ban hành|công bố|tuyên bố|phát biểu|đầu tư|chi tiêu|phân bổ|xây dựng|khởi công|khánh thành|đạt|ghi nhận|thu về|tăng|giảm|vượt|hoàn thành|kết thúc|ra mắt|giới thiệu|trúng thầu|ấn định)",
         claim,
@@ -151,10 +152,7 @@ async def run_evidence_retrieval_agent(
                 break
 
         if ground_truth_evidence:
-            logger.info(
-                "[V12 ULTRA HOTFIX] Merging ground truth evidence "
-                f"({len(ground_truth_evidence)} chars)"
-            )
+            logger.info(f"[V12 ULTRA HOTFIX] Merging ground truth evidence ({len(ground_truth_evidence)} chars)")
             all_content_results.insert(
                 0,
                 {
@@ -168,17 +166,8 @@ async def run_evidence_retrieval_agent(
             )
 
         if all_content_results:
-            unique_domains = len(
-                {
-                    r.get("url", "").split("/")[2] if "://" in r.get("url", "") else r.get("url", "")
-                    for r in all_content_results
-                    if r.get("url") and r.get("url") != "ground_truth"
-                }
-            )
-            logger.info(
-                f"[V12 ULTRA] Contradiction seeking complete: {len(all_content_results)} passages "
-                f"from {unique_domains} domains across {len(contradiction_queries)} perspectives"
-            )
+            unique_domains = len({r.get("url", "").split("/")[2] if "://" in r.get("url", "") else r.get("url", "") for r in all_content_results if r.get("url") and r.get("url") != "ground_truth"})
+            logger.info(f"[V12 ULTRA] Contradiction seeking complete: {len(all_content_results)} passages from {unique_domains} domains across {len(contradiction_queries)} perspectives")
             capped = all_content_results[:top_k]
             if len(all_content_results) > top_k:
                 logger.info(f"[V14.6 SMART] Capping to top_k={top_k} (was {len(all_content_results)})")
@@ -212,6 +201,4 @@ def run_evidence_retrieval_agent_sync(
     use_gt_fallback: bool = True,
 ) -> list[dict[str, Any]]:
     """Synchronous wrapper for run_evidence_retrieval_agent."""
-    return run_async_in_thread(
-        run_evidence_retrieval_agent(query, top_k, ground_truth_evidence, use_gt_fallback)
-    )
+    return run_async_in_thread(run_evidence_retrieval_agent(query, top_k, ground_truth_evidence, use_gt_fallback))

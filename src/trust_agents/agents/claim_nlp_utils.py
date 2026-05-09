@@ -8,50 +8,196 @@ import re
 logger = logging.getLogger("TRUST_agents.agents.claim_extractor_tools")
 
 VIETNAMESE_DIACRITIC_MARKERS = [
-    "ă", "â", "đ", "ê", "ô", "ơ", "ư",
-    "ạ", "ả", "ấ", "ầ", "ẩ", "ẫ", "ậ",
-    "ắ", "ằ", "ẳ", "ẵ", "ặ",
-    "ẹ", "ẻ", "ẽ", "ế", "ề", "ể", "ễ", "ệ",
-    "ỉ", "ị",
-    "ọ", "ỏ", "ố", "ồ", "ổ", "ỗ", "ộ",
-    "ụ", "ủ", "ứ", "ừ", "ử", "ữ", "ự", "ợ",
-    "tôi", "bạn", "ông", "bà", "chúng", "họ",
-    "năm", "tháng", "ngày", "giờ", "phút",
+    "ă",
+    "â",
+    "đ",
+    "ê",
+    "ô",
+    "ơ",
+    "ư",
+    "ạ",
+    "ả",
+    "ấ",
+    "ầ",
+    "ẩ",
+    "ẫ",
+    "ậ",
+    "ắ",
+    "ằ",
+    "ẳ",
+    "ẵ",
+    "ặ",
+    "ẹ",
+    "ẻ",
+    "ẽ",
+    "ế",
+    "ề",
+    "ể",
+    "ễ",
+    "ệ",
+    "ỉ",
+    "ị",
+    "ọ",
+    "ỏ",
+    "ố",
+    "ồ",
+    "ổ",
+    "ỗ",
+    "ộ",
+    "ụ",
+    "ủ",
+    "ứ",
+    "ừ",
+    "ử",
+    "ữ",
+    "ự",
+    "ợ",
+    "tôi",
+    "bạn",
+    "ông",
+    "bà",
+    "chúng",
+    "họ",
+    "năm",
+    "tháng",
+    "ngày",
+    "giờ",
+    "phút",
 ]
 
 VIETNAMESE_FACTUAL_MARKERS = [
-    "là", "có", "đã", "sẽ", "đang",
-    "phát", "triển", "tăng", "giảm",
-    "cho biết", "theo", "báo", "tin", "nói",
-    "khẳng", "định", "công", "bố", "thông", "tin",
-    "nghiên", "cứu", "xác", "nhận",
+    "là",
+    "có",
+    "đã",
+    "sẽ",
+    "đang",
+    "phát",
+    "triển",
+    "tăng",
+    "giảm",
+    "cho biết",
+    "theo",
+    "báo",
+    "tin",
+    "nói",
+    "khẳng",
+    "định",
+    "công",
+    "bố",
+    "thông",
+    "tin",
+    "nghiên",
+    "cứu",
+    "xác",
+    "nhận",
 ]
 
 VIETNAMESE_CLAIM_MARKERS = [
-    "nói", "cho biết", "khẳng định", "tuyên bố",
-    "thông báo", "báo cáo", "xác nhận", "phủ nhận",
-    "công bố", "kết luận", "nghiên cứu", "cho hay",
-    "trả lời", "hồi", "tin", "theo", "được",
-    "là", "có", "đã", "sẽ", "đang",
-    "phát", "triển", "tăng", "giảm", "đạt", "vượt", "hạ",
+    "nói",
+    "cho biết",
+    "khẳng định",
+    "tuyên bố",
+    "thông báo",
+    "báo cáo",
+    "xác nhận",
+    "phủ nhận",
+    "công bố",
+    "kết luận",
+    "nghiên cứu",
+    "cho hay",
+    "trả lời",
+    "hồi",
+    "tin",
+    "theo",
+    "được",
+    "là",
+    "có",
+    "đã",
+    "sẽ",
+    "đang",
+    "phát",
+    "triển",
+    "tăng",
+    "giảm",
+    "đạt",
+    "vượt",
+    "hạ",
 ]
 
 ENGLISH_CLAIM_VERBS = {
-    "say", "claim", "state", "report", "announce",
-    "declare", "assert", "allege", "argue", "maintain",
-    "contend", "insist", "affirm", "attest", "testify",
-    "reveal", "disclose", "admit", "acknowledge", "confess",
-    "confirm", "deny", "show", "prove", "demonstrate",
-    "indicate", "suggest", "imply", "note", "observe",
-    "find", "discover", "detect", "notice",
-    "emphasize", "stress", "highlight", "underscore", "point out",
-    "predict", "forecast", "warn", "caution",
-    "anticipate", "expect", "explain", "describe",
-    "characterize", "define", "specify",
-    "believe", "think", "consider", "regard", "view",
-    "estimate", "calculate", "determine", "assess", "evaluate",
-    "is", "are", "was", "were", "be", "been", "being",
-    "has", "have", "had", "contain", "include", "involve",
+    "say",
+    "claim",
+    "state",
+    "report",
+    "announce",
+    "declare",
+    "assert",
+    "allege",
+    "argue",
+    "maintain",
+    "contend",
+    "insist",
+    "affirm",
+    "attest",
+    "testify",
+    "reveal",
+    "disclose",
+    "admit",
+    "acknowledge",
+    "confess",
+    "confirm",
+    "deny",
+    "show",
+    "prove",
+    "demonstrate",
+    "indicate",
+    "suggest",
+    "imply",
+    "note",
+    "observe",
+    "find",
+    "discover",
+    "detect",
+    "notice",
+    "emphasize",
+    "stress",
+    "highlight",
+    "underscore",
+    "point out",
+    "predict",
+    "forecast",
+    "warn",
+    "caution",
+    "anticipate",
+    "expect",
+    "explain",
+    "describe",
+    "characterize",
+    "define",
+    "specify",
+    "believe",
+    "think",
+    "consider",
+    "regard",
+    "view",
+    "estimate",
+    "calculate",
+    "determine",
+    "assess",
+    "evaluate",
+    "is",
+    "are",
+    "was",
+    "were",
+    "be",
+    "been",
+    "being",
+    "has",
+    "have",
+    "had",
+    "contain",
+    "include",
+    "involve",
 }
 
 VI_FALLBACK_CLAIM_MARKERS = [" là ", " có ", " đã ", " sẽ ", " đang ", " theo "]
@@ -60,9 +206,7 @@ VI_FALLBACK_CLAIM_MARKERS = [" là ", " có ", " đã ", " sẽ ", " đang ", " 
 def detect_language(text: str) -> str:
     lower_text = text.lower()
     vietnamese_count = sum(1 for marker in VIETNAMESE_DIACRITIC_MARKERS if marker in lower_text)
-    has_diacritics = any(
-        c in lower_text for c in "ạảấầẩẫậắằẳẵặẹẻẽếềểễệỉịọỏốồổỗộụủứừửữựợ"
-    )
+    has_diacritics = any(c in lower_text for c in "ạảấầẩẫậắằẳẵặẹẻẽếềểễệỉịọỏốồổỗộụủứừửữựợ")
     if vietnamese_count >= 2 or has_diacritics:
         return "vi"
     return "en"
@@ -88,6 +232,7 @@ def load_spacy_model(*model_names: str):
 def sentencize_vietnamese(text: str) -> list[str]:
     try:
         from underthesea import sent_tokenize
+
         return sent_tokenize(text)
     except ImportError:
         logger.warning("underthesea not installed, using regex-based splitting")
@@ -101,6 +246,7 @@ def sentencize_vietnamese(text: str) -> list[str]:
 def tokenize_vietnamese(text: str) -> list[str]:
     try:
         from underthesea import word_tokenize
+
         return word_tokenize(text, format="text").split()
     except ImportError:
         logger.warning("underthesea not installed, using simple split")
@@ -115,11 +261,7 @@ def fallback_claim_sentences(text: str) -> list[str]:
     if lang == "vi":
         sentences = sentencize_vietnamese(text)
     else:
-        sentences = [
-            segment.strip()
-            for segment in re.split(r"(?<=[.!?])\s+", text)
-            if segment.strip()
-        ]
+        sentences = [segment.strip() for segment in re.split(r"(?<=[.!?])\s+", text) if segment.strip()]
 
     claims: list[str] = []
     for sentence in sentences:

@@ -31,10 +31,7 @@ async def run_explainer_agent(
     reasoning = verdict_data.get("reasoning", "")
 
     # Format evidence for context
-    evidence_text = "\n\n".join([
-        f"Source {i+1} ({item.get('url', 'no link')}):\n{item.get('text', str(item))[:300]}..."
-        for i, item in enumerate(evidence[:5])
-    ])
+    evidence_text = "\n\n".join([f"Source {i + 1} ({item.get('url', 'no link')}):\n{item.get('text', str(item))[:300]}..." for i, item in enumerate(evidence[:5])])
 
     system_prompt = """Bạn là chuyên gia giải thích thông tin (Explainer).
 Nhiệm vụ: Tạo báo cáo giải thích kết quả kiểm chứng một cách dễ hiểu, khách quan.
@@ -65,10 +62,7 @@ BẰNG CHỨNG:
 Trả về CHỈ JSON:"""
 
     try:
-        response = await model.ainvoke([
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": prompt}
-        ])
+        response = await model.ainvoke([{"role": "system", "content": system_prompt}, {"role": "user", "content": prompt}])
 
         content = response.content if hasattr(response, "content") else str(response)
         logger.info(f"[AGENT] LLM response length: {len(content)}")
@@ -83,7 +77,7 @@ Trả về CHỈ JSON:"""
             "summary": parsed.get("summary", f"Kết quả kiểm chứng là {verdict}."),
             "detailed_explanation": parsed.get("detailed_explanation", reasoning),
             "citations": parsed.get("citations", []),
-            "label": parsed.get("verdict", verdict)
+            "label": parsed.get("verdict", verdict),
         }
 
         logger.info("[AGENT] Successfully generated explanation report")
@@ -91,13 +85,7 @@ Trả về CHỈ JSON:"""
 
     except Exception as e:
         logger.error(f"[AGENT] Explanation generation failed: {e}")
-        return {
-            "verdict": verdict,
-            "confidence": confidence,
-            "summary": f"Lỗi khi tạo báo cáo: {str(e)}",
-            "detailed_explanation": reasoning,
-            "label": verdict
-        }
+        return {"verdict": verdict, "confidence": confidence, "summary": f"Lỗi khi tạo báo cáo: {str(e)}", "detailed_explanation": reasoning, "label": verdict}
 
 
 def run_explainer_agent_sync(

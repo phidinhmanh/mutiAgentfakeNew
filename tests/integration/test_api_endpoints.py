@@ -8,12 +8,9 @@ from unittest.mock import Mock
 import pytest
 from fastapi.testclient import TestClient
 
-from tests.conftest import collect_sse_events
-
 # ────────────────────────────────────────────────────────────────
 # Fixtures
 # ────────────────────────────────────────────────────────────────
-
 
 
 @pytest.fixture
@@ -235,11 +232,7 @@ def test_analyze_sse_contains_log_events(api_client: TestClient) -> None:
         assert len(data_lines) > 0, f"Expected 'data:' SSE frames, got: {lines}"
 
         # Verify at least one log event
-        has_log_event = any(
-            (json.loads(line.removeprefix("data: ")).get("type") == "log")
-            for line in data_lines
-            if _is_json(line.removeprefix("data: "))
-        )
+        has_log_event = any((json.loads(line.removeprefix("data: ")).get("type") == "log") for line in data_lines if _is_json(line.removeprefix("data: ")))
         assert has_log_event, f"Expected at least one log event, got data lines: {data_lines}"
 
 
@@ -250,11 +243,7 @@ def test_analyze_sse_contains_result_event(api_client: TestClient) -> None:
         "/api/analyze",
         json={"text": "Việt Nam đạt tăng trưởng GDP 8%."},
     ) as response:
-        data_lines = [
-            json.loads(line.removeprefix("data: "))
-            for line in response.iter_lines()
-            if line.startswith("data: ") and _is_json(line.removeprefix("data: "))
-        ]
+        data_lines = [json.loads(line.removeprefix("data: ")) for line in response.iter_lines() if line.startswith("data: ") and _is_json(line.removeprefix("data: "))]
 
         result_events = [e for e in data_lines if e.get("type") == "result"]
         assert len(result_events) == 1, f"Expected 1 result event, got: {data_lines}"
@@ -272,11 +261,7 @@ def test_analyze_unicode_vietnamese(api_client: TestClient) -> None:
         json={"text": "Theo báo cáo của Bộ Y tế, Việt Nam kiểm soát dịch COVID-19 hiệu quả."},
     ) as response:
         assert response.status_code == 200
-        data_lines = [
-            json.loads(line.removeprefix("data: "))
-            for line in response.iter_lines()
-            if line.startswith("data: ") and _is_json(line.removeprefix("data: "))
-        ]
+        data_lines = [json.loads(line.removeprefix("data: ")) for line in response.iter_lines() if line.startswith("data: ") and _is_json(line.removeprefix("data: "))]
         result_events = [e for e in data_lines if e.get("type") == "result"]
         assert len(result_events) == 1
 
@@ -290,11 +275,7 @@ def test_analyze_long_text(api_client: TestClient) -> None:
         json={"text": long_text},
     ) as response:
         assert response.status_code == 200
-        data_lines = [
-            json.loads(line.removeprefix("data: "))
-            for line in response.iter_lines()
-            if line.startswith("data: ") and _is_json(line.removeprefix("data: "))
-        ]
+        data_lines = [json.loads(line.removeprefix("data: ")) for line in response.iter_lines() if line.startswith("data: ") and _is_json(line.removeprefix("data: "))]
         result_events = [e for e in data_lines if e.get("type") == "result"]
         assert len(result_events) == 1
 
@@ -306,11 +287,7 @@ def test_analyze_multiple_claims(api_client: TestClient) -> None:
         "/api/analyze",
         json={"text": "Việt Nam đạt tăng trưởng 8%. Campuchia tăng 5%. Thái Lan tăng 3%."},
     ) as response:
-        data_lines = [
-            json.loads(line.removeprefix("data: "))
-            for line in response.iter_lines()
-            if line.startswith("data: ") and _is_json(line.removeprefix("data: "))
-        ]
+        data_lines = [json.loads(line.removeprefix("data: ")) for line in response.iter_lines() if line.startswith("data: ") and _is_json(line.removeprefix("data: "))]
         result_events = [e for e in data_lines if e.get("type") == "result"]
         assert len(result_events) == 1
 

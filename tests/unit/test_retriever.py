@@ -119,9 +119,7 @@ class TestRetrieveEvidence:
 
     @patch("fake_news_detector.rag.retriever.get_vector_store")
     @patch("fake_news_detector.rag.retriever.search_web")
-    def test_retrieve_faiss_only_high_confidence(
-        self, mock_search: Mock, mock_get: Mock
-    ) -> None:
+    def test_retrieve_faiss_only_high_confidence(self, mock_search: Mock, mock_get: Mock) -> None:
         """High confidence skips web search."""
         mock_vs = Mock()
         mock_vs.similarity_search.return_value = [{"content": "high", "score": 0.95}]
@@ -133,9 +131,7 @@ class TestRetrieveEvidence:
 
     @patch("fake_news_detector.rag.retriever.get_vector_store")
     @patch("fake_news_detector.rag.retriever.search_web")
-    def test_retrieve_web_fallback_low_confidence(
-        self, mock_search: Mock, mock_get: Mock
-    ) -> None:
+    def test_retrieve_web_fallback_low_confidence(self, mock_search: Mock, mock_get: Mock) -> None:
         """Low confidence triggers web search."""
         mock_vs = Mock()
         mock_vs.similarity_search.return_value = [{"content": "low", "score": 0.3}]

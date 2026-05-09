@@ -5,7 +5,6 @@ from __future__ import annotations
 from unittest.mock import Mock, patch
 
 from fake_news_detector.models.baseline import LABEL_MAP, PhoBERTBaseline
-from trust_agents.models import baseline as trust_baseline
 
 
 class TestLabelMap:
@@ -28,9 +27,7 @@ class TestPhoBERTBaselineInit:
     @patch("trust_agents.models.baseline.AutoModelForSequenceClassification")
     @patch("trust_agents.models.baseline.AutoTokenizer")
     @patch("trust_agents.models.baseline.settings")
-    def test_init_loads_tokenizer(
-        self, mock_settings: Mock, mock_tokenizer: Mock, mock_model: Mock
-    ) -> None:
+    def test_init_loads_tokenizer(self, mock_settings: Mock, mock_tokenizer: Mock, mock_model: Mock) -> None:
         """Initializes tokenizer."""
         mock_settings.phobert_model = "vinai/phobert-base"
         mock_tokenizer_instance = Mock()
@@ -46,9 +43,7 @@ class TestPhoBERTBaselineInit:
     @patch("trust_agents.models.baseline.AutoModelForSequenceClassification")
     @patch("trust_agents.models.baseline.AutoTokenizer")
     @patch("trust_agents.models.baseline.settings")
-    def test_init_loads_model(
-        self, mock_settings: Mock, mock_tokenizer: Mock, mock_model: Mock
-    ) -> None:
+    def test_init_loads_model(self, mock_settings: Mock, mock_tokenizer: Mock, mock_model: Mock) -> None:
         """Initializes model with correct config."""
         mock_settings.phobert_model = "vinai/phobert-base"
         mock_tokenizer.from_pretrained.return_value = Mock()
@@ -64,9 +59,7 @@ class TestPhoBERTBaselineInit:
     @patch("trust_agents.models.baseline.AutoModelForSequenceClassification")
     @patch("trust_agents.models.baseline.AutoTokenizer")
     @patch("trust_agents.models.baseline.settings")
-    def test_init_sets_model_eval(
-        self, mock_settings: Mock, mock_tokenizer: Mock, mock_model: Mock
-    ) -> None:
+    def test_init_sets_model_eval(self, mock_settings: Mock, mock_tokenizer: Mock, mock_model: Mock) -> None:
         """Sets model to eval mode."""
         mock_settings.phobert_model = "vinai/phobert-base"
         mock_tokenizer.from_pretrained.return_value = Mock()
@@ -83,9 +76,7 @@ class TestPhoBERTBaselineEmptyInput:
     @patch("trust_agents.models.baseline.AutoModelForSequenceClassification")
     @patch("trust_agents.models.baseline.AutoTokenizer")
     @patch("trust_agents.models.baseline.settings")
-    def test_predict_empty_text(
-        self, mock_settings: Mock, mock_tokenizer: Mock, mock_model: Mock
-    ) -> None:
+    def test_predict_empty_text(self, mock_settings: Mock, mock_tokenizer: Mock, mock_model: Mock) -> None:
         """Empty text returns UNKNOWN label."""
         mock_settings.phobert_model = "vinai/phobert-base"
         mock_tokenizer.from_pretrained.return_value = Mock()
@@ -101,9 +92,7 @@ class TestPhoBERTBaselineEmptyInput:
     @patch("trust_agents.models.baseline.AutoModelForSequenceClassification")
     @patch("trust_agents.models.baseline.AutoTokenizer")
     @patch("trust_agents.models.baseline.settings")
-    def test_predict_whitespace_only(
-        self, mock_settings: Mock, mock_tokenizer: Mock, mock_model: Mock
-    ) -> None:
+    def test_predict_whitespace_only(self, mock_settings: Mock, mock_tokenizer: Mock, mock_model: Mock) -> None:
         """Whitespace-only returns UNKNOWN."""
         mock_settings.phobert_model = "vinai/phobert-base"
         mock_tokenizer.from_pretrained.return_value = Mock()
@@ -116,9 +105,7 @@ class TestPhoBERTBaselineEmptyInput:
     @patch("trust_agents.models.baseline.AutoModelForSequenceClassification")
     @patch("trust_agents.models.baseline.AutoTokenizer")
     @patch("trust_agents.models.baseline.settings")
-    def test_predict_with_sliding_window_empty(
-        self, mock_settings: Mock, mock_tokenizer: Mock, mock_model: Mock
-    ) -> None:
+    def test_predict_with_sliding_window_empty(self, mock_settings: Mock, mock_tokenizer: Mock, mock_model: Mock) -> None:
         """Sliding window with empty text returns UNKNOWN."""
         mock_settings.phobert_model = "vinai/phobert-base"
         mock_tokenizer.from_pretrained.return_value = Mock()

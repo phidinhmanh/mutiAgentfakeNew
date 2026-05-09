@@ -27,6 +27,7 @@ def call_llm(
 ) -> str:
     """Call LLM with prompt, supporting multiple backends with retries for 429."""
     import time
+
     config = get_llm_config()
     max_retries = 5
     base_delay = 10
@@ -35,6 +36,7 @@ def call_llm(
         try:
             if config.provider.value == "openai":
                 from openai import OpenAI
+
                 messages = []
                 if system_prompt:
                     messages.append({"role": "system", "content": system_prompt})
@@ -50,6 +52,7 @@ def call_llm(
 
             if config.provider.value == "groq":
                 from groq import Groq
+
                 messages = []
                 if system_prompt:
                     messages.append({"role": "system", "content": system_prompt})
@@ -65,6 +68,7 @@ def call_llm(
 
             if config.provider.value == "nvidia":
                 from openai import OpenAI
+
                 api_key = config.get_api_key()
                 if not isinstance(api_key, str) or not api_key:
                     raise ValueError("A string NVIDIA API key is required")
@@ -86,6 +90,7 @@ def call_llm(
 
             from google import genai
             from google.genai import types
+
             api_key = config.get_api_key()
             if not isinstance(api_key, str) or not api_key:
                 raise ValueError("A string Gemini API key is required")
@@ -103,12 +108,11 @@ def call_llm(
 
         except Exception as e:
             error_str = str(e).lower()
-            is_retryable = any(code in error_str for code in
-                ["429", "500", "502", "503", "504", "bad gateway", "rate_limit", "timeout"])
+            is_retryable = any(code in error_str for code in ["429", "500", "502", "503", "504", "bad gateway", "rate_limit", "timeout"])
 
             if is_retryable and attempt < max_retries - 1:
-                delay = base_delay * (2 ** attempt)
-                logger.warning(f"Retryable error hit ({e}). Retrying in {delay}s... (Attempt {attempt+1}/{max_retries})")
+                delay = base_delay * (2**attempt)
+                logger.warning(f"Retryable error ({e}). Retrying in {delay}s... (Attempt {attempt + 1}/{max_retries})")
                 time.sleep(delay)
                 continue
             logger.error(f"LLM call failed: {e}")
@@ -197,11 +201,7 @@ def call_llm_json(
     except ValueError as first_error:
         logger.warning("Failed to parse JSON on first attempt: %s", first_error)
 
-    retry_prompt = (
-        f"{prompt}\n\n"
-        "Return exactly one valid JSON object. Do not include markdown fences, "
-        "commentary, or trailing text."
-    )
+    retry_prompt = f"{prompt}\n\nReturn exactly one valid JSON object. Do not include markdown fences, commentary, or trailing text."
     retry_response = call_llm(retry_prompt, system_prompt, temperature, max_tokens)
 
     try:

@@ -26,18 +26,8 @@ from dotenv import load_dotenv
 from shared_fact_checking.constants import (
     AUTHORITATIVE_DOMAINS,
     CACHE_TTL_SECONDS,
-    GOV_AUTHORITY_WEIGHT,
-    GOV_CONFIDENCE_BOOST,
-    LOW_CONFIDENCE_RETRY_THRESHOLD,
-    NEGATION_GUARD_THRESHOLD,
-    NEWS_AUTHORITY_WEIGHT,
-    NUMERIC_DISCREPANCY_THRESHOLD,
-    NUMERIC_MISMATCH_THRESHOLD,
     RETRY_BASE_DELAY,
     RETRY_MAX_RETRIES,
-    TRUSTED_TIER_PREFIXES,
-    VETO_CONFIDENCE_THRESHOLD_MULTI,
-    VETO_CONFIDENCE_THRESHOLD_SINGLE,
 )
 from trust_agents.agents.claim_extractor import run_claim_extractor_agent_sync
 from trust_agents.agents.evidence_retrieval import run_evidence_retrieval_agent_sync
@@ -45,6 +35,8 @@ from trust_agents.agents.explainer import run_explainer_agent_sync
 from trust_agents.agents.verifier import run_verifier_agent_sync
 from trust_agents.orchestration.identity_guard import (
     detect_identity_mismatch as _detect_identity_mismatch,
+)
+from trust_agents.orchestration.identity_guard import (
     detect_numeric_discrepancy as _detect_hard_numeric_discrepancy,
 )
 from trust_agents.orchestration.negation_guard import negation_scanner
@@ -136,8 +128,6 @@ def _get_cached_result(claim: str) -> dict[str, Any] | None:
     return None
 
 
-
-
 def _cache_result(claim: str, result: dict[str, Any]) -> None:
     """Cache result for claim."""
     import time
@@ -152,7 +142,6 @@ def clear_claim_cache() -> None:
     global _claim_cache
     _claim_cache.clear()
     logger.info("[CACHE] Claim cache cleared")
-
 
 
 @dataclass
@@ -325,6 +314,7 @@ class TRUSTOrchestrator:
         if self.log_callback:
             try:
                 import datetime
+
                 now = datetime.datetime.now()
                 time_str = now.strftime("%H:%M:%S") + f".{now.microsecond // 1000:03d}"
                 self.log_callback({"time": time_str, "level": level, "agent": agent, "msg": msg})
@@ -379,10 +369,7 @@ class TRUSTOrchestrator:
     def _process_claims(self, claims: list[str], skip_evidence: bool = False) -> list[dict[str, Any]]:
         """Process claims with bounded concurrency while preserving order."""
         if len(claims) <= 1 or self.max_claim_workers == 1:
-            return [
-                self._process_single_claim_with_fallback(index, claim, len(claims), skip_evidence)
-                for index, claim in enumerate(claims, 1)
-            ]
+            return [self._process_single_claim_with_fallback(index, claim, len(claims), skip_evidence) for index, claim in enumerate(claims, 1)]
 
         max_workers = min(self.max_claim_workers, len(claims))
         logger.info(
@@ -393,10 +380,7 @@ class TRUSTOrchestrator:
 
         indexed_results: list[dict[str, Any] | None] = [None] * len(claims)
         with ThreadPoolExecutor(max_workers=max_workers) as executor:
-            future_to_index = {
-                executor.submit(self._process_single_claim_with_fallback, i, claim, len(claims), skip_evidence): i - 1
-                for i, claim in enumerate(claims, 1)
-            }
+            future_to_index = {executor.submit(self._process_single_claim_with_fallback, i, claim, len(claims), skip_evidence): i - 1 for i, claim in enumerate(claims, 1)}
 
             for future in concurrent.futures.as_completed(future_to_index):
                 idx = future_to_index[future]
@@ -555,7 +539,7 @@ class TRUSTOrchestrator:
         # Emit verdict log
         v_label = verdict_data.get("verdict", "uncertain").upper()
         v_conf = verdict_data.get("confidence", 0.0)
-        self._emit_log("SUCCESS", "Verifier", f"Kết quả: {v_label} ({v_conf*100:.1f}%)")
+        self._emit_log("SUCCESS", "Verifier", f"Kết quả: {v_label} ({v_conf * 100:.1f}%)")
 
         # V12 ULTRA: Bayesian retry - if REAL but confidence < 0.7, retry with strict prompt
         if self.v12_ultra_enabled and self.v12_bayesian_retry and evidence:
@@ -570,8 +554,7 @@ class TRUSTOrchestrator:
                 )
                 try:
                     retry_verdict = run_verifier_agent_sync(
-                        f"{claim} [V12 ULTRA RETRY] Kiểm tra lại nghiêm ngặt: "
-                        f"yêu cầu 3+ nguồn TIER 1 xác nhận mọi số liệu",
+                        f"{claim} [V12 ULTRA RETRY] Kiểm tra lại nghiêm ngặt: yêu cầu 3+ nguồn TIER 1 xác nhận mọi số liệu",
                         evidence,
                     )
                     retry_verdict = self._normalize_verdict(retry_verdict)
@@ -643,9 +626,7 @@ class TRUSTOrchestrator:
             }
 
         # V14.8 Identity Hard-Guard: direct name mismatch Claim vs Evidence
-        _identity_kill_fired, _identity_override_reasoning = _detect_identity_mismatch(
-            claim, evidence
-        )
+        _identity_kill_fired, _identity_override_reasoning = _detect_identity_mismatch(claim, evidence)
         if _identity_kill_fired:
             logger.info("[V14.8 IDENTITY KILL] %s", _identity_override_reasoning)
             verdict_data = {
@@ -756,9 +737,7 @@ class TRUSTOrchestrator:
         # Instead of simple average, weight by source authority
         total_weight = sum(source_authorities)
         weighted_avg_conf = sum(c * w for c, w in weighted_confidences) / total_weight if total_weight > 0 else 0.0
-        simple_avg_conf = (
-            sum(c for c, _ in weighted_confidences) / len(weighted_confidences) if weighted_confidences else 0.0
-        )
+        simple_avg_conf = sum(c for c, _ in weighted_confidences) / len(weighted_confidences) if weighted_confidences else 0.0
 
         # Map: true→REAL, false→FAKE, uncertain→UNCERTAIN (for counting)
         norm = {"true": "REAL", "false": "FAKE", "uncertain": "UNCERTAIN"}
@@ -866,12 +845,7 @@ class TRUSTOrchestrator:
 
         # ── V13/V14.5: Ground-truth-first heuristic with web corroboration ──
         has_ground_truth_context = bool(self.ground_truth_evidence and self.ground_truth_evidence.strip())
-        has_ground_truth_evidence = any(
-            any(k in item for k in ("_ground_truth", "ground_truth", "is_ground_truth"))
-            for result in results
-            for item in result.get("evidence", [])
-            if isinstance(item, dict)
-        )
+        has_ground_truth_evidence = any(any(k in item for k in ("_ground_truth", "ground_truth", "is_ground_truth")) for result in results for item in result.get("evidence", []) if isinstance(item, dict))
         gt_first_enabled = has_ground_truth_context or has_ground_truth_evidence
 
         def _split_gt_and_web_items(evidence_list: list[dict[str, Any]]) -> tuple[int, int]:
@@ -981,7 +955,9 @@ class TRUSTOrchestrator:
                             _numeric_kill_confidence = max(_numeric_kill_confidence, conf)
                             logger.info(
                                 "[V14.7.1] Numeric kill: %.1f vs %.1f gap=%.0f%%",
-                                a, b, rel_diff * 100,
+                                a,
+                                b,
+                                rel_diff * 100,
                             )
 
             # V14.7.1 Strict Entity Guard: identity/name mismatches in reasoning
@@ -1000,9 +976,7 @@ class TRUSTOrchestrator:
             if any(m in reasoning_text.lower() for m in _identity_markers):
                 _identity_mismatch_found = True
                 _identity_mismatch_confidence = max(_identity_mismatch_confidence, conf)
-                logger.info(
-                    "[V14.7.1] Identity mismatch detected in reasoning"
-                )
+                logger.info("[V14.7.1] Identity mismatch detected in reasoning")
 
         # ── V14: Contradiction Overrides GT ─────────────────────────────────
         # If GT evidence is present and all claims would be TRUE, but web evidence
@@ -1150,10 +1124,7 @@ class TRUSTOrchestrator:
         if final_verdict in ("REAL", "true"):
             _gov_boost_blocked = _identity_mismatch_found or _numeric_kill_found
             if _gov_boost_blocked:
-                logger.info(
-                    "[V14.7.1 GOV BOOST BLOCKED] identity/numeric mismatch detected, "
-                    "skipping trust boost"
-                )
+                logger.info("[V14.7.1 GOV BOOST BLOCKED] identity/numeric mismatch detected, skipping trust boost")
             else:
                 has_gov_evidence = False
                 for result in results:
@@ -1171,12 +1142,7 @@ class TRUSTOrchestrator:
         return {
             "verdict": final_verdict,
             "confidence": round(final_confidence, 3),
-            "explanation": (
-                f"Verified {total} claims with weighted scoring. "
-                f"REAL weight: {real_weight:.1f}, FAKE weight: {fake_weight:.1f}"
-                if len(results) > 1
-                else (results[0].get("reasoning", "") if results else "No claims found")
-            ),
+            "explanation": (f"Verified {total} claims with weighted scoring. REAL weight: {real_weight:.1f}, FAKE weight: {fake_weight:.1f}" if len(results) > 1 else (results[0].get("reasoning", "") if results else "No claims found")),
             "claims": results,
             "total_claims": len(results),
             "verdicts": verdict_counts,

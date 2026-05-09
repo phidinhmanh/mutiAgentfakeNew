@@ -20,9 +20,7 @@ DATASET_NAME = "tranthaihoa/vifactcheck"
 MODEL_NAME = "vinai/phobert-base"
 
 
-def prepare_dataset(
-    tokenizer: AutoTokenizer, max_length: int = 256
-) -> tuple[Dataset, Dataset]:
+def prepare_dataset(tokenizer: AutoTokenizer, max_length: int = 256) -> tuple[Dataset, Dataset]:
     """Prepare dataset for training.
 
     Args:
@@ -59,12 +57,8 @@ def prepare_dataset(
     train_dataset = train_dataset.map(map_labels)
     val_dataset = val_dataset.map(map_labels)
 
-    train_dataset = train_dataset.filter(
-        lambda x: x["labels"] in [0, 1], desc="Filtering invalid labels"
-    )
-    val_dataset = val_dataset.filter(
-        lambda x: x["labels"] in [0, 1], desc="Filtering invalid labels"
-    )
+    train_dataset = train_dataset.filter(lambda x: x["labels"] in [0, 1], desc="Filtering invalid labels")
+    val_dataset = val_dataset.filter(lambda x: x["labels"] in [0, 1], desc="Filtering invalid labels")
 
     return train_dataset, val_dataset
 

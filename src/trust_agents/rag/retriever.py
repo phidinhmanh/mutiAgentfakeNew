@@ -29,12 +29,8 @@ def retrieve_evidence(claim: str, use_web_search: bool = True) -> list[dict[str,
     vector_store = get_vector_store()
     return retrieve_with_fallback(
         query=claim,
-        local_search=lambda value: vector_store.similarity_search(
-            value, k=settings.top_k_faiss
-        ),
+        local_search=lambda value: vector_store.similarity_search(value, k=settings.top_k_faiss),
         web_search=lambda value: search_web(value, num_results=settings.top_k_google),
         threshold=settings.similarity_threshold,
         use_web_search=use_web_search,
     )
-
-

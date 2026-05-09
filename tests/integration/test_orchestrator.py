@@ -279,9 +279,7 @@ class TestOrchestratorIntegration:
 
         # Should still return results
         assert len(result.results) >= 1
-        assert (
-            "error" in result.results[0] or result.results[0]["verdict"] == "uncertain"
-        )
+        assert "error" in result.results[0] or result.results[0]["verdict"] == "uncertain"
 
     def test_process_text_explainer_error(
         self,
@@ -396,9 +394,7 @@ class TestOrchestratorIntegration:
         """Test handling of Vietnamese text."""
         orchestrator = TRUSTOrchestrator()
 
-        vietnamese_text = (
-            "Theo báo cáo của Bộ Y tế, Việt Nam đã kiểm soát được dịch COVID-19."
-        )
+        vietnamese_text = "Theo báo cáo của Bộ Y tế, Việt Nam đã kiểm soát được dịch COVID-19."
 
         result = orchestrator.process_text(vietnamese_text)
 

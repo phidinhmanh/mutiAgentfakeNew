@@ -94,24 +94,18 @@ class TestSearchTavily:
 class TestSearchWeb:
     """Test web search provider selection."""
 
-    def test_search_web_uses_serper_by_default(
-        self, mock_serper_api: Mock, monkeypatch: pytest.MonkeyPatch
-    ) -> None:
+    def test_search_web_uses_serper_by_default(self, mock_serper_api: Mock, monkeypatch: pytest.MonkeyPatch) -> None:
         """Default provider is Serper."""
         monkeypatch.setenv("SERPER_API_KEY", "test-key")
         monkeypatch.delenv("TAVILY_API_KEY", raising=False)
         results = search_web("test query")
         assert len(results) >= 0
 
-    def test_search_web_uses_tavily_when_configured(
-        self, mock_tavily_api: Mock, monkeypatch: pytest.MonkeyPatch
-    ) -> None:
+    def test_search_web_uses_tavily_when_configured(self, mock_tavily_api: Mock, monkeypatch: pytest.MonkeyPatch) -> None:
         """Tavily used when configured via settings."""
         monkeypatch.setenv("TAVILY_API_KEY", "test-key")
         monkeypatch.delenv("SERPER_API_KEY", raising=False)
-        monkeypatch.setattr(
-            "fake_news_detector.config.settings.search_provider", "tavily"
-        )
+        monkeypatch.setattr("fake_news_detector.config.settings.search_provider", "tavily")
         results = search_web("test query")
         assert len(results) >= 0
 

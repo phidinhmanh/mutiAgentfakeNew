@@ -58,9 +58,7 @@ def _try_parse_verdict_json(text: str) -> dict[str, Any] | None:
             key_m = re.findall(r'"key_points"\s*:\s*\[(.*?)\]', text, re.DOTALL)
             key_points: list[str] = []
             if key_m:
-                key_points = [
-                    k.strip().strip('"') for k in re.findall(r'"([^"]+)"', key_m[0])
-                ]
+                key_points = [k.strip().strip('"') for k in re.findall(r'"([^"]+)"', key_m[0])]
 
             result: dict[str, Any] = {
                 "overall_verdict": verdict,
@@ -80,9 +78,7 @@ def _try_parse_verdict_json(text: str) -> dict[str, Any] | None:
     return None
 
 
-def _heuristic_evidence_verdict(
-    claim: str, evidence_list: list[dict[str, Any]]
-) -> dict[str, Any]:
+def _heuristic_evidence_verdict(claim: str, evidence_list: list[dict[str, Any]]) -> dict[str, Any]:
     """Deterministic verdict when LLM parsing completely fails."""
     claim_lower = claim.lower()
     claim_words = set(claim_lower.split())
@@ -156,9 +152,7 @@ def _heuristic_consistency_verdict(claim: str, evidence_text: str) -> dict[str, 
         "consistency": consistency,
         "confidence": confidence,
         "key_points": [],
-        "reasoning": f"Heuristic fallback: consistency={consistency}, overlap_ratio={ratio:.2f}"
-        if len(claim_words) > 0
-        else "No claim words to compare",
+        "reasoning": f"Heuristic fallback: consistency={consistency}, overlap_ratio={ratio:.2f}" if len(claim_words) > 0 else "No claim words to compare",
         "_fallback": True,
     }
 
@@ -203,9 +197,7 @@ Return ONLY valid JSON:
             max_tokens=500,
         )
 
-        logger.info(
-            f"compare_claim_evidence_tool completed: {result.get('consistency')}"
-        )
+        logger.info(f"compare_claim_evidence_tool completed: {result.get('consistency')}")
         return json.dumps(result)
 
     except Exception as e:
@@ -260,7 +252,7 @@ INSTRUCTIONS:
    - If the claim describes a process as "labor-intensive" or "elaborate" and gives a duration (e.g., "6 hours"), and evidence confirms the process is indeed elaborate, accept the duration as plausible even if other sources show "quick" versions exist.
 3. A claim is "contradicted" only if:
    - The evidence directly says the opposite (e.g., "X is NOT Y").
-   - The evidence describes a DIFFERENT, INCOMPATIBLE process/method than the one in the claim. 
+   - The evidence describes a DIFFERENT, INCOMPATIBLE process/method than the one in the claim.
      * Example: Claim says "transported fully assembled", evidence says "shipped in 32 crates". These are mutually exclusive. Mark as CONTRADICTED.
    - The numbers in the claim are LOGICALLY IMPOSSIBLE or PHYSICALLY INCOMPATIBLE given the evidence.
    - IMPORTANT: Individual variations in speed (3h vs 6h) are NOT contradictions.
@@ -372,9 +364,7 @@ async def generate_verdict_tool(claim: str, aggregated_assessment: str) -> str:
             "reasoning": assessment.get("reasoning", "Based on available evidence"),
         }
 
-        logger.info(
-            f"generate_verdict_tool completed: {verdict} (confidence: {confidence:.3f})"
-        )
+        logger.info(f"generate_verdict_tool completed: {verdict} (confidence: {confidence:.3f})")
         return json.dumps(result)
 
     except Exception as e:
@@ -437,9 +427,7 @@ async def confidence_calibration_tool(verdict: str, evidence_quality: str) -> st
             base_confidence = 0.5
 
         # Apply calibration
-        calibrated = base_confidence * (
-            0.4 * relevance + 0.4 * consistency + 0.2 * quantity
-        )
+        calibrated = base_confidence * (0.4 * relevance + 0.4 * consistency + 0.2 * quantity)
 
         if verdict == "uncertain":
             calibrated *= 0.9
@@ -462,6 +450,4 @@ async def confidence_calibration_tool(verdict: str, evidence_quality: str) -> st
 
     except Exception as e:
         logger.error(f"Error calibrating confidence: {e}")
-        return json.dumps(
-            {"original_confidence": 0.5, "calibrated_confidence": 0.35, "error": str(e)}
-        )
+        return json.dumps({"original_confidence": 0.5, "calibrated_confidence": 0.35, "error": str(e)})

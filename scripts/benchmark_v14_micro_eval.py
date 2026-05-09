@@ -14,8 +14,7 @@ import logging
 import os
 import sys
 import time
-from dataclasses import asdict, dataclass
-from pathlib import Path
+from dataclasses import dataclass
 from typing import Any
 
 if sys.platform == "win32":
@@ -69,7 +68,12 @@ async def run_multi_agent_async(
 
     t0 = time.perf_counter()
     result = await asyncio.to_thread(
-        run_trust_pipeline_sync, text, 10, False, ground_truth_evidence, True,
+        run_trust_pipeline_sync,
+        text,
+        10,
+        False,
+        ground_truth_evidence,
+        True,
     )
     latency = time.perf_counter() - t0
 
@@ -121,11 +125,7 @@ async def process_one(sample: dict[str, Any]) -> SampleResult:
         r.multi_tokens_out = multi_resp["tokens_out"]
         r.multi_correct = r.multi_verdict == expected
 
-        logger.info(
-            f"[Micro] ID={sid} expected={expected} -> {r.multi_verdict} "
-            f"({r.multi_confidence:.1%}, {r.multi_latency:.1f}s) "
-            f"CORRECT={r.multi_correct}"
-        )
+        logger.info(f"[Micro] ID={sid} expected={expected} -> {r.multi_verdict} ({r.multi_confidence:.1%}, {r.multi_latency:.1f}s) CORRECT={r.multi_correct}")
     except Exception as e:
         r.multi_error = str(e)
         logger.error(f"[Micro] ID={sid} ERROR: {e}")
@@ -139,8 +139,20 @@ async def main() -> None:
 
     # The 14 FAKE->REAL errors from V14 cross-val
     ids_to_fix = [
-        164, 5558, 3502, 5334, 6161, 447, 3850, 1800,
-        3542, 1618, 1463, 4097, 3652, 3799,
+        164,
+        5558,
+        3502,
+        5334,
+        6161,
+        447,
+        3850,
+        1800,
+        3542,
+        1618,
+        1463,
+        4097,
+        3652,
+        3799,
     ]
 
     samples = [s for s in data if s["sample_id"] in ids_to_fix]
@@ -168,9 +180,9 @@ async def main() -> None:
     accuracy = correct / len(results) * 100 if results else 0
 
     fp = sum(1 for r in results if r.expected == "FAKE" and r.multi_verdict == "REAL")
-    fn = sum(1 for r in results if r.expected == "REAL" and r.multi_verdict == "FAKE")
+    # fn = sum(1 for r in results if r.expected == "REAL" and r.multi_verdict == "FAKE")
     tn = sum(1 for r in results if r.expected == "FAKE" and r.multi_verdict == "FAKE")
-    tp = sum(1 for r in results if r.expected == "REAL" and r.multi_verdict == "REAL")
+    # tp = sum(1 for r in results if r.expected == "REAL" and r.multi_verdict == "REAL")
     unc = sum(1 for r in results if r.multi_verdict == "UNCERTAIN")
 
     print("\n" + "=" * 80)
@@ -186,10 +198,7 @@ async def main() -> None:
         mark = "SUCCESS" if r.multi_correct else "FAIL"
         if r.multi_verdict == "UNCERTAIN" and r.expected == "FAKE":
             mark = "BETTER"  # UNCERTAIN is better than REAL for FAKE
-        print(
-            f"  ID={r.sample_id:5d} | expected={r.expected:5s} -> {r.multi_verdict:12s} "
-            f"({r.multi_confidence:.1%}) | {mark}"
-        )
+        print(f"  ID={r.sample_id:5d} | expected={r.expected:5s} -> {r.multi_verdict:12s} ({r.multi_confidence:.1%}) | {mark}")
 
     print()
     print(f"Summary: {tn} correct FAKE, {fp} still FAKE->REAL, {unc} FAKE->UNCERTAIN (improved)")

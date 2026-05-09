@@ -11,9 +11,7 @@ from fake_news_detector.config import settings
 logger = logging.getLogger(__name__)
 
 
-def search_serper(
-    query: str, num_results: int = 3
-) -> tuple[list[dict[str, Any]], str | None]:
+def search_serper(query: str, num_results: int = 3) -> tuple[list[dict[str, Any]], str | None]:
     """Search using Serper.dev (Google Search API).
 
     Args:
@@ -55,9 +53,7 @@ def search_serper(
     except HTTPError as error:
         status_code = error.response.status_code if error.response is not None else None
         if status_code == 403:
-            logger.error(
-                "Serper search failed with 403 Forbidden; check SERPER_API_KEY or provider access"
-            )
+            logger.error("Serper search failed with 403 Forbidden; check SERPER_API_KEY or provider access")
             return [], "http_403"
         logger.error("Serper search failed with HTTP %s: %s", status_code, error)
         return [], f"http_{status_code}" if status_code is not None else "http_error"
@@ -66,9 +62,7 @@ def search_serper(
         return [], type(error).__name__
 
 
-def _should_fallback_to_tavily(
-    failure_reason: str | None, results: list[dict[str, Any]]
-) -> bool:
+def _should_fallback_to_tavily(failure_reason: str | None, results: list[dict[str, Any]]) -> bool:
     """Return whether Tavily should be used after Serper attempt."""
     if results:
         return False
@@ -84,9 +78,7 @@ def _log_tavily_fallback_reason(failure_reason: str | None) -> None:
     elif failure_reason == "missing_api_key":
         logger.warning("Falling back to Tavily because SERPER_API_KEY is unavailable")
     elif failure_reason:
-        logger.warning(
-            "Falling back to Tavily because Serper failed: %s", failure_reason
-        )
+        logger.warning("Falling back to Tavily because Serper failed: %s", failure_reason)
 
 
 def search_web(query: str, num_results: int = 3) -> list[dict[str, Any]]:
@@ -121,16 +113,11 @@ def search_ddg(query: str, num_results: int = 3) -> list[dict[str, Any]]:
     """Search using DuckDuckGo (Free fallback)."""
     try:
         from langchain_community.tools import DuckDuckGoSearchRun
+
         search = DuckDuckGoSearchRun()
         content = search.run(query)
         if content:
-            return [{
-                "content": content,
-                "title": f"Search result for {query[:30]}...",
-                "url": "https://duckduckgo.com",
-                "source": "duckduckgo",
-                "score": 0.6
-            }]
+            return [{"content": content, "title": f"Search result for {query[:30]}...", "url": "https://duckduckgo.com", "source": "duckduckgo", "score": 0.6}]
         return []
     except Exception as e:
         logger.error(f"DuckDuckGo search failed: {e}")

@@ -78,15 +78,9 @@ class ChatGemini(BaseChatModel):
             )
             return self._client
 
-        api_key = (
-            self.google_api_key
-            or os.getenv("GEMINI_API_KEY")
-            or os.getenv("GOOGLE_API_KEY")
-        )
+        api_key = self.google_api_key or os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
         if not api_key:
-            raise ValueError(
-                "GEMINI_API_KEY or GOOGLE_API_KEY environment variable required"
-            )
+            raise ValueError("GEMINI_API_KEY or GOOGLE_API_KEY environment variable required")
 
         self._client = genai.Client(
             api_key=api_key,
@@ -146,9 +140,7 @@ class ChatGemini(BaseChatModel):
             contents=prompt,
             config=self._build_config(stop=stop, **kwargs),
         )
-        generation = ChatGeneration(
-            message=AIMessage(content=self._extract_text(response))
-        )
+        generation = ChatGeneration(message=AIMessage(content=self._extract_text(response)))
         return ChatResult(generations=[generation])
 
     async def _agenerate(

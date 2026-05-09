@@ -1,6 +1,7 @@
 """
 TRUST Backend Adapter - implements BaseAgentBackend for TRUSTOrchestrator.
 """
+
 import asyncio
 import logging
 import time
@@ -51,12 +52,14 @@ def _extract_evidence(evidence_list: list[dict[str, Any]]) -> list[EvidenceItem]
         source = ev.get("source", "")
         authority = get_domain_authority(url) if url else "medium"
 
-        items.append(EvidenceItem(
-            content=ev.get("content", ev.get("text", "")),
-            source=source or url or "Unknown",
-            url=url,
-            authority=authority,
-        ))
+        items.append(
+            EvidenceItem(
+                content=ev.get("content", ev.get("text", "")),
+                source=source or url or "Unknown",
+                url=url,
+                authority=authority,
+            )
+        )
     return items
 
 
@@ -113,7 +116,7 @@ class TRUSTBackend(BaseAgentBackend):
 
         # Process claims
         claims: list[ClaimResult] = []
-        for i, claim_result in enumerate(result.results, 1):
+        for _i, claim_result in enumerate(result.results, 1):
             claim = claim_result.get("claim", "")
             verdict = _normalize_verdict(claim_result.get("verdict", "uncertain"))
             confidence = float(claim_result.get("confidence", 0.0))
@@ -122,13 +125,15 @@ class TRUSTBackend(BaseAgentBackend):
             evidence_list = claim_result.get("evidence", [])
             evidence = _extract_evidence(evidence_list)
 
-            claims.append(ClaimResult(
-                claim=claim,
-                verdict=verdict,
-                confidence=confidence,
-                reasoning=reasoning,
-                evidence=evidence,
-            ))
+            claims.append(
+                ClaimResult(
+                    claim=claim,
+                    verdict=verdict,
+                    confidence=confidence,
+                    reasoning=reasoning,
+                    evidence=evidence,
+                )
+            )
 
         # Get summary
         summary = result.summary
@@ -137,13 +142,8 @@ class TRUSTBackend(BaseAgentBackend):
         explanation = summary.get("explanation", "")
 
         # Log: Final result if not already done
-        if not any(l.msg.startswith("Phân tích hoàn tất") for l in logs):
-            logs.append(AgentLog(
-                time=_format_time(),
-                level="SUCCESS",
-                agent="Orchestrator",
-                msg=f"Phân tích hoàn tất. Kết luận: {final_verdict} — Độ tin cậy {final_confidence*100:.0f}%"
-            ))
+        if not any(log.msg.startswith("Phân tích hoàn tất") for log in logs):
+            logs.append(AgentLog(time=_format_time(), level="SUCCESS", agent="Orchestrator", msg=f"Phân tích hoàn tất. Kết luận: {final_verdict} — Độ tin cậy {final_confidence * 100:.0f}%"))
 
         processing_ms = int((time.time() - start_time) * 1000)
 
@@ -153,7 +153,7 @@ class TRUSTBackend(BaseAgentBackend):
             summary=explanation,
             claims=claims,
             logs=logs,
-            processingMs=processing_ms,
+            processing_ms=processing_ms,
         )
 
     def get_status(self) -> dict:
@@ -196,13 +196,15 @@ class TRUSTBackend(BaseAgentBackend):
             reasoning = claim_result.get("reasoning", claim_result.get("summary", ""))
             evidence_list = claim_result.get("evidence", [])
 
-            claims.append(ClaimResult(
-                claim=claim_result.get("claim", ""),
-                verdict=verdict,
-                confidence=confidence,
-                reasoning=reasoning,
-                evidence=_extract_evidence(evidence_list),
-            ))
+            claims.append(
+                ClaimResult(
+                    claim=claim_result.get("claim", ""),
+                    verdict=verdict,
+                    confidence=confidence,
+                    reasoning=reasoning,
+                    evidence=_extract_evidence(evidence_list),
+                )
+            )
 
         # Get summary
         summary = result.summary
@@ -216,5 +218,5 @@ class TRUSTBackend(BaseAgentBackend):
             summary=summary.get("explanation", ""),
             claims=claims,
             logs=logs,
-            processingMs=processing_ms,
+            processing_ms=processing_ms,
         )

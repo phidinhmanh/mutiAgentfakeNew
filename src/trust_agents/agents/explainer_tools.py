@@ -44,9 +44,7 @@ def safe_json_parse(data: str | dict | list | Any, default: Any = None) -> Any:
 
 
 @tool()
-async def summarize_verification_tool(
-    claim: str, verdict: str, confidence: float, evidence_summary: str
-) -> str:
+async def summarize_verification_tool(claim: str, verdict: str, confidence: float, evidence_summary: str) -> str:
     """
     Summarize the verification process and key findings.
 
@@ -92,9 +90,7 @@ Create a concise summary that:
             "verdict": verdict,
             "confidence": confidence,
             "summary": summary,
-            "evidence_count": len(evidence_summary.split("Evidence")) - 1
-            if evidence_summary
-            else 0,
+            "evidence_count": len(evidence_summary.split("Evidence")) - 1 if evidence_summary else 0,
         }
 
         logger.info("summarize_verification_tool completed")
@@ -114,9 +110,7 @@ Create a concise summary that:
 
 
 @tool()
-async def generate_explanation_tool(
-    claim: str, verdict_data: str, evidence_list: str
-) -> str:
+async def generate_explanation_tool(claim: str, verdict_data: str, evidence_list: str) -> str:
     """
     Generate detailed natural language explanation with evidence citations.
 
@@ -131,9 +125,7 @@ async def generate_explanation_tool(
     logger.info("[DEBUG] generate_explanation_tool called")
 
     try:
-        verdict = safe_json_parse(
-            verdict_data, {"verdict": "uncertain", "confidence": 0.5}
-        )
+        verdict = safe_json_parse(verdict_data, {"verdict": "uncertain", "confidence": 0.5})
         evidence = safe_json_parse(evidence_list, [])
 
         verdict_str = verdict.get("verdict", "uncertain")
@@ -262,12 +254,8 @@ async def create_report_tool(
 
         verdict_str = verdict if isinstance(verdict, str) else str(verdict)
         summary_str = summary if isinstance(summary, str) else str(summary)
-        explanation_str = (
-            explanation if isinstance(explanation, str) else str(explanation)
-        )
-        confidence_value = (
-            float(confidence) if isinstance(confidence, (int, float)) else 0.5
-        )
+        explanation_str = explanation if isinstance(explanation, str) else str(explanation)
+        confidence_value = float(confidence) if isinstance(confidence, (int, float)) else 0.5
 
         report = {
             "claim": claim,

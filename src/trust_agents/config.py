@@ -46,9 +46,7 @@ class LLMConfig:
         model_map = {
             LLMProvider.OPENAI: os.getenv("OPENAI_MODEL", "gpt-4o-mini"),
             LLMProvider.GEMINI_GOOGLE: os.getenv("GEMINI_MODEL", "gemma-4-31b-it"),
-            LLMProvider.GEMINI_NVIDIA: os.getenv(
-                "NVIDIA_MODEL", "meta/llama-3.3-70b-instruct"
-            ),
+            LLMProvider.GEMINI_NVIDIA: os.getenv("NVIDIA_MODEL", "meta/llama-3.3-70b-instruct"),
             LLMProvider.GROQ: os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile"),
         }
 
@@ -61,9 +59,7 @@ class LLMConfig:
 
     def get_api_key_for(self, provider: LLMProvider | str) -> str | None:
         """Get API key for a specific provider."""
-        provider_value = (
-            provider.value if isinstance(provider, LLMProvider) else str(provider)
-        )
+        provider_value = provider.value if isinstance(provider, LLMProvider) else str(provider)
         if provider_value == LLMProvider.OPENAI.value:
             return os.getenv("OPENAI_API_KEY")
         if provider_value == LLMProvider.GEMINI_GOOGLE.value:
@@ -103,12 +99,8 @@ class Settings:
     hf_token: str = field(default_factory=lambda: os.getenv("HF_TOKEN", ""))
 
     # Model settings
-    phobert_model: str = field(
-        default_factory=lambda: os.getenv("PHOBERT_MODEL", "vinai/phobert-base")
-    )
-    llm_model: str = field(
-        default_factory=lambda: os.getenv("LLM_MODEL", "openai/gpt-oss-120b")
-    )
+    phobert_model: str = field(default_factory=lambda: os.getenv("PHOBERT_MODEL", "vinai/phobert-base"))
+    llm_model: str = field(default_factory=lambda: os.getenv("LLM_MODEL", "openai/gpt-oss-120b"))
     embedding_model: str = field(
         default_factory=lambda: os.getenv(
             "EMBEDDING_MODEL",
@@ -117,32 +109,18 @@ class Settings:
     )
 
     # RAG settings
-    faiss_index_path: str = field(
-        default_factory=lambda: os.getenv("FAISS_INDEX_PATH", "./data/faiss_index")
-    )
+    faiss_index_path: str = field(default_factory=lambda: os.getenv("FAISS_INDEX_PATH", "./data/faiss_index"))
     top_k_faiss: int = field(default_factory=lambda: int(os.getenv("TOP_K_FAISS", "5")))
-    top_k_google: int = field(
-        default_factory=lambda: int(os.getenv("TOP_K_GOOGLE", "3"))
-    )
-    similarity_threshold: float = field(
-        default_factory=lambda: float(os.getenv("SIMILARITY_THRESHOLD", "0.7"))
-    )
+    top_k_google: int = field(default_factory=lambda: int(os.getenv("TOP_K_GOOGLE", "3")))
+    similarity_threshold: float = field(default_factory=lambda: float(os.getenv("SIMILARITY_THRESHOLD", "0.7")))
 
     # Search engine choice
-    search_provider: Literal["serper", "tavily"] = field(
-        default_factory=lambda: os.getenv("SEARCH_PROVIDER", "serper")
-    )  # type: ignore
+    search_provider: Literal["serper", "tavily"] = field(default_factory=lambda: os.getenv("SEARCH_PROVIDER", "serper"))  # type: ignore
 
     # Application settings
-    debug: bool = field(
-        default_factory=lambda: os.getenv("DEBUG", "False").lower() == "true"
-    )
-    max_tokens: int = field(
-        default_factory=lambda: int(os.getenv("MAX_TOKENS", "2048"))
-    )
-    streaming: bool = field(
-        default_factory=lambda: os.getenv("STREAMING", "True").lower() == "true"
-    )
+    debug: bool = field(default_factory=lambda: os.getenv("DEBUG", "False").lower() == "true")
+    max_tokens: int = field(default_factory=lambda: int(os.getenv("MAX_TOKENS", "2048")))
+    streaming: bool = field(default_factory=lambda: os.getenv("STREAMING", "True").lower() == "true")
 
     # Trusted Vietnamese news sources
     trusted_sources: list[str] = field(

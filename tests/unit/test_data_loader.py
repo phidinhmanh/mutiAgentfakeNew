@@ -24,9 +24,7 @@ class TestLoadViFactCheck:
 
         load_vifactcheck("train")
         mock_load.assert_called_once()
-        assert mock_load.call_args[1].get("split") == "train" or "train" in str(
-            mock_load.call_args
-        )
+        assert mock_load.call_args[1].get("split") == "train" or "train" in str(mock_load.call_args)
 
     @patch("trust_agents.data.loader.load_dataset")
     def test_load_dataset_name(self, mock_load: Mock) -> None:

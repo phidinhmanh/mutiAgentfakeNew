@@ -19,6 +19,7 @@ def clean_orchestrator_cache():
     yield
     clear_claim_cache()
 
+
 # === Sample Data Fixtures ===
 
 
@@ -90,12 +91,8 @@ def sample_verdicts() -> list[dict[str, Any]]:
 def mock_nvidia_client() -> Mock:
     """Mock NVIDIA NIM API client."""
     client = Mock()
-    client.invoke = Mock(
-        return_value='{"verdict": "REAL", "confidence": 0.8, "reasoning": "Test reasoning", "citations": []}'
-    )
-    client.stream = Mock(
-        return_value=iter(['{"verdict": "REAL', '", "confidence": 0.8}'])
-    )
+    client.invoke = Mock(return_value='{"verdict": "REAL", "confidence": 0.8, "reasoning": "Test reasoning", "citations": []}')
+    client.stream = Mock(return_value=iter(['{"verdict": "REAL', '", "confidence": 0.8}']))
     return client
 
 
@@ -106,9 +103,7 @@ def mock_nvidia_client_fake() -> Mock:
     client.invoke = Mock(
         return_value='{"verdict": "FAKE", "confidence": 0.85, "reasoning": "Evidence contradicts claim", "citations": []}'  # noqa: E501
     )
-    client.stream = Mock(
-        return_value=iter(['{"verdict": "FAKE', '", "confidence": 0.85}'])
-    )
+    client.stream = Mock(return_value=iter(['{"verdict": "FAKE', '", "confidence": 0.85}']))
     return client
 
 
@@ -119,9 +114,7 @@ def mock_nvidia_client_unverifiable() -> Mock:
     client.invoke = Mock(
         return_value='{"verdict": "UNVERIFIABLE", "confidence": 0.0, "reasoning": "Not enough evidence", "citations": []}'  # noqa: E501
     )
-    client.stream = Mock(
-        return_value=iter(['{"verdict": "UNVERIFIABLE', '", "confidence": 0.0}'])
-    )
+    client.stream = Mock(return_value=iter(['{"verdict": "UNVERIFIABLE', '", "confidence": 0.0}']))
     return client
 
 
@@ -249,9 +242,7 @@ def mock_transformers_tokenizer() -> Mock:
 @pytest.fixture
 def mock_transformers_model() -> Mock:
     """Mock HuggingFace model."""
-    with patch(
-        "transformers.AutoModelForSequenceClassification.from_pretrained"
-    ) as mock:
+    with patch("transformers.AutoModelForSequenceClassification.from_pretrained") as mock:
         model = Mock()
         model.eval = Mock()
 
@@ -314,27 +305,15 @@ class MockNVIDIAResponse:
 
     @staticmethod
     def get_real_verdict() -> str:
-        return (
-            '{"verdict": "REAL", "confidence": 0.8, '
-            '"reasoning": "Evidence supports claim", '
-            '"citations": [{"evidence_id": 0, "quote_text": "Vietnam GDP grew 8%"}]}'
-        )
+        return '{"verdict": "REAL", "confidence": 0.8, "reasoning": "Evidence supports claim", "citations": [{"evidence_id": 0, "quote_text": "Vietnam GDP grew 8%"}]}'
 
     @staticmethod
     def get_fake_verdict() -> str:
-        return (
-            '{"verdict": "FAKE", "confidence": 0.85, '
-            '"reasoning": "Evidence contradicts claim", '
-            '"citations": []}'
-        )
+        return '{"verdict": "FAKE", "confidence": 0.85, "reasoning": "Evidence contradicts claim", "citations": []}'
 
     @staticmethod
     def get_unverifiable_verdict() -> str:
-        return (
-            '{"verdict": "UNVERIFIABLE", "confidence": 0.0, '
-            '"reasoning": "Not enough evidence", '
-            '"citations": []}'
-        )
+        return '{"verdict": "UNVERIFIABLE", "confidence": 0.0, "reasoning": "Not enough evidence", "citations": []}'
 
     @staticmethod
     def get_invalid_json() -> str:
@@ -474,9 +453,7 @@ def mock_claim_extractor_agent(monkeypatch: pytest.MonkeyPatch) -> Mock:
         "Việt Nam đạt tăng trưởng 8% trong năm 2023",
         "GDP Việt Nam cao nhất ASEAN",
     ]
-    monkeypatch.setattr(
-        "trust_agents.orchestrator.run_claim_extractor_agent_sync", mock
-    )
+    monkeypatch.setattr("trust_agents.orchestrator.run_claim_extractor_agent_sync", mock)
     return mock
 
 
@@ -489,9 +466,7 @@ def mock_claim_extractor_multiple(monkeypatch: pytest.MonkeyPatch) -> Mock:
         "Chúng tôi đã kiểm soát được dịch",
         "Tốc độ tăng trưởng đạt 8%",
     ]
-    monkeypatch.setattr(
-        "trust_agents.orchestrator.run_claim_extractor_agent_sync", mock
-    )
+    monkeypatch.setattr("trust_agents.orchestrator.run_claim_extractor_agent_sync", mock)
     return mock
 
 
@@ -500,9 +475,7 @@ def mock_claim_extractor_empty(monkeypatch: pytest.MonkeyPatch) -> Mock:
     """Mock claim extractor returning empty list."""
     mock = Mock()
     mock.return_value = []
-    monkeypatch.setattr(
-        "trust_agents.orchestrator.run_claim_extractor_agent_sync", mock
-    )
+    monkeypatch.setattr("trust_agents.orchestrator.run_claim_extractor_agent_sync", mock)
     return mock
 
 
@@ -518,9 +491,7 @@ def mock_evidence_retriever(monkeypatch: pytest.MonkeyPatch) -> Mock:
         },
         {"content": "GDP cao nhất ASEAN", "source": "worldbank", "score": 0.88},
     ]
-    monkeypatch.setattr(
-        "trust_agents.orchestrator.run_evidence_retrieval_agent_sync", mock
-    )
+    monkeypatch.setattr("trust_agents.orchestrator.run_evidence_retrieval_agent_sync", mock)
     return mock
 
 
@@ -529,9 +500,7 @@ def mock_evidence_retriever_empty(monkeypatch: pytest.MonkeyPatch) -> Mock:
     """Mock evidence retriever returning empty list."""
     mock = Mock()
     mock.return_value = []
-    monkeypatch.setattr(
-        "trust_agents.orchestrator.run_evidence_retrieval_agent_sync", mock
-    )
+    monkeypatch.setattr("trust_agents.orchestrator.run_evidence_retrieval_agent_sync", mock)
     return mock
 
 
@@ -671,4 +640,3 @@ def collect_sse_events(response) -> list[dict[str, Any]]:
             except json.JSONDecodeError:
                 continue
     return events
-

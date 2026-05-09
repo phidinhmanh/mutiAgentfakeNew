@@ -166,11 +166,7 @@ class TestCreateBenchmarkModel:
     def test_returns_openai_message_content(self, monkeypatch) -> None:
         message = SimpleNamespace(content="FAKE", reasoning_content="")
         response = SimpleNamespace(choices=[SimpleNamespace(message=message)])
-        llm = SimpleNamespace(
-            chat=SimpleNamespace(
-                completions=SimpleNamespace(create=Mock(return_value=response))
-            )
-        )
+        llm = SimpleNamespace(chat=SimpleNamespace(completions=SimpleNamespace(create=Mock(return_value=response))))
         monkeypatch.setattr(
             "scripts.benchmark.get_llm_config",
             lambda: LLMConfig(provider=LLMProvider.OPENAI, model="gpt-4o-mini"),
@@ -186,11 +182,7 @@ class TestCreateBenchmarkModel:
     def test_returns_reasoning_content_for_nvidia(self, monkeypatch) -> None:
         message = SimpleNamespace(content=None, reasoning_content="REAL")
         response = SimpleNamespace(choices=[SimpleNamespace(message=message)])
-        llm = SimpleNamespace(
-            chat=SimpleNamespace(
-                completions=SimpleNamespace(create=Mock(return_value=response))
-            )
-        )
+        llm = SimpleNamespace(chat=SimpleNamespace(completions=SimpleNamespace(create=Mock(return_value=response))))
         monkeypatch.setattr(
             "scripts.benchmark.get_llm_config",
             lambda: LLMConfig(

@@ -1,68 +1,98 @@
-# Byte-compiled / optimized / DLL files
+# ─── Python ──────────────────────────────────────────────────────────────────
 __pycache__/
 *.py[cod]
 *$py.class
-
-# Distribution / packaging
-dist/
+.Python
 build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
 *.egg-info/
+.installed.cfg
+*.egg
 
-# Environments
-.env
+# Virtual environments
 .venv/
 venv/
 ENV/
-
-# IDE
-.idea/
-.vscode/
-*.swp
-*.swo
-
-# Models cache
-models_cache/
-models/
-
-# Data
-data/faiss_index/
-*.faiss
-*.pkl
-
-# Logs
-*.log
-
-# OS
-.DS_Store
-Thumbs.db
-
-# Test coverage
-.coverage
-htmlcov/
-.pytest_cache/
-
-# Jupyter
-.ipynb_checkpoints/
+env/
 
 # UV
 .uv/
 
-# Release packages
+# ─── Data / Models ───────────────────────────────────────────────────────────
+models_cache/
+models/
+data/
+*.faiss
+*.pkl
+*.pickle
+
+# ─── Test / Coverage ─────────────────────────────────────────────────────────
+.coverage
+.pytest_cache/
+htmlcov/
+coverage.xml
+*.cover
+
+# ─── Logs ─────────────────────────────────────────────────────────────────────
+*.log
+logs/
+
+# ─── Jupyter ─────────────────────────────────────────────────────────────────
+.ipynb_checkpoints/
+*.ipynb
+
+# ─── IDE ──────────────────────────────────────────────────────────────────────
+.idea/
+.vscode/
+*.swp
+*.swo
+*.sublime-workspace
+*.sublime-project
+
+# ─── OS ───────────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ─── Secrets / Local ──────────────────────────────────────────────────────────
+.env
+.env.*
+!.env.example
+!.env.docker
+secrets/
+credentials/
+
+# ─── Node / Next.js (frontend in separate repo) ───────────────────────────────
+node_modules/
+.next/
+out/
+dist/
+.yarn/
+.pnp.*
+.pnp
+
+# ─── Claude ───────────────────────────────────────────────────────────────────
+.claude/
+.claude.bak/
+.cavecrew/
+
+# ─── Release artifacts ────────────────────────────────────────────────────────
 TRUST_AGENT*FINAL*.zip
 release_v10/
 release_v11_plus/
 scratch/
-
-# Benchmark reports (generated artifacts)
+examples/
+scripts/archive/
 benchmarks/*_report.json
 benchmarks/final/
 benchmarks/v15_6_*.json
-
-# Claude local files
-.claude/settings.local.json
-.claude/scheduled_tasks.lock
-.claude/worktrees/
-
-# Root demo/dev artifacts
-examples/
-scripts/archive/

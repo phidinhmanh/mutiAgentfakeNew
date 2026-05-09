@@ -85,9 +85,7 @@ def build_faiss_index(
     """
     logger.info("Loading dataset for indexing...")
     # trust flags prevent 404 on dataset_infos.json/vifactcheck.py
-    dataset = load_dataset(
-        dataset_name, split="train", trust_remote_code=True, trust_remote_files=True
-    )
+    dataset = load_dataset(dataset_name, split="train", trust_remote_code=True, trust_remote_files=True)
 
     documents = []
     for i, item in enumerate(dataset):

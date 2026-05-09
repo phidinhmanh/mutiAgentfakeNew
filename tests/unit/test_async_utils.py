@@ -85,9 +85,7 @@ class TestGatherWithTimeout:
             await asyncio.sleep(10)
             return "done"
 
-        results = await gather_with_timeout(
-            slow_task(), slow_task(), slow_task(), timeout=0.1
-        )
+        results = await gather_with_timeout(slow_task(), slow_task(), slow_task(), timeout=0.1)
         assert results == [None, None, None]
 
     @pytest.mark.asyncio
@@ -114,9 +112,7 @@ class TestParallelAnalysis:
         def claim_func(text: str) -> list[dict[str, Any]]:
             return [{"text": "Test claim", "type": "FACT"}]
 
-        baseline, claims = await parallel_analysis(
-            "Test article", baseline_func, claim_func
-        )
+        baseline, claims = await parallel_analysis("Test article", baseline_func, claim_func)
         assert baseline["label"] == "REAL"
         assert len(claims) == 1
 
@@ -133,9 +129,7 @@ class TestParallelAnalysis:
                 {"text": "Claim 2", "type": "OPINION"},
             ]
 
-        baseline, claims = await parallel_analysis(
-            "Test article", baseline_func, claim_func
-        )
+        baseline, claims = await parallel_analysis("Test article", baseline_func, claim_func)
         assert baseline["label"] == "FAKE"
         assert len(claims) == 2
 

@@ -1,4 +1,5 @@
 """Utils module initialization."""
+
 import json
 import logging
 import re

@@ -22,11 +22,7 @@ def check_env():
     # Check for Google/Gemini keys (either one is sufficient)
     google_key = os.getenv("GOOGLE_API_KEY") or os.getenv("GEMINI_API_KEY")
     if google_key:
-        masked = (
-            google_key[:4] + "*" * (len(google_key) - 8) + google_key[-4:]
-            if len(google_key) > 8
-            else "***"
-        )
+        masked = google_key[:4] + "*" * (len(google_key) - 8) + google_key[-4:] if len(google_key) > 8 else "***"
         logger.info(f"✅ GOOGLE_API_KEY/GEMINI_API_KEY: {masked}")
     else:
         logger.warning("❌ GOOGLE_API_KEY/GEMINI_API_KEY: Missing")
@@ -43,9 +39,7 @@ def check_env():
     for var, is_critical in other_vars:
         val = os.getenv(var)
         if val:
-            masked = (
-                val[:4] + "*" * (len(val) - 8) + val[-4:] if len(val) > 8 else "***"
-            )
+            masked = val[:4] + "*" * (len(val) - 8) + val[-4:] if len(val) > 8 else "***"
             logger.info(f"✅ {var}: {masked}")
         else:
             if is_critical:
@@ -103,9 +97,7 @@ def check_model_factory():
             model = create_chat_model()
             logger.info(f"✅ Model factory successfully created {type(model).__name__}")
         except Exception as e:
-            logger.warning(
-                f"⚠️ Model creation failed (expected if API keys missing): {e}"
-            )
+            logger.warning(f"⚠️ Model creation failed (expected if API keys missing): {e}")
 
         return True
     except Exception as e:
@@ -126,13 +118,9 @@ def main():
     if env_ok and imports_ok and factory_ok:
         logger.info("✅ All core checks passed! System is ready for development.")
     elif imports_ok and factory_ok:
-        logger.info(
-            "⚠️ Core code is healthy, but some API keys are missing. Real runs may fail."
-        )
+        logger.info("⚠️ Core code is healthy, but some API keys are missing. Real runs may fail.")
     else:
-        logger.error(
-            "❌ Critical system issues detected. Please fix imports/logic before proceeding."
-        )
+        logger.error("❌ Critical system issues detected. Please fix imports/logic before proceeding.")
         sys.exit(1)
 
 

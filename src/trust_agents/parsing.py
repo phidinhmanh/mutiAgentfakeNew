@@ -10,10 +10,7 @@ from trust_agents.utils import clean_and_parse_json
 def normalize_message_content(content: Any) -> str:
     """Normalize LangChain/LangGraph message content into plain text."""
     if isinstance(content, list):
-        return "".join(
-            part.get("text", "") if isinstance(part, dict) else str(part)
-            for part in content
-        )
+        return "".join(part.get("text", "") if isinstance(part, dict) else str(part) for part in content)
     if isinstance(content, str):
         return content
     return str(content)

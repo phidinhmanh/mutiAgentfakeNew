@@ -127,9 +127,7 @@ class TestFactCheckFlowAcceptance:
                 passed=passed,
                 actual_verdict=actual_verdict,
                 expected_verdict=sample.expected_verdict,
-                error_message=None
-                if passed
-                else f"Expected {sample.expected_verdict}, got {actual_verdict}",
+                error_message=None if passed else f"Expected {sample.expected_verdict}, got {actual_verdict}",
             )
         except Exception as e:
             return AcceptanceResult(
@@ -188,9 +186,7 @@ class TestFactCheckFlowAcceptance:
                 passed=passed,
                 actual_verdict=actual_verdict,
                 expected_verdict=expected_verdict,
-                error_message=None
-                if passed
-                else f"Expected {expected_verdict}, got {actual_verdict}",
+                error_message=None if passed else f"Expected {expected_verdict}, got {actual_verdict}",
             )
         except Exception as e:
             return AcceptanceResult(
@@ -214,9 +210,7 @@ class TestFactCheckFlowAcceptance:
                     "score": 0.9,
                 }
             ]
-            result = self._run_pipeline_with_evidence(
-                sample, evidence, expected_verdict="false"
-            )
+            result = self._run_pipeline_with_evidence(sample, evidence, expected_verdict="false")
 
             assert result.passed, f"Sample {sample.id} failed: {result.error_message}"
             assert result.actual_verdict == "false"
@@ -234,9 +228,7 @@ class TestFactCheckFlowAcceptance:
                     "score": 0.9,
                 }
             ]
-            result = self._run_pipeline_with_evidence(
-                sample, evidence, expected_verdict="true"
-            )
+            result = self._run_pipeline_with_evidence(sample, evidence, expected_verdict="true")
 
             assert result.passed, f"Sample {sample.id} failed: {result.error_message}"
             assert result.actual_verdict == "true"
@@ -370,10 +362,7 @@ class TestFactCheckPerformance:
         from trust_agents.orchestrator import TRUSTOrchestrator
 
         orchestrator = TRUSTOrchestrator()
-        result = orchestrator.process_text(
-            "Số ca mắc COVID-19 giảm 30%. Chúng tôi đã kiểm soát được dịch. "
-            "Tốc độ tăng trưởng đạt 8%."
-        )
+        result = orchestrator.process_text("Số ca mắc COVID-19 giảm 30%. Chúng tôi đã kiểm soát được dịch. Tốc độ tăng trưởng đạt 8%.")
 
         # Should process all 3 claims
         assert len(result.results) == 3

@@ -16,18 +16,12 @@ logger = logging.getLogger(__name__)
 
 # Random User-Agent rotation pool (desktop browsers)
 _UA_POOL = [
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
-    "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
-    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
-    "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
-    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
-    "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:125.0) Gecko/20100101 "
-    "Firefox/125.0",
-    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 "
-    "(KHTML, like Gecko) Version/17.4 Safari/605.1.15",
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
-    "(KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36 Edg/123.0.0.0",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:125.0) Gecko/20100101 Firefox/125.0",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4 Safari/605.1.15",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36 Edg/123.0.0.0",
 ]
 
 
@@ -53,6 +47,7 @@ def extract_from_url(url: str, timeout: int = 10) -> str:
 
         # Use requests as primary fetcher for better header/SSL control
         import requests
+
         try:
             headers = {"User-Agent": ua}
             # Disable SSL verification for maximum compatibility (dangerous but common in scrapers)
@@ -92,18 +87,33 @@ def extract_from_url(url: str, timeout: int = 10) -> str:
 
 # Blacklisted domains that are slow, require JS, or often fail
 _BLACKLISTED_DOMAINS = [
-    "youtube.com", "facebook.com", "twitter.com", "t.co", "instagram.com",
-    "bnews.vn", "zalo.me", "zalo.com",
+    "youtube.com",
+    "facebook.com",
+    "twitter.com",
+    "t.co",
+    "instagram.com",
+    "bnews.vn",
+    "zalo.me",
+    "zalo.com",
     # Educational sites that often return irrelevant content (e.g. math problems)
-    "vndoc.com", "vietjack.com", "loigiaihay.com", "giaitoan.com",
-    "cunghocvui.com", "lazi.vn", "olm.vn", "khoahoc.vietjack.com",
-    "tech12h.com", "hoc24h.vn", "moon.vn",
+    "vndoc.com",
+    "vietjack.com",
+    "loigiaihay.com",
+    "giaitoan.com",
+    "cunghocvui.com",
+    "lazi.vn",
+    "olm.vn",
+    "khoahoc.vietjack.com",
+    "tech12h.com",
+    "hoc24h.vn",
+    "moon.vn",
 ]
 
 
 def _remove_diacritics(text: str) -> str:
     """Remove Vietnamese diacritics for case-insensitive matching."""
     import unicodedata
+
     nfd = unicodedata.normalize("NFD", text)
     return "".join(c for c in nfd if unicodedata.category(c) != "Mn")
 
@@ -179,10 +189,7 @@ async def extract_content_batch_async(
         max_results = len(urls)
 
     # Filter blacklisted domains
-    filtered_urls = [
-        url for url in urls
-        if not any(domain in url.lower() for domain in _BLACKLISTED_DOMAINS)
-    ]
+    filtered_urls = [url for url in urls if not any(domain in url.lower() for domain in _BLACKLISTED_DOMAINS)]
 
     if not filtered_urls:
         return []
@@ -193,7 +200,7 @@ async def extract_content_batch_async(
 
     with ThreadPoolExecutor(max_workers=concurrency) as executor:
         tasks = []
-        for url in filtered_urls[:max_results + 2]:
+        for url in filtered_urls[: max_results + 2]:
             tasks.append(loop.run_in_executor(executor, extract_from_url, url))
 
         extracted_contents = await asyncio.gather(*tasks, return_exceptions=True)
@@ -208,27 +215,24 @@ async def extract_content_batch_async(
 
     # Filter by minimum relevance threshold and sort
     min_relevance = 0.15
-    scored_results = [
-        (s, u, c) for s, u, c in scored_results if s >= min_relevance
-    ]
+    scored_results = [(s, u, c) for s, u, c in scored_results if s >= min_relevance]
     scored_results.sort(key=lambda x: x[0], reverse=True)
 
     results = []
     for score, url, truncated in scored_results:
-        results.append({
-            "url": url,
-            "title": _extract_title_from_markdown(truncated),
-            "content": truncated,
-            "source": _extract_domain(url),
-            "relevance_score": round(score, 3),
-        })
+        results.append(
+            {
+                "url": url,
+                "title": _extract_title_from_markdown(truncated),
+                "content": truncated,
+                "source": _extract_domain(url),
+                "relevance_score": round(score, 3),
+            }
+        )
         if len(results) >= max_results:
             break
 
-    logger.info(
-        f"Extracted {len(results)}/{len(urls)} URLs "
-        f"(filtered by relevance >={min_relevance})"
-    )
+    logger.info(f"Extracted {len(results)}/{len(urls)} URLs (filtered by relevance >={min_relevance})")
     return results
 
 
@@ -323,12 +327,14 @@ def extract_content_batch(
 
         if content:
             truncated = smart_truncate(content, query, max_chars)
-            results.append({
-                "url": url,
-                "title": _extract_title_from_markdown(truncated),
-                "content": truncated,
-                "source": _extract_domain(url),
-            })
+            results.append(
+                {
+                    "url": url,
+                    "title": _extract_title_from_markdown(truncated),
+                    "content": truncated,
+                    "source": _extract_domain(url),
+                }
+            )
             logger.info(f"  -> Got {len(truncated)} chars")
         else:
             logger.warning("  -> Failed to extract content")
@@ -359,6 +365,7 @@ def _extract_domain(url: str) -> str:
     """Extract domain from URL for source attribution."""
     try:
         from urllib.parse import urlparse
+
         parsed = urlparse(url)
         return parsed.netloc.replace("www.", "")
     except Exception:
@@ -371,6 +378,7 @@ def _extract_domain(url: str) -> str:
 def _lazy_import_trafilatura():
     try:
         import trafilatura
+
         return trafilatura
     except ImportError:
         logger.error("trafilatura not installed: run `uv add trafilatura`")

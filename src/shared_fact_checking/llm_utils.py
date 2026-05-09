@@ -1,4 +1,5 @@
 """Shared LLM utilities: sync wrappers, JSON parsing, and model creation."""
+
 from __future__ import annotations
 
 import asyncio

@@ -13,7 +13,6 @@ from fastapi.testclient import TestClient
 # ────────────────────────────────────────────────────────────────
 
 
-
 @pytest.fixture
 def fast_mock_agents(monkeypatch: pytest.MonkeyPatch) -> None:
     """Mock all agent functions with minimal delay for performance testing."""

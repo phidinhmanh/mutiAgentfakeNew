@@ -430,9 +430,7 @@ def search_ddg_urls(query: str, num_results: int = 5) -> list[dict[str, Any]]:
         resp.raise_for_status()
 
         if len(resp.text) < 5000:
-            logger.warning(
-                f"DuckDuckGo HTML scrape returned short response ({len(resp.text)} bytes) - likely bot detection"
-            )
+            logger.warning(f"DuckDuckGo HTML scrape returned short response ({len(resp.text)} bytes) - likely bot detection")
         else:
             soup = bs4.BeautifulSoup(resp.text, "html.parser")
             for result in soup.select(".result")[:num_results]:
@@ -524,9 +522,7 @@ def _search_ddg_html(query: str, num_results: int = 5) -> list[dict[str, Any]]:
         # Validate response - short responses are usually bot detection pages
         # or timeout truncations
         if len(resp.text) < 5000:
-            logger.warning(
-                f"DuckDuckGo HTML scrape returned short response ({len(resp.text)} bytes) - likely bot detection"
-            )
+            logger.warning(f"DuckDuckGo HTML scrape returned short response ({len(resp.text)} bytes) - likely bot detection")
             return []
 
         soup = bs4.BeautifulSoup(resp.text, "html.parser")

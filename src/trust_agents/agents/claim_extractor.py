@@ -103,9 +103,7 @@ Văn bản: {text}
 Trả về CHỈ JSON, không có giải thích:"""
 
     try:
-        response = await model.ainvoke(
-            [{"role": "system", "content": system_prompt}, {"role": "user", "content": prompt}]
-        )
+        response = await model.ainvoke([{"role": "system", "content": system_prompt}, {"role": "user", "content": prompt}])
 
         content = response.content if hasattr(response, "content") else str(response)
         logger.info(f"[AGENT] LLM response length: {len(content)}")

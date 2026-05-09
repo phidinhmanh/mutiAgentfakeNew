@@ -33,9 +33,7 @@ def detect_identity_mismatch(claim: str, evidence: list[dict[str, Any]]) -> tupl
     if claim_names.isdisjoint(evidence_names):
         claim_text = ", ".join(sorted(claim_names))
         evidence_text = ", ".join(sorted(list(evidence_names)[:3]))
-        return True, (
-            f"Phát hiện sai lệch thực thể tên người ({claim_text} vs {evidence_text}) trong bằng chứng."
-        )
+        return True, (f"Phát hiện sai lệch thực thể tên người ({claim_text} vs {evidence_text}) trong bằng chứng.")
     return False, None
 
 
@@ -82,9 +80,6 @@ def detect_numeric_discrepancy(
             continue
         rel_diff = abs(claim_num - closest) / closest
         if rel_diff > threshold:
-            reasoning = (
-                "Phát hiện sai lệch số liệu định lượng "
-                f"({closest:,.0f} vs {claim_num:,.0f}) vượt ngưỡng 1%."
-            )
+            reasoning = f"Phát hiện sai lệch số liệu định lượng ({closest:,.0f} vs {claim_num:,.0f}) vượt ngưỡng 1%."
             return True, reasoning.replace(",", ".")
     return False, None

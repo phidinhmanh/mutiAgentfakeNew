@@ -17,14 +17,26 @@ from dotenv import load_dotenv
 from langchain_core.tools import tool
 
 from trust_agents.agents.claim_nlp_utils import (
-    detect_language as _detect_language,
     ENGLISH_CLAIM_VERBS,
-    fallback_claim_sentences as _fallback_claim_sentences,
-    looks_like_claim_english as _looks_like_claim_english,
-    looks_like_claim_vietnamese as _looks_like_claim_vietnamese,
-    load_spacy_model as _load_spacy_model,
-    sentencize_vietnamese as _sentencize_vietnamese,
     VIETNAMESE_CLAIM_MARKERS,
+)
+from trust_agents.agents.claim_nlp_utils import (
+    detect_language as _detect_language,
+)
+from trust_agents.agents.claim_nlp_utils import (
+    fallback_claim_sentences as _fallback_claim_sentences,
+)
+from trust_agents.agents.claim_nlp_utils import (
+    load_spacy_model as _load_spacy_model,
+)
+from trust_agents.agents.claim_nlp_utils import (
+    looks_like_claim_english as _looks_like_claim_english,
+)
+from trust_agents.agents.claim_nlp_utils import (
+    looks_like_claim_vietnamese as _looks_like_claim_vietnamese,
+)
+from trust_agents.agents.claim_nlp_utils import (
+    sentencize_vietnamese as _sentencize_vietnamese,
 )
 from trust_agents.llm.llm_helpers import call_llm
 
@@ -60,11 +72,7 @@ def _ner_extract_vietnamese(text: str) -> str:
     claims = []
     for sent in _sentencize_vietnamese(text):
         sent_doc = nlp(sent.strip())
-        entities = [
-            ent.text
-            for ent in sent_doc.ents
-            if ent.label_ in ["PERSON", "ORG", "GPE", "LOC", "DATE", "MONEY", "EVENT"]
-        ]
+        entities = [ent.text for ent in sent_doc.ents if ent.label_ in ["PERSON", "ORG", "GPE", "LOC", "DATE", "MONEY", "EVENT"]]
         if entities and _looks_like_claim_vietnamese(sent_doc):
             claims.append(sent.strip())
 
@@ -84,11 +92,7 @@ def _ner_extract_english(text: str) -> str:
     for sent in doc.sents:
         sent_text = sent.text.strip()
         sent_doc = nlp(sent_text)
-        entities = [
-            ent.text
-            for ent in sent_doc.ents
-            if ent.label_ in ["PERSON", "ORG", "GPE", "LOC", "EVENT", "DATE", "MONEY"]
-        ]
+        entities = [ent.text for ent in sent_doc.ents if ent.label_ in ["PERSON", "ORG", "GPE", "LOC", "EVENT", "DATE", "MONEY"]]
         if entities and _looks_like_claim_english(sent_doc):
             claims.append(sent_text)
 
@@ -193,9 +197,7 @@ Return ONLY a valid JSON array: [{{"claim_text": "..."}}, {{"claim_text": "..."}
 No markdown, no additional text.
 
 Text: {text}"""
-    content = _strip_json_markers(
-        call_llm(prompt, system_prompt="Extract factual claims and return only valid JSON.", max_tokens=500)
-    )
+    content = _strip_json_markers(call_llm(prompt, system_prompt="Extract factual claims and return only valid JSON.", max_tokens=500))
     return _parse_llm_claims(content, lang="en")
 
 

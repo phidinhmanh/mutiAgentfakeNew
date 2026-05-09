@@ -56,12 +56,7 @@ async def run_verifier_agent(claim: str, evidence: list[dict[str, Any]]) -> dict
 
     # Format evidence for prompt (support both 'content' (markdown) and 'text' keys)
     # V15.6: increased truncation from 2500→4000 chars to capture core numbers/dates
-    evidence_text = "\n\n".join(
-        [
-            f"Evidence {i + 1}:\n{item.get('content', item.get('text', str(item)))[:4000]}"
-            for i, item in enumerate(evidence[:7])
-        ]
-    )
+    evidence_text = "\n\n".join([f"Evidence {i + 1}:\n{item.get('content', item.get('text', str(item)))[:4000]}" for i, item in enumerate(evidence[:7])])
 
     # V15.6 CONSOLIDATED system prompt - simplified, clear, no conflicting rules
     system_prompt = """Bạn là chuyên gia kiểm chứng thông tin (Fact-checker).
@@ -123,9 +118,7 @@ QUYẾT ĐỊNH:
 Trả về CHỈ JSON:"""
 
     try:
-        response = await model.ainvoke(
-            [{"role": "system", "content": system_prompt}, {"role": "user", "content": prompt}]
-        )
+        response = await model.ainvoke([{"role": "system", "content": system_prompt}, {"role": "user", "content": prompt}])
 
         content = response.content if hasattr(response, "content") else str(response)
         logger.info(f"[AGENT] LLM response length: {len(content)}")
@@ -172,16 +165,13 @@ Trả về CHỈ JSON:"""
         _doc_nums = _extract_doc_numbers(claim_lower)
         _claim_dates = _extract_dates(claim)
 
-        if (_doc_nums or _claim_dates):
+        if _doc_nums or _claim_dates:
             _nums_to_check = _doc_nums if _doc_nums else []
             _matched_nums = sum(1 for n in _nums_to_check if n in evidence_lower)
             _matched_dates = sum(1 for d in _claim_dates if d in evidence_lower)
 
             # V15.6: Also check for full document reference patterns
-            _doc_refs_in_claim = re.findall(
-                r"(nghị quyết|chỉ thị|quyết định|luật|nghị định)\s+(?:số\s+)?(\d+)",
-                claim_lower
-            )
+            _doc_refs_in_claim = re.findall(r"(nghị quyết|chỉ thị|quyết định|luật|nghị định)\s+(?:số\s+)?(\d+)", claim_lower)
             for _doc_type, _doc_num in _doc_refs_in_claim:
                 if _doc_num in evidence_lower:
                     _matched_nums += 1
@@ -195,15 +185,10 @@ Trả về CHỈ JSON:"""
                     # V15.6: Check for trusted domain in evidence
                     _has_trusted = _check_trusted_domain(evidence_text)
                     if _has_trusted or _matched_nums >= 1:
-                        logger.warning(
-                            f"[V15.6] Hard Numeric Veto activated (score={_hard_match_score:.2f}, trusted={_has_trusted})"
-                        )
+                        logger.warning(f"[V15.6] Hard Numeric Veto activated (score={_hard_match_score:.2f}, trusted={_has_trusted})")
                         verdict = "true"
                         confidence = max(confidence, 0.90)
-                        reasoning = (
-                            "Hệ thống xác nhận khớp định danh số liệu "
-                            "(Nghị quyết/Chỉ thị + ngày) từ nguồn chính thống."
-                        )
+                        reasoning = "Hệ thống xác nhận khớp định danh số liệu (Nghị quyết/Chỉ thị + ngày) từ nguồn chính thống."
                         if "12" in _doc_nums and any("16/3" in d for d in _claim_dates):
                             reasoning = "Hệ thống xác nhận khớp 100% định danh số liệu (Nghị quyết 12, ngày 16/3/2022) từ nguồn chính thống."
 

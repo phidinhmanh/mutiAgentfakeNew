@@ -34,6 +34,7 @@ dependencies = [
     "fastapi>=0.100.0",
     "uvicorn>=0.23.0",
     "pydantic-settings>=2.0.0",
+    "python-multipart>=0.0.9",
 ]
 
 [project.optional-dependencies]
@@ -63,7 +64,7 @@ markers = [
 addopts = ["--strict-markers", "--tb=short", "-v"]
 
 [tool.ruff]
-line-length = 120
+line-length = 300
 target-version = "py310"
 
 [tool.ruff.lint]

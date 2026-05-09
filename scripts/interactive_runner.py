@@ -53,9 +53,7 @@ GOLDEN_SAMPLES = [
 def configure_logging(verbose: bool) -> None:
     """Configure logging for the interactive runner."""
     level = logging.DEBUG if verbose else logging.INFO
-    logging.basicConfig(
-        level=level, format="%(asctime)s | %(levelname)-8s | %(name)s | %(message)s"
-    )
+    logging.basicConfig(level=level, format="%(asctime)s | %(levelname)-8s | %(name)s | %(message)s")
 
 
 def print_header(title: str) -> None:
@@ -153,9 +151,7 @@ def run_trust_only(article: str, skip_evidence: bool, top_k_evidence: int) -> An
     return orchestrator.process_text(article, skip_evidence=skip_evidence)
 
 
-def run_full_analysis(
-    article: str, skip_evidence: bool, top_k_evidence: int
-) -> dict[str, Any]:
+def run_full_analysis(article: str, skip_evidence: bool, top_k_evidence: int) -> dict[str, Any]:
     """Run the full article analysis flow."""
     processed_article = article
     summarized = False
@@ -164,9 +160,7 @@ def run_full_analysis(
         summarized = True
 
     baseline_result = run_baseline_only(processed_article)
-    trust_result = run_trust_only(
-        processed_article, skip_evidence=skip_evidence, top_k_evidence=top_k_evidence
-    )
+    trust_result = run_trust_only(processed_article, skip_evidence=skip_evidence, top_k_evidence=top_k_evidence)
     stylistic_result = extract_stylistic_features(processed_article)
 
     return {
@@ -287,9 +281,7 @@ def browse_dataset_samples() -> None:
         print(f"Claim date : {sample.get('claim_date', '')}")
 
         if prompt_yes_no("Chạy full analysis với claim này?", default=False):
-            analysis = run_full_analysis(
-                sample.get("claim", ""), skip_evidence=False, top_k_evidence=5
-            )
+            analysis = run_full_analysis(sample.get("claim", ""), skip_evidence=False, top_k_evidence=5)
             print_baseline_result(analysis["baseline"])
             print_trust_result(analysis["trust"])
             print_stylistic_result(analysis["stylistic_features"])
@@ -401,10 +393,7 @@ def run_golden_sample_checks() -> None:
             ok = actual == expected
             if ok:
                 passed += 1
-            print(
-                f"Expected: {expected} | Actual: {actual} | "
-                f"Status: {'PASS' if ok else 'FAIL'}"
-            )
+            print(f"Expected: {expected} | Actual: {actual} | Status: {'PASS' if ok else 'FAIL'}")
         except Exception as exc:
             print(f"Lỗi khi chạy sample {sample['id']}: {exc}")
 
@@ -420,9 +409,7 @@ def full_analysis_interactive() -> None:
 
     skip_evidence = prompt_yes_no("Bỏ qua evidence retrieval?", default=False)
     top_k_evidence = prompt_int("Top-k evidence", 5)
-    analysis = run_full_analysis(
-        article, skip_evidence=skip_evidence, top_k_evidence=top_k_evidence
-    )
+    analysis = run_full_analysis(article, skip_evidence=skip_evidence, top_k_evidence=top_k_evidence)
 
     if analysis["summarized"]:
         print("Nội dung dài đã được rút gọn trước khi phân tích.")
@@ -452,9 +439,7 @@ def trust_only_interactive() -> None:
         return
     skip_evidence = prompt_yes_no("Bỏ qua evidence retrieval?", default=False)
     top_k_evidence = prompt_int("Top-k evidence", 5)
-    result = run_trust_only(
-        article, skip_evidence=skip_evidence, top_k_evidence=top_k_evidence
-    )
+    result = run_trust_only(article, skip_evidence=skip_evidence, top_k_evidence=top_k_evidence)
     print_trust_result(
         {
             "claims": result.claims,
@@ -475,19 +460,7 @@ def stylistic_only_interactive() -> None:
 
 def show_menu() -> None:
     """Show the main menu."""
-    print(
-        "\nChọn chức năng:\n"
-        "1. Full analysis\n"
-        "2. Baseline only\n"
-        "3. TRUST pipeline only\n"
-        "4. Stylistic features\n"
-        "5. Browse ViFactCheck dataset\n"
-        "6. Build FAISS index\n"
-        "7. Query FAISS index\n"
-        "8. Test individual agents\n"
-        "9. Run golden sample checks\n"
-        "0. Thoát"
-    )
+    print("\nChọn chức năng:\n1. Full analysis\n2. Baseline only\n3. TRUST pipeline only\n4. Stylistic features\n5. Browse ViFactCheck dataset\n6. Build FAISS index\n7. Query FAISS index\n8. Test individual agents\n9. Run golden sample checks\n0. Thoát")
 
 
 def interactive_loop() -> None:
@@ -525,16 +498,10 @@ def parse_args() -> argparse.Namespace:
     """Parse command-line arguments."""
     parser = argparse.ArgumentParser(description="Interactive fake news project runner")
     parser.add_argument("--text", help="Run full analysis directly for a text input")
-    parser.add_argument(
-        "--skip-evidence", action="store_true", help="Skip evidence retrieval in TRUST"
-    )
-    parser.add_argument(
-        "--top-k", type=int, default=5, help="Top-k evidence for TRUST retrieval"
-    )
+    parser.add_argument("--skip-evidence", action="store_true", help="Skip evidence retrieval in TRUST")
+    parser.add_argument("--top-k", type=int, default=5, help="Top-k evidence for TRUST retrieval")
     parser.add_argument("--verbose", action="store_true", help="Enable debug logging")
-    parser.add_argument(
-        "--print-json", action="store_true", help="Print raw JSON for direct analysis"
-    )
+    parser.add_argument("--print-json", action="store_true", help="Print raw JSON for direct analysis")
     return parser.parse_args()
 
 

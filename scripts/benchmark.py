@@ -178,9 +178,7 @@ def run_baseline_benchmark(
         else:
             real_keywords.update(text.split())
 
-    fake_count = sum(
-        1 for sample in train_data if sample["label"] == 1 or sample["label"] == "FAKE"
-    )
+    fake_count = sum(1 for sample in train_data if sample["label"] == 1 or sample["label"] == "FAKE")
     real_count = len(train_data) - fake_count
     prior_fake = fake_count / len(train_data)
     prior_real = real_count / len(train_data)
@@ -231,9 +229,7 @@ def parse_verdict_label(result_text: str) -> str:
 def build_multi_agent_prompt(sample: dict[str, Any]) -> str:
     """Build the benchmark prompt for the evidence-aware path."""
     evidence_text = sample.get("evidence", "")
-    evidence_formatted = (
-        f"[0] {evidence_text}" if evidence_text else "[0] Khong co bang chung."
-    )
+    evidence_formatted = f"[0] {evidence_text}" if evidence_text else "[0] Khong co bang chung."
 
     return f"""Claim: {sample["claim"]}
 
@@ -604,7 +600,7 @@ def _normalize_trust_label(trust_label: Any) -> str:
     """Normalize TRUST verdict label to benchmark format (REAL/FAKE)."""
     if isinstance(trust_label, bool):
         return "REAL" if trust_label else "FAKE"
-    
+
     label_upper = str(trust_label).upper()
     if label_upper in ["TRUE", "REAL"]:
         return "REAL"
@@ -622,7 +618,6 @@ def run_trust_orchestrator_benchmark(
         "Running TRUST Orchestrator benchmark with %ss per-request timeout...",
         timeout_seconds,
     )
-
 
     start_time = time.time()
     predictions = []
@@ -701,17 +696,10 @@ def print_results(results: list[BenchmarkResult]) -> None:
     print("\n" + "-" * 80)
 
     for result in results:
-        status_suffix = (
-            f" [{result.status.upper()}]" if result.status != "completed" else ""
-        )
+        status_suffix = f" [{result.status.upper()}]" if result.status != "completed" else ""
         print(f"\n{result.approach}{status_suffix}")
-        print(
-            f"  Accuracy:     {result.accuracy:.1%} ({result.correct}/{result.samples})"
-        )
-        print(
-            f"  Undecided:    {result.undecided_rate:.1%} "
-            f"({result.undecided}/{result.samples})"
-        )
+        print(f"  Accuracy:     {result.accuracy:.1%} ({result.correct}/{result.samples})")
+        print(f"  Undecided:    {result.undecided_rate:.1%} ({result.undecided}/{result.samples})")
         print(f"  Total time:   {result.total_time:.2f}s")
         print(f"  Avg/sample:   {result.avg_time_per_sample:.2f}s")
         if result.error_message:
@@ -726,12 +714,7 @@ def print_results(results: list[BenchmarkResult]) -> None:
         for prediction in result.predictions[:5]:
             status = "OK" if prediction["correct"] else "FAIL"
             claim_preview = prediction["claim"][:50] if prediction["claim"] else "empty"
-            print(
-                f"  [{status}] ID={prediction['id']:2d} "
-                f"| True={prediction['true_label']:4s} "
-                f"| Pred={prediction['predicted_label']:4s} "
-                f"| {claim_preview}..."
-            )
+            print(f"  [{status}] ID={prediction['id']:2d} | True={prediction['true_label']:4s} | Pred={prediction['predicted_label']:4s} | {claim_preview}...")
         if len(result.predictions) > 5:
             print(f"  ... and {len(result.predictions) - 5} more")
 
@@ -739,9 +722,7 @@ def print_results(results: list[BenchmarkResult]) -> None:
 def save_results(results: list[BenchmarkResult], output_path: str) -> None:
     """Save results to JSON file."""
     output = {
-        "benchmark": (
-            "Baseline vs Single-Agent vs Multi-Agent (Fake) vs TRUST Orchestrator"
-        ),
+        "benchmark": ("Baseline vs Single-Agent vs Multi-Agent (Fake) vs TRUST Orchestrator"),
         "test_samples": results[0].samples if results else 0,
         "train_samples_baseline": 500,
         "results": [asdict(result) for result in results],
@@ -799,7 +780,6 @@ def main() -> None:
 
     test_data = load_test_data(args.test_samples)
     train_data = load_train_baseline_data(args.train_samples)
-
 
     results = [run_baseline_benchmark(test_data, train_data)]
 

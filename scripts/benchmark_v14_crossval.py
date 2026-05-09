@@ -203,10 +203,7 @@ async def _process_sample_async(sample: dict[str, Any], idx: int) -> SampleResul
         r.multi_tokens_out = multi_resp["tokens_out"]
         r.multi_correct = r.multi_verdict == expected
 
-        logger.info(
-            f"  [Fold sample] ID={sid} expected={expected} "
-            f"→ {r.multi_verdict} ({r.multi_confidence:.1%}, {r.multi_latency:.1f}s)"
-        )
+        logger.info(f"  [Fold sample] ID={sid} expected={expected} → {r.multi_verdict} ({r.multi_confidence:.1%}, {r.multi_latency:.1f}s)")
     except Exception as e:
         r.multi_error = str(e)
         logger.error(f"  ERROR sample {sid}: {e}")
@@ -250,23 +247,14 @@ def _print_early_stop_debug(
     print("\n" + "=" * 90)
     print(f"EARLY STOP DEBUG — FOLD {fold_idx + 1}")
     print("=" * 90)
-    print(
-        "  "
-        f"Processed REAL: {processed_real}/{total_real} | "
-        f"Processed FAKE: {processed_fake}/{total_fake} | "
-        f"Projected REAL Recall: {projected_real_recall:.1%} | "
-        f"Projected FAKE Recall: {projected_fake_recall:.1%}"
-    )
+    print(f"  Processed REAL: {processed_real}/{total_real} | Processed FAKE: {processed_fake}/{total_fake} | Projected REAL Recall: {projected_real_recall:.1%} | Projected FAKE Recall: {projected_fake_recall:.1%}")
     print()
     print(f"  {'ID':<8} {'Expected':<10} {'Predicted':<10} {'Correct':<8} {'Conf':>7}")
     print(f"  {'-' * 8} {'-' * 10} {'-' * 10} {'-' * 8} {'-' * 7}")
     for result in processed_results:
         predicted = result.multi_verdict or "ERROR"
         correct = "YES" if result.multi_correct else "NO"
-        print(
-            f"  {result.sample_id:<8} {result.expected:<10} {predicted:<10} "
-            f"{correct:<8} {result.multi_confidence:>6.1%}"
-        )
+        print(f"  {result.sample_id:<8} {result.expected:<10} {predicted:<10} {correct:<8} {result.multi_confidence:>6.1%}")
     print("=" * 90)
 
 
@@ -349,10 +337,7 @@ def create_balanced_folds(
     for i in range(n_folds):
         real_start = i * real_per_fold
         fake_start = i * fake_per_fold
-        fold = (
-            real_samples[real_start : real_start + real_per_fold]
-            + fake_samples[fake_start : fake_start + fake_per_fold]
-        )
+        fold = real_samples[real_start : real_start + real_per_fold] + fake_samples[fake_start : fake_start + fake_per_fold]
         random.shuffle(fold)  # shuffle within fold for run diversity
         folds.append(fold)
 
@@ -390,9 +375,7 @@ def compute_fold_metrics(results: list[SampleResult]) -> dict[str, float]:
     # Also compute FAKE recall
     fake_recall = tn / (tn + fp) if (tn + fp) > 0 else 0.0
     fake_precision = tn / (tn + fn) if (tn + fn) > 0 else 0.0
-    fake_f1 = (
-        2 * fake_precision * fake_recall / (fake_precision + fake_recall) if (fake_precision + fake_recall) > 0 else 0.0
-    )
+    fake_f1 = 2 * fake_precision * fake_recall / (fake_precision + fake_recall) if (fake_precision + fake_recall) > 0 else 0.0
 
     return {
         "accuracy": round(accuracy * 100, 1),
@@ -448,13 +431,7 @@ async def run_fold(
     # Log per-sample update after each result (for live tracking)
     # Check kill-switch after burn-in
     if len(results) >= burn_in:
-        logger.info(
-            f"  [Recall Forecast] burn-in={burn_in} | "
-            f"REAL: {projected['tp_real']}/{projected['processed_real']}/{total_real} "
-            f"(projected {projs:.1%}) | "
-            f"FAKE: {projected['tp_fake']}/{projected['processed_fake']}/{total_fake} "
-            f"(projected {projs_fake:.1%})"
-        )
+        logger.info(f"  [Recall Forecast] burn-in={burn_in} | REAL: {projected['tp_real']}/{projected['processed_real']}/{total_real} (projected {projs:.1%}) | FAKE: {projected['tp_fake']}/{projected['processed_fake']}/{total_fake} (projected {projs_fake:.1%})")
         if projs < recall_target_real or (projs_fake < recall_target_fake and projs < recall_target_real):
             _print_early_stop_debug(
                 fold_idx,
@@ -466,24 +443,11 @@ async def run_fold(
                 total_real,
                 total_fake,
             )
-            logger.warning(
-                f"  [KILL SWITCH] FOLD {fold_idx + 1}: "
-                f"REAL projected {projs:.1%} (target {recall_target_real:.0%}) | "
-                f"FAKE projected {projs_fake:.1%} (target {recall_target_fake:.0%}) → ABORT"
-            )
-            raise EarlyStopFoldError(
-                f"Fold {fold_idx + 1} projected REAL recall below {recall_target_real:.0%}. "
-                f"REAL {projs:.1%}, FAKE {projs_fake:.1%}"
-            )
+            logger.warning(f"  [KILL SWITCH] FOLD {fold_idx + 1}: REAL projected {projs:.1%} (target {recall_target_real:.0%}) | FAKE projected {projs_fake:.1%} (target {recall_target_fake:.0%}) → ABORT")
+            raise EarlyStopFoldError(f"Fold {fold_idx + 1} projected REAL recall below {recall_target_real:.0%}. REAL {projs:.1%}, FAKE {projs_fake:.1%}")
 
     metrics = compute_fold_metrics(results)
-    logger.info(
-        f"FOLD {fold_idx + 1} done: Acc={metrics['accuracy']:.1f}% "
-        f"F1={metrics['f1']:.1f}% Recall={metrics['recall']:.1f}% "
-        f"FAKE-F1={metrics['fake_f1']:.1f}% "
-        f"({metrics['tp']}TP/{metrics['tn']}TN/{metrics['fp']}FP/{metrics['fn']}FN, "
-        f"{fold_time:.1f}s)"
-    )
+    logger.info(f"FOLD {fold_idx + 1} done: Acc={metrics['accuracy']:.1f}% F1={metrics['f1']:.1f}% Recall={metrics['recall']:.1f}% FAKE-F1={metrics['fake_f1']:.1f}% ({metrics['tp']}TP/{metrics['tn']}TN/{metrics['fp']}FP/{metrics['fn']}FN, {fold_time:.1f}s)")
 
     return {
         "fold": fold_idx + 1,
@@ -675,19 +639,11 @@ def main() -> None:
     combined_accuracy = (total_tp + total_tn) / combined_total * 100 if combined_total else 0
     combined_precision = total_tp / (total_tp + total_fp) * 100 if (total_tp + total_fp) else 0
     combined_recall = total_tp / (total_tp + total_fn) * 100 if (total_tp + total_fn) else 0
-    combined_f1 = (
-        2 * combined_precision * combined_recall / (combined_precision + combined_recall)
-        if (combined_precision + combined_recall)
-        else 0
-    )
+    combined_f1 = 2 * combined_precision * combined_recall / (combined_precision + combined_recall) if (combined_precision + combined_recall) else 0
 
     combined_fake_precision = total_tn / (total_tn + total_fn) * 100 if (total_tn + total_fn) else 0
     combined_fake_recall = total_tn / (total_tn + total_fp) * 100 if (total_tn + total_fp) else 0
-    combined_fake_f1 = (
-        2 * combined_fake_precision * combined_fake_recall / (combined_fake_precision + combined_fake_recall)
-        if (combined_fake_precision + combined_fake_recall)
-        else 0
-    )
+    combined_fake_f1 = 2 * combined_fake_precision * combined_fake_recall / (combined_fake_precision + combined_fake_recall) if (combined_fake_precision + combined_fake_recall) else 0
 
     report = {
         "version": "v14.3",
@@ -713,10 +669,7 @@ def main() -> None:
             "fake_recall": round(combined_fake_recall, 1),
             "fake_f1": round(combined_fake_f1, 1),
         },
-        "per_fold": [
-            {"fold": fr["fold"], "metrics": fr["metrics"], "elapsed_seconds": fr["elapsed_seconds"]}
-            for fr in fold_results
-        ],
+        "per_fold": [{"fold": fr["fold"], "metrics": fr["metrics"], "elapsed_seconds": fr["elapsed_seconds"]} for fr in fold_results],
         "fold_stats": {
             "accuracy": _stat([m["accuracy"] for m in all_metrics]),
             "precision": _stat([m["precision"] for m in all_metrics]),
@@ -740,11 +693,7 @@ def main() -> None:
     print(f"  {'-' * 6} {'-' * 6} {'-' * 6} {'-' * 6} {'-' * 6} {'-' * 9} {'-' * 6}")
     for fr in fold_results:
         m = fr["metrics"]
-        print(
-            f"  {fr['fold']:<6} {m['accuracy']:>5.1f}% {m['precision']:>5.1f}% "
-            f"{m['recall']:>5.1f}% {m['f1']:>5.1f}% {m['fake_f1']:>8.1f}% "
-            f"{fr['elapsed_seconds']:>5.0f}s"
-        )
+        print(f"  {fr['fold']:<6} {m['accuracy']:>5.1f}% {m['precision']:>5.1f}% {m['recall']:>5.1f}% {m['f1']:>5.1f}% {m['fake_f1']:>8.1f}% {fr['elapsed_seconds']:>5.0f}s")
 
     print()
     fs = report["fold_stats"]
@@ -761,10 +710,7 @@ def main() -> None:
     print("Combined Confusion Matrix (all folds):")
     c = report["combined"]
     print(f"  TP={c['tp']} TN={c['tn']} FP={c['fp']} FN={c['fn']}")
-    print(
-        f"  Accuracy={c['accuracy']:.1f}% F1={c['f1']:.1f}% "
-        f"FAKE-F1={c['fake_f1']:.1f}% FAKE-Recall={c['fake_recall']:.1f}%"
-    )
+    print(f"  Accuracy={c['accuracy']:.1f}% F1={c['f1']:.1f}% FAKE-F1={c['fake_f1']:.1f}% FAKE-Recall={c['fake_recall']:.1f}%")
     print()
 
     out_path = Path(args.output)

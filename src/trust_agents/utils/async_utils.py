@@ -63,9 +63,7 @@ async def parallel_analysis(
     baseline_task = asyncio.create_task(run_in_thread(baseline_func, article))
     claim_task = asyncio.create_task(run_in_thread(claim_func, article))
 
-    baseline_result, claims = await gather_with_timeout(
-        baseline_task, claim_task, timeout=60.0
-    )
+    baseline_result, claims = await gather_with_timeout(baseline_task, claim_task, timeout=60.0)
 
     if baseline_result is None:
         baseline_result = {"label": "UNKNOWN", "confidence": 0.0}

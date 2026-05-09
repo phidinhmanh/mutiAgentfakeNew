@@ -9,6 +9,7 @@ class EvidenceItem(BaseModel):
     url: str | None = None
     authority: str = "medium"  # high, medium, low
 
+
 class ClaimResult(BaseModel):
     claim: str
     verdict: str  # REAL, FAKE, UNCERTAIN, UNKNOWN
@@ -16,11 +17,13 @@ class ClaimResult(BaseModel):
     reasoning: str
     evidence: list[EvidenceItem] = []
 
+
 class AgentLog(BaseModel):
     time: str
     level: str  # INFO, SUCCESS, ERROR, WARN
     agent: str
     msg: str
+
 
 class AgentResponse(BaseModel):
     verdict: str
@@ -28,7 +31,8 @@ class AgentResponse(BaseModel):
     summary: str
     claims: list[ClaimResult]
     logs: list[AgentLog]
-    processingMs: int
+    processing_ms: int
+
 
 class BaseAgentBackend(ABC):
     """Interface chuẩn cho mọi backend agent."""
