@@ -47,7 +47,17 @@ async def run_verifier_agent(
     evidence_json = json.dumps(evidence[:5], ensure_ascii=False)
 
     agent_prompt = f"""
-You are a Verifier agent. Your task is to verify the claim against the provided evidence.
+You are a Verifier agent. Verify the claim against the provided evidence.
+
+V15.6 CORE PRINCIPLES:
+1. DECISIVENESS: Favor "true" or "false" over "uncertain" when evidence is
+   relevant.
+2. NUMERIC TOLERANCE: If core subjects and document IDs match authoritative
+   evidence, return "true" even when minor numeric details are missing or
+   slightly off (up to 5%).
+3. IDENTITY: Title/position changes for the same person/entity still support
+   the claim.
+4. TEMPORAL: A "past" claim contradicted by "future/planned" evidence is FALSE.
 
 Claim: {claim}
 
@@ -55,17 +65,19 @@ Evidence Passages:
 {evidence_summary}
 
 You have access to these tools:
-- compare_claim_evidence_tool: Compare claim against individual evidence passages
-- aggregate_evidence_tool: Aggregate multiple evidence assessments
-- generate_verdict_tool: Generate final verdict based on aggregated assessment
-- confidence_calibration_tool: Calibrate confidence based on evidence quality
+- aggregate_evidence_tool: Use first to get an overview of multiple pieces of evidence
+- compare_claim_evidence_tool: Use to drill down into specific evidence/claim pairs
+- generate_verdict_tool: Use last to produce the final normalized verdict
+- confidence_calibration_tool: Use to refine confidence scores
 
 Your PROCESS:
 1. Use aggregate_evidence_tool with the evidence JSON: {evidence_json[:500]}...
-2. Use generate_verdict_tool with the aggregated assessment
-3. Return the final verdict
+2. If evidence is conflicting, use compare_claim_evidence_tool for deep analysis
+3. Use generate_verdict_tool with the assessment
+4. Return the final verdict
 
-After verification, return JSON: {{"verdict": "true|false|uncertain", "confidence": 0.0-1.0, "reasoning": "explanation"}}.
+Return JSON: {{"verdict": "true|false|uncertain", "confidence": 0.0-1.0,
+"reasoning": "explanation"}}.
 """.strip()
 
     tools = [

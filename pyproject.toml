@@ -9,6 +9,7 @@ dependencies = [
     "underthesea>=6.8.0",
     "langchain>=0.1.0",
     "langchain-community>=0.0.20",
+    "langgraph>=0.2.0",
     "faiss-cpu>=1.7.4",
     "sentence-transformers>=2.2.0",
     "requests>=2.31.0",
@@ -43,7 +44,7 @@ build-backend = "hatchling.build"
 [tool.pytest.ini_options]
 minversion = "8.0"
 testpaths = ["tests"]
-pythonpath = ["."]
+pythonpath = ["src"]
 markers = [
     "slow: marks tests as slow",
     "integration: marks integration tests",
