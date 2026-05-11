@@ -10,15 +10,17 @@ runs what it can and reports representative comparison results.
 import argparse
 import json
 import logging
-import os
 import time
 from dataclasses import asdict, dataclass, field
 from typing import Any
 
-os.environ.setdefault("LLM_PROVIDER", "nvidia")
-os.environ.setdefault("NVIDIA_MODEL", "openai/gpt-oss-120b")
-
-from trust_agents.config import LLMConfig, LLMProvider, get_llm_config, set_llm_config
+from trust_agents.config import (
+    LLMConfig,
+    LLMProvider,
+    get_auto_llm_config,
+    get_llm_config,
+    set_llm_config,
+)
 from trust_agents.llm.factory import create_chat_model
 from trust_agents.orchestrator import TRUSTOrchestrator
 
@@ -618,7 +620,7 @@ def run_trust_orchestrator_benchmark(
     )
 
     if get_llm_config().get_api_key() is None:
-        set_llm_config(get_auto_config())
+        set_llm_config(get_auto_llm_config())
 
     start_time = time.time()
     predictions = []
@@ -748,57 +750,6 @@ def save_results(results: list[BenchmarkResult], output_path: str) -> None:
     logger.info("Results saved to %s", output_path)
 
 
-def get_auto_config(provider_override: str | None = None) -> LLMConfig:
-    """Select best available provider based on environment keys."""
-    if provider_override:
-        provider = LLMProvider(provider_override)
-        model_map = {
-            LLMProvider.GEMINI_NVIDIA: os.getenv("NVIDIA_MODEL", "openai/gpt-oss-120b"),
-            LLMProvider.OPENAI: os.getenv("OPENAI_MODEL", "gpt-4o-mini"),
-            LLMProvider.GEMINI_GOOGLE: os.getenv("GEMINI_MODEL", "gemini-2.0-flash"),
-            LLMProvider.GROQ: os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile"),
-        }
-        return LLMConfig(
-            provider=provider,
-            model=model_map[provider],
-            temperature=0.1,
-            max_tokens=2048,
-        )
-
-    # Priority: NVIDIA (NIM) > OpenAI (Compatible) > Google (Native)
-    if os.getenv("NVIDIA_API_KEY"):
-        return LLMConfig(
-            provider=LLMProvider.GEMINI_NVIDIA,
-            model=os.getenv("NVIDIA_MODEL", "openai/gpt-oss-120b"),
-            temperature=0.1,
-            max_tokens=2048,
-        )
-
-    # Use OpenAI if key exists and isn't known to be OpenRouter (which was 401)
-    # or just trust the user provided a valid key.
-    if os.getenv("OPENAI_API_KEY"):
-        return LLMConfig(
-            provider=LLMProvider.OPENAI,
-            model=os.getenv("OPENAI_MODEL", "gpt-4o-mini"),
-            temperature=0.1,
-            max_tokens=2048,
-        )
-
-    if os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY"):
-        return LLMConfig(
-            provider=LLMProvider.GEMINI_GOOGLE,
-            model=os.getenv("GEMINI_MODEL", "gemini-2.0-flash"),
-            temperature=0.1,
-            max_tokens=2048,
-        )
-
-    config = get_llm_config()
-    if not config.get_api_key():
-        logger.error("No valid API key found for any LLM provider in env.")
-
-    return config
-
-
 def main() -> None:
     """Main benchmark entry point."""
     parser = argparse.ArgumentParser(description="Benchmark fake news detection")
@@ -852,7 +803,10 @@ def main() -> None:
     test_data = load_test_data(args.test_samples)
     train_data = load_train_baseline_data(args.train_samples)
 
-    set_llm_config(get_auto_config(args.provider))
+    if args.provider:
+        set_llm_config(LLMConfig.from_provider(LLMProvider(args.provider)))
+    else:
+        set_llm_config(get_auto_llm_config())
 
     results = [run_baseline_benchmark(test_data, train_data)]
 
