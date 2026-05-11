@@ -79,7 +79,7 @@ class TestBenchmarkParsingHelpers:
     def test_parse_verdict_label(self) -> None:
         assert parse_verdict_label("FAKE") == "FAKE"
         assert parse_verdict_label("This looks real") == "REAL"
-        assert parse_verdict_label("uncertain") == "UNVERIFIABLE"
+        assert parse_verdict_label("uncertain") == "UNCERTAIN"
         assert parse_verdict_label("n/a") == "UNKNOWN"
 
     def test_extract_multi_agent_verdict_prefers_json(self) -> None:
@@ -87,8 +87,9 @@ class TestBenchmarkParsingHelpers:
         assert extract_multi_agent_verdict(text) == "FAKE"
 
     def test_score_prediction_maps_unverifiable_to_real(self) -> None:
-        assert _score_prediction("UNVERIFIABLE", "REAL") is True
-        assert _score_prediction("UNVERIFIABLE", "FAKE") is False
+        assert _score_prediction("UNCERTAIN", "REAL") == (False, True)
+        assert _score_prediction("UNCERTAIN", "FAKE") == (False, True)
+        assert _score_prediction("REAL", "REAL") == (True, False)
 
 
 class TestCreateBenchmarkModel:
@@ -141,7 +142,11 @@ class TestCreateBenchmarkModel:
         result = create_benchmark_model(timeout_seconds=12)
 
         assert result == "openai-client"
-        openai_ctor.assert_called_once_with(api_key="oa-key", timeout=12.0)
+        openai_ctor.assert_called_once_with(
+            api_key="oa-key",
+            base_url=None,
+            timeout=12.0,
+        )
 
     def test_returns_langchain_like_content(self) -> None:
         class LangChainLikeModel:

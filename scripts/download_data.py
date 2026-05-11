@@ -1,4 +1,4 @@
-"""Script to download and prepare ViFactCheck dataset."""
+﻿"""Script to download and prepare ViFactCheck dataset."""
 import argparse
 import logging
 from pathlib import Path
@@ -22,24 +22,52 @@ def download_dataset(output_dir: Path | None = None) -> None:
     """
     logger.info(f"Downloading dataset: {DATASET_NAME}")
 
-    train_dataset = load_dataset(DATASET_NAME, split="train")
-    logger.info(f"Train samples: {len(train_dataset)}")
+    # trust_remote_code=True for datasets without loading scripts
+    # trust_remote_files=True for parquet-based datasets
+    ds_kwargs: dict[str, bool] = {
+        "trust_remote_code": True,
+        "trust_remote_files": True,
+    }
 
-    val_dataset = load_dataset(DATASET_NAME, split="validation")
-    logger.info(f"Validation samples: {len(val_dataset)}")
+    try:
+        train_dataset = load_dataset(DATASET_NAME, split="train", **ds_kwargs)
+        logger.info(f"Train samples: {len(train_dataset)}")
+    except Exception as e:
+        logger.warning(f"Could not load 'train' split: {e}")
+        train_dataset = None
 
-    test_dataset = load_dataset(DATASET_NAME, split="test")
-    logger.info(f"Test samples: {len(test_dataset)}")
+    try:
+        val_dataset = load_dataset(DATASET_NAME, split="validation", **ds_kwargs)
+        logger.info(f"Validation samples: {len(val_dataset)}")
+    except Exception as e:
+        logger.warning(f"Could not load 'validation' split: {e}")
+        val_dataset = None
+
+    try:
+        test_dataset = load_dataset(DATASET_NAME, split="test", **ds_kwargs)
+        logger.info(f"Test samples: {len(test_dataset)}")
+    except Exception as e:
+        logger.warning(f"Could not load 'test' split: {e}")
+        test_dataset = None
 
     if output_dir:
         output_dir = Path(output_dir)
         output_dir.mkdir(parents=True, exist_ok=True)
 
-        train_dataset.save_to_disk(str(output_dir / "train"))
-        val_dataset.save_to_disk(str(output_dir / "validation"))
-        test_dataset.save_to_disk(str(output_dir / "test"))
+        if train_dataset is not None:
+            train_dataset.save_to_disk(str(output_dir / "train"))
+        if val_dataset is not None:
+            val_dataset.save_to_disk(str(output_dir / "validation"))
+        if test_dataset is not None:
+            test_dataset.save_to_disk(str(output_dir / "test"))
 
         logger.info(f"Saved dataset to {output_dir}")
+
+    # Fallback: load entire dataset if named splits not found
+    if train_dataset is None and val_dataset is None and test_dataset is None:
+        logger.info("Attempting to load full dataset...")
+        full_dataset = load_dataset(DATASET_NAME, **ds_kwargs)
+        logger.info(f"Full dataset loaded: {full_dataset}")
 
 
 def build_faiss_index(
@@ -55,7 +83,10 @@ def build_faiss_index(
         max_samples: Maximum samples to index
     """
     logger.info("Loading dataset for indexing...")
-    dataset = load_dataset(dataset_name, split="train")
+    # trust flags prevent 404 on dataset_infos.json/vifactcheck.py
+    dataset = load_dataset(
+        dataset_name, split="train", trust_remote_code=True, trust_remote_files=True
+    )
 
     documents = []
     for i, item in enumerate(dataset):
@@ -64,7 +95,6 @@ def build_faiss_index(
 
         evidence = item.get("evidence", "")
         claim = item.get("claim", "")
-
         content = f"{claim} {evidence}".strip()
         if content:
             documents.append({

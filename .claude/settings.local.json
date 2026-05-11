@@ -38,7 +38,32 @@
       "Bash(uv sync *)",
       "Bash(uv *)",
       "Bash(PYTHONIOENCODING=utf-8 uv run *)",
-      "Skill(update-config)"
+      "Skill(update-config)",
+      "Bash(findstr /i \"accuracy\\\\|error\\\\|results\\\\|BENCHMARK\")",
+      "Bash(timeout 10)",
+      "Bash(findstr /i \"accuracy\\\\|error\\\\|results\\\\|benchmark\\\\|ok\\\\|fail\")",
+      "Bash(.venv/Scripts/python.exe scripts/benchmark.py --test-samples 8 --llm-timeout 30 --skip-multi --skip-single)",
+      "Bash(.venv/Scripts/python.exe -c \"import sys; print\\(sys.version, sys.executable\\)\")",
+      "Bash(.venv/Scripts/python.exe -c \"import sys; print\\(sys.path\\)\")",
+      "Bash(.venv/Scripts/pip.exe install *)",
+      "Bash(.venv/Scripts/python.exe -m pip install --force-reinstall pydantic-core pydantic)",
+      "Bash(where python *)",
+      "Bash(py -0)",
+      "PowerShell(& \"D:\\\\Work\\\\project\\\\mutiAgentfakeNew\\\\.venv\\\\Scripts\\\\python.exe\" -c \"import sys; print\\(sys.version\\)\")",
+      "Bash(mkdir -p \"D:/Work/Project/pydantic_core_stub\")",
+      "Bash(ls -d /d /Work/*/pydantic*)",
+      "Bash(.venv/Scripts/python.exe -c ' *)",
+      "Bash(mkdir -p \".venv/Lib/site-packages\")",
+      "Bash(.venv/Scripts/python.exe -c \"import pydantic_core; print\\('pydantic_core OK'\\)\")",
+      "Bash(mkdir -p ~/.claude/skills)",
+      "Bash(ln -s ~/Developer/video-use ~/.claude/skills/video-use)",
+      "Read(//c/Users/Manh/.claude/skills/**)",
+      "Bash(xargs grep *)",
+      "Bash(Get-Content *)",
+      "PowerShell(Select-String -Path \"README.md\" -Pattern \"uv sync --all-extras\" -Context 0,3 | ForEach-Object { $_.LineNumber; $_.Context.PostContext })",
+      "PowerShell(\\(Get-Content \"README.md\"\\)[110..125] | ForEach-Object { $i = [array]::IndexOf\\(\\(Get-Content \"README.md\"\\), $_\\); Write-Output \"$\\($i+1\\): $_\" })",
+      "PowerShell(Set-Content *)",
+      "Read(//c/Users/Manh/.claude/**)"
     ]
   }
 }

@@ -1,9 +1,8 @@
 """Async utilities for parallel execution."""
 import asyncio
 import logging
-from typing import Any, Callable, Coroutine, TypeVar
-
-from fake_news_detector.config import settings
+from collections.abc import Callable, Coroutine
+from typing import Any, TypeVar
 
 logger = logging.getLogger(__name__)
 

@@ -12,7 +12,9 @@ class TestCreateChatModel:
     def test_create_openai_model(self, monkeypatch) -> None:
         openai_ctor = Mock(return_value="openai-model")
         monkeypatch.setattr("trust_agents.llm.factory.ChatOpenAI", openai_ctor)
-        monkeypatch.setattr("trust_agents.llm.factory.ChatGemini", Mock())
+        # Patch the lazy import getter and reset the cached class
+        monkeypatch.setattr("trust_agents.llm.factory._get_chat_gemini", Mock())
+        monkeypatch.setattr("trust_agents.llm.factory._ChatGemini", None)
 
         config = LLMConfig(
             provider=LLMProvider.OPENAI,
@@ -32,7 +34,10 @@ class TestCreateChatModel:
     def test_create_gemini_model(self, monkeypatch) -> None:
         gemini_ctor = Mock(return_value="gemini-model")
         monkeypatch.setattr("trust_agents.llm.factory.ChatOpenAI", Mock())
-        monkeypatch.setattr("trust_agents.llm.factory.ChatGemini", gemini_ctor)
+        # Patch the lazy import getter and reset the cached class
+        monkeypatch.setattr("trust_agents.llm.factory._get_chat_gemini", Mock(return_value=gemini_ctor))
+        monkeypatch.setattr("trust_agents.llm.factory._ChatGemini", None)
+
         monkeypatch.setenv("GEMINI_API_KEY", "gem-key")
         monkeypatch.setenv("NVIDIA_API_KEY", "nv-key")
 

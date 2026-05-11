@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 
 """
 Evidence Retrieval Agent - ReAct Agent with hybrid search tools.
@@ -7,7 +6,6 @@ Uses BM25 + Dense retrieval (FAISS) to find evidence passages for fact-checking.
 Supports OpenAI, Google Gemini (AI Studio), and NVIDIA NIM backends.
 """
 
-import json
 import logging
 from typing import Any
 
@@ -21,7 +19,11 @@ from trust_agents.agents.retrieval_agent_tools import (
     search_evidence_tool,
 )
 from trust_agents.llm.factory import create_chat_model
-from trust_agents.parsing import extract_last_message_text, parse_dict_payload, parse_evidence_payload
+from trust_agents.parsing import (
+    extract_last_message_text,
+    parse_dict_payload,
+    parse_evidence_payload,
+)
 
 load_dotenv()
 logger = logging.getLogger("EvidenceRetriever.Agent")
@@ -82,7 +84,24 @@ After retrieving evidence, return JSON: {{"evidence": [list of passages with tex
 
     parsed = parse_dict_payload(content)
     if parsed and isinstance(parsed.get("evidence"), list):
-        return [item for item in parsed["evidence"] if isinstance(item, dict)]
+        evidence = [item for item in parsed["evidence"] if isinstance(item, dict)]
+        if evidence:
+            logger.info("[AGENT] Successfully extracted %d evidence passages", len(evidence))
+            return evidence
+
+    for msg in reversed(msgs):
+        message_text = extract_last_message_text([msg])
+        evidence = parse_evidence_payload(message_text)
+        if evidence:
+            logger.info("[AGENT] Recovered %d evidence passages from intermediate message", len(evidence))
+            return evidence
+
+        parsed = parse_dict_payload(message_text)
+        if parsed and isinstance(parsed.get("evidence"), list):
+            evidence = [item for item in parsed["evidence"] if isinstance(item, dict)]
+            if evidence:
+                logger.info("[AGENT] Recovered %d evidence passages from intermediate message", len(evidence))
+                return evidence
 
     logger.warning("[AGENT] No evidence found")
     return []

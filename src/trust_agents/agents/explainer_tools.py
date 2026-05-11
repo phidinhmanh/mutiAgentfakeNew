@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 
 """
 Explainer Agent Tools - Tools for generating explanations of verification results.
@@ -12,21 +11,21 @@ Tools used by the Explainer ReAct Agent:
 Supports OpenAI, Google Gemini (AI Studio), and NVIDIA NIM backends.
 """
 
-import os
 import json
 import logging
-from typing import Dict, List, Union, Any
+from typing import Any
 
-from langchain_core.tools import tool
 from dotenv import load_dotenv
-from trust_agents.llm.llm_helpers import call_llm, call_llm_json
+from langchain_core.tools import tool
+
+from trust_agents.llm.llm_helpers import call_llm
 
 load_dotenv()
 logger = logging.getLogger("TRUST_agents.agents.explainer_tools")
 logger.propagate = True
 
 
-def safe_json_parse(data: Union[str, dict, list, Any], default: Any = None) -> Any:
+def safe_json_parse(data: str | dict | list | Any, default: Any = None) -> Any:
     """
     Safely parse JSON data that might be a string, dict, list, or other type.
     """
@@ -59,7 +58,7 @@ async def summarize_verification_tool(claim: str, verdict: str, confidence: floa
     Returns:
         JSON string with verification summary
     """
-    logger.info(f"[DEBUG] summarize_verification_tool called")
+    logger.info("[DEBUG] summarize_verification_tool called")
 
     try:
         if not isinstance(confidence, (int, float)):
@@ -95,7 +94,7 @@ Create a concise summary that:
             "evidence_count": len(evidence_summary.split("Evidence")) - 1 if evidence_summary else 0
         }
 
-        logger.info(f"summarize_verification_tool completed")
+        logger.info("summarize_verification_tool completed")
         return json.dumps(result)
 
     except Exception as e:
@@ -122,7 +121,7 @@ async def generate_explanation_tool(claim: str, verdict_data: str, evidence_list
     Returns:
         JSON string with detailed explanation
     """
-    logger.info(f"[DEBUG] generate_explanation_tool called")
+    logger.info("[DEBUG] generate_explanation_tool called")
 
     try:
         verdict = safe_json_parse(verdict_data, {"verdict": "uncertain", "confidence": 0.5})
@@ -173,7 +172,7 @@ Write a clear explanation that:
             "evidence_used": len(evidence)
         }
 
-        logger.info(f"generate_explanation_tool completed")
+        logger.info("generate_explanation_tool completed")
         return json.dumps(result)
 
     except Exception as e:
@@ -196,7 +195,7 @@ async def cite_evidence_tool(evidence_list: str) -> str:
     Returns:
         JSON string with formatted citations
     """
-    logger.info(f"[DEBUG] cite_evidence_tool called")
+    logger.info("[DEBUG] cite_evidence_tool called")
 
     try:
         evidence = safe_json_parse(evidence_list, [])
@@ -242,23 +241,30 @@ async def create_report_tool(claim: str, verdict: str, confidence: float, summar
     Returns:
         JSON string with complete fact-check report
     """
-    logger.info(f"[DEBUG] create_report_tool called")
+    logger.info("[DEBUG] create_report_tool called")
 
     try:
         parsed_citations = safe_json_parse(citations, {"citations": [], "count": 0})
+        if not isinstance(parsed_citations, dict):
+            parsed_citations = {"citations": [], "count": 0}
+
+        verdict_str = verdict if isinstance(verdict, str) else str(verdict)
+        summary_str = summary if isinstance(summary, str) else str(summary)
+        explanation_str = explanation if isinstance(explanation, str) else str(explanation)
+        confidence_value = float(confidence) if isinstance(confidence, (int, float)) else 0.5
 
         report = {
             "claim": claim,
-            "verdict": verdict,
-            "confidence": float(confidence) if isinstance(confidence, (int, float)) else 0.5,
-            "label": verdict,
-            "summary": summary,
-            "explanation": explanation,
+            "verdict": verdict_str,
+            "confidence": confidence_value,
+            "label": verdict_str,
+            "summary": summary_str,
+            "explanation": explanation_str,
             "citations": parsed_citations.get("citations", []),
             "evidence_count": parsed_citations.get("count", 0)
         }
 
-        logger.info(f"create_report_tool completed")
+        logger.info("create_report_tool completed")
         return json.dumps(report)
 
     except Exception as e:

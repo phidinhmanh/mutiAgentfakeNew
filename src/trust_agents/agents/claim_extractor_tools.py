@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 
 """
 Claim Extractor Tools - Tools for NLP-based claim extraction.
@@ -12,19 +11,62 @@ Each tool is self-contained, logs its actions, and returns status summaries.
 Supports OpenAI, Google Gemini (AI Studio), and NVIDIA NIM backends.
 """
 
-import os
-import re
 import json
 import logging
-from typing import Any
+import re
 
 from dotenv import load_dotenv
 from langchain_core.tools import tool
-from trust_agents.llm.llm_helpers import call_llm, call_llm_json
+
+from trust_agents.llm.llm_helpers import call_llm
 
 load_dotenv()
 logger = logging.getLogger("TRUST_agents.agents.claim_extractor_tools")
 logger.propagate = True
+
+
+def _load_spacy_model(*model_names: str):
+    """Load the first available spaCy model, or return None if unavailable."""
+    try:
+        import spacy
+    except ImportError:
+        logger.warning("spaCy not installed, using heuristic fallback")
+        return None
+
+    for model_name in model_names:
+        try:
+            return spacy.load(model_name)
+        except OSError:
+            logger.warning("spaCy model not found: %s", model_name)
+
+    logger.warning("No spaCy model available, using heuristic fallback")
+    return None
+
+
+def _fallback_claim_sentences(text: str) -> list[str]:
+    """Extract plausible claim sentences without spaCy."""
+    lang = _detect_language(text)
+    sentences = (
+        _sentencize_vietnamese(text)
+        if lang == "vi"
+        else [segment.strip() for segment in re.split(r"(?<=[.!?])\s+", text) if segment.strip()]
+    )
+
+    claims: list[str] = []
+    for sentence in sentences:
+        stripped = sentence.strip()
+        if not stripped or stripped.endswith(("?", "!")):
+            continue
+        if len(stripped.split()) < 4:
+            continue
+        if lang == "vi":
+            lowered = stripped.lower()
+            if any(marker in lowered for marker in [" là ", " có ", " đã ", " sẽ ", " đang ", " theo "]):
+                claims.append(stripped)
+        elif re.search(r"\b(is|are|was|were|has|have|had|said|says|reported|announced|according to)\b", stripped, re.IGNORECASE):
+            claims.append(stripped)
+
+    return claims
 
 
 def _detect_language(text: str) -> str:
@@ -111,7 +153,7 @@ async def ner_claim_extraction_tool(text: str) -> str:
     Returns:
         JSON string with claims list and method
     """
-    logger.info(f"[DEBUG] ner_claim_extraction_tool called")
+    logger.info("[DEBUG] ner_claim_extraction_tool called")
 
     lang = _detect_language(text)
     logger.info(f"Detected language: {lang}")
@@ -128,22 +170,17 @@ async def ner_claim_extraction_tool(text: str) -> str:
 
 def _ner_extract_vietnamese(text: str) -> str:
     """Extract claims from Vietnamese text using NER."""
-    import spacy
-    try:
-        nlp = spacy.load("xx_ent_wiki_sm")
-    except OSError:
-        logger.warning("xx_ent_wiki_sm model not found, using default")
-        nlp = spacy.load("xx_sm")
+    nlp = _load_spacy_model("xx_ent_wiki_sm", "xx_sm")
+    if nlp is None:
+        claims = _fallback_claim_sentences(text)
+        logger.info("ner_claim_extraction_tool completed (heuristic fallback): %d claims found", len(claims))
+        result = {"claims": claims, "method": "ner", "language": "vi", "ner_done": False, "fallback": "heuristic"}
+        return json.dumps(result, ensure_ascii=False)
 
-    doc = nlp(text)
-
-    entity_types = ["PERSON", "ORG", "GPE", "LOC", "DATE", "MONEY", "EVENT"]
     claims = []
-
     for sent in _sentencize_vietnamese(text):
         sent_doc = nlp(sent.strip())
-        entities = [ent.text for ent in sent_doc.ents if ent.label_ in entity_types]
-
+        entities = [ent.text for ent in sent_doc.ents if ent.label_ in ["PERSON", "ORG", "GPE", "LOC", "DATE", "MONEY", "EVENT"]]
         if entities and _looks_like_claim_vietnamese(sent_doc):
             claims.append(sent.strip())
 
@@ -154,19 +191,20 @@ def _ner_extract_vietnamese(text: str) -> str:
 
 def _ner_extract_english(text: str) -> str:
     """Extract claims from English text using NER."""
-    import spacy
-    nlp = spacy.load("en_core_web_sm")
-    doc = nlp(text)
+    nlp = _load_spacy_model("en_core_web_sm", "xx_ent_wiki_sm", "xx_sm")
+    if nlp is None:
+        claims = _fallback_claim_sentences(text)
+        logger.info("ner_claim_extraction_tool completed (heuristic fallback): %d claims found", len(claims))
+        result = {"claims": claims, "method": "ner", "language": "en", "ner_done": False, "fallback": "heuristic"}
+        return json.dumps(result)
 
-    entity_types = ["PERSON", "ORG", "GPE", "LOC", "EVENT", "DATE", "MONEY"]
+    doc = nlp(text)
     claims = []
 
     for sent in doc.sents:
         sent_text = sent.text.strip()
         sent_doc = nlp(sent_text)
-
-        entities = [ent.text for ent in sent_doc.ents if ent.label_ in entity_types]
-
+        entities = [ent.text for ent in sent_doc.ents if ent.label_ in ["PERSON", "ORG", "GPE", "LOC", "EVENT", "DATE", "MONEY"]]
         if entities and _looks_like_claim(sent_doc):
             claims.append(sent_text)
 
@@ -213,7 +251,7 @@ async def dependency_claim_extraction_tool(text: str) -> str:
     Returns:
         JSON string with claims list and method
     """
-    logger.info(f"[DEBUG] dependency_claim_extraction_tool called")
+    logger.info("[DEBUG] dependency_claim_extraction_tool called")
 
     lang = _detect_language(text)
     logger.info(f"Detected language: {lang}")
@@ -230,19 +268,13 @@ async def dependency_claim_extraction_tool(text: str) -> str:
 
 def _dependency_extract_vietnamese(text: str) -> str:
     """Extract claims from Vietnamese text using dependency patterns."""
-    import spacy
+    nlp = _load_spacy_model("xx_ent_wiki_sm", "xx_sm", "en_core_web_sm")
+    if nlp is None:
+        claims = _fallback_claim_sentences(text)
+        logger.info("dependency_claim_extraction_tool completed (heuristic fallback): %d claims found", len(claims))
+        result = {"claims": claims, "method": "dependency", "language": "vi", "dependency_done": False, "fallback": "heuristic"}
+        return json.dumps(result, ensure_ascii=False)
 
-    # Try multilingual model first
-    try:
-        nlp = spacy.load("xx_ent_wiki_sm")
-    except OSError:
-        try:
-            nlp = spacy.load("xx_sm")
-        except OSError:
-            logger.warning("No multilingual model, using English model")
-            nlp = spacy.load("en_core_web_sm")
-
-    # Vietnamese claim verbs/markers
     vi_claim_markers = [
         "nói", "cho biết", "khẳng định", "tuyên bố", "thông báo", "báo cáo",
         "xác nhận", "phủ nhận", "công bố", "kết luận", "nghiên cứu", "cho hay",
@@ -260,13 +292,8 @@ def _dependency_extract_vietnamese(text: str) -> str:
 
         sent_doc = nlp(sent_text)
         has_claim_marker = any(marker in sent_text.lower() for marker in vi_claim_markers)
-
-        # Check for subject-verb patterns
         has_subject = any(token.dep_ in ["nsubj", "nsubj:pass"] for token in sent_doc)
-
-        # Check for factual indicators
-        factual_indicators = ["năm", "người", "triệu", "tỷ", "phần", "%", "°"]
-        has_factual_data = any(ind in sent_text for ind in factual_indicators)
+        has_factual_data = any(ind in sent_text for ind in ["năm", "người", "triệu", "tỷ", "phần", "%", "°"])
 
         if (has_claim_marker or has_factual_data) and (has_subject or len(sent_doc) > 5):
             if _looks_like_claim_vietnamese(sent_doc):
@@ -279,10 +306,14 @@ def _dependency_extract_vietnamese(text: str) -> str:
 
 def _dependency_extract_english(text: str) -> str:
     """Extract claims from English text using dependency parsing."""
-    import spacy
-    nlp = spacy.load("en_core_web_sm")
-    doc = nlp(text)
+    nlp = _load_spacy_model("en_core_web_sm", "xx_ent_wiki_sm", "xx_sm")
+    if nlp is None:
+        claims = _fallback_claim_sentences(text)
+        logger.info("dependency_claim_extraction_tool completed (heuristic fallback): %d claims found", len(claims))
+        result = {"claims": claims, "method": "dependency", "language": "en", "dependency_done": False, "fallback": "heuristic"}
+        return json.dumps(result)
 
+    doc = nlp(text)
     claim_verbs = {
         "say", "claim", "state", "report", "announce", "declare", "assert", "allege",
         "argue", "maintain", "contend", "insist", "affirm", "attest", "testify",
@@ -302,7 +333,6 @@ def _dependency_extract_english(text: str) -> str:
     for sent in doc.sents:
         sent_text = sent.text.strip()
         sent_doc = nlp(sent_text)
-
         has_claim_verb = any(token.lemma_.lower() in claim_verbs for token in sent_doc)
         has_subject = any(token.dep_ == "nsubj" for token in sent_doc)
         has_object = any(token.dep_ in ["dobj", "pobj", "attr"] for token in sent_doc)
@@ -329,7 +359,7 @@ async def llm_claim_extraction_tool(text: str) -> str:
     Returns:
         JSON string with claims list and method
     """
-    logger.info(f"[DEBUG] llm_claim_extraction_tool called")
+    logger.info("[DEBUG] llm_claim_extraction_tool called")
 
     lang = _detect_language(text)
     logger.info(f"Detected language: {lang}")

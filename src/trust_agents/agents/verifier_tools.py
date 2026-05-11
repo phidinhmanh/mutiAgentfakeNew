@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 
 """
 Verifier Agent Tools - Tools for claim verification against evidence.
@@ -11,18 +10,167 @@ Tools used by the Verifier ReAct Agent:
 Supports OpenAI, Google Gemini (AI Studio), and NVIDIA NIM backends.
 """
 
-import os
 import json
 import logging
-from typing import List, Dict
+from typing import Any
 
-from langchain_core.tools import tool
 from dotenv import load_dotenv
-from trust_agents.llm.llm_helpers import call_llm, call_llm_json
+from langchain_core.tools import tool
+
+from trust_agents.llm.llm_helpers import call_llm_json
 
 load_dotenv()
 logger = logging.getLogger("TRUST_agents.agents.verifier_tools")
 logger.propagate = True
+
+
+# -------------------------------------------------------------------
+# Deterministic fallback helpers — used when LLM JSON parsing fails.
+# -------------------------------------------------------------------
+
+
+def _try_parse_verdict_json(text: str) -> dict[str, Any] | None:
+    """Try extracting and parsing a partial JSON verdict from truncated LLM output."""
+    import re
+
+    if not text.strip():
+        return None
+
+    # Try to find and parse a partial verdict from what the model already emitted.
+    patterns = [
+        r'"overall_verdict"\s*:\s*"([^"]+)"',
+        r'"consistency"\s*:\s*"([^"]+)"',
+    ]
+    for pattern in patterns:
+        m = re.search(pattern, text, re.IGNORECASE)
+        if m:
+            verdict_value = m.group(1).lower()
+            verdict_map = {
+                "supported": "supported",
+                "contradicts": "contradicted",
+                "contradicted": "contradicted",
+                "insufficient": "insufficient",
+            }
+            verdict = verdict_map.get(verdict_value, "insufficient")
+
+            conf_m = re.search(r'"confidence"\s*:\s*([\d.]+)', text)
+            confidence = float(conf_m.group(1)) if conf_m else 0.5
+
+            key_m = re.findall(r'"key_points"\s*:\s*\[(.*?)\]', text, re.DOTALL)
+            key_points: list[str] = []
+            if key_m:
+                key_points = [
+                    k.strip().strip('"')
+                    for k in re.findall(r'"([^"]+)"', key_m[0])
+                ]
+
+            result: dict[str, Any] = {
+                "overall_verdict": verdict,
+                "confidence": confidence,
+                "supporting_count": 0,
+                "contradicting_count": 0,
+                "key_points": key_points,
+                "conflicts": [],
+                "reasoning": f"Fallback parse from partial response: {verdict}",
+                "_fallback": True,
+            }
+            logger.warning(
+                "aggregate_evidence_tool: recovered partial verdict '%s' "
+                "from truncated response",
+                verdict,
+            )
+            return result
+    return None
+
+
+def _heuristic_evidence_verdict(
+    claim: str, evidence_list: list[dict[str, Any]]
+) -> dict[str, Any]:
+    """Deterministic verdict when LLM parsing completely fails."""
+    claim_lower = claim.lower()
+    claim_words = set(claim_lower.split())
+
+    supporting = 0
+    contradicting = 0
+
+    for ev in evidence_list[:5]:
+        ev_text = (ev.get("text") or str(ev)).lower()
+        ev_words = set(ev_text.split())
+        overlap = len(claim_words & ev_words)
+
+        # If significant vocabulary overlap, evidence supports claim
+        if overlap >= 2 and len(claim_words) > 0:
+            ratio = overlap / len(claim_words)
+            if ratio >= 0.3:
+                supporting += 1
+            else:
+                contradicting += 1
+        else:
+            contradicting += 1
+
+    if supporting > contradicting:
+        overall = "supported"
+    elif contradicting > supporting:
+        overall = "contradicted"
+    else:
+        overall = "insufficient"
+
+    result: dict[str, Any] = {
+        "overall_verdict": overall,
+        "confidence": 0.45,
+        "supporting_count": supporting,
+        "contradicting_count": contradicting,
+        "key_points": [],
+        "conflicts": [],
+        "reasoning": (
+            f"Heuristic fallback: supporting={supporting}, "
+            f"contradicting={contradicting}"
+        ),
+        "_fallback": True,
+    }
+    logger.info(
+        "aggregate_evidence_tool: heuristic verdict '%s' "
+        "(supporting=%d, contradicting=%d)",
+        overall,
+        supporting,
+        contradicting,
+    )
+    return result
+
+
+def _heuristic_consistency_verdict(claim: str, evidence_text: str) -> dict[str, Any]:
+    """Deterministic consistency verdict when LLM parsing fails."""
+    claim_lower = claim.lower()
+    ev_lower = evidence_text.lower()
+
+    claim_words = set(claim_lower.split())
+    ev_words = set(ev_lower.split())
+    overlap = len(claim_words & ev_words)
+
+    if len(claim_words) == 0:
+        consistency = "insufficient"
+        confidence = 0.3
+    else:
+        ratio = overlap / len(claim_words)
+        if ratio >= 0.25:
+            consistency = "supports"
+            confidence = min(0.4 + ratio * 0.3, 0.75)
+        else:
+            consistency = "insufficient"
+            confidence = 0.35
+
+    return {
+        "consistency": consistency,
+        "confidence": confidence,
+        "key_points": [],
+        "reasoning": (
+            f"Heuristic fallback: consistency={consistency}, "
+            f"overlap_ratio={ratio:.2f}"
+            if len(claim_words) > 0
+            else "No claim words to compare"
+        ),
+        "_fallback": True,
+    }
 
 
 @tool()
@@ -37,46 +185,56 @@ async def compare_claim_evidence_tool(claim: str, evidence_text: str) -> str:
     Returns:
         JSON string with comparison result and reasoning
     """
-    logger.info(f"[DEBUG] compare_claim_evidence_tool called")
+    logger.info("[DEBUG] compare_claim_evidence_tool called")
 
     try:
-        prompt = f"""Compare the following claim against the evidence and assess consistency.
+        sys_p = (
+            "You are a decisive fact-checker. Favor supports/contradicts over "
+            "insufficient when evidence is relevant."
+        )
+        prompt = f"""Compare the claim against evidence and assess consistency.
+
+V15.6 CONSOLIDATED RULES:
+1. TRUE (ĐÚNG):
+   - Evidence confirms core info (subject, number, date, event) → TRUE.
+   - Numeric/document override: if subject + document number/date match an
+     authoritative source, return supports even when minor details are missing.
+   - Identity/title evolution: same person/entity with a different title still
+     supports the claim.
+2. FALSE (SAI):
+   - Direct contradiction for same event/person.
+   - Numeric mismatch >5% for major facts.
+   - Temporal mismatch: claim says completed/past but evidence says future/planned.
+3. UNCERTAIN: only if evidence is unrelated or silent about all core facts.
 
 Claim: {claim}
-
 Evidence: {evidence_text}
-
-Analyze:
-1. Does the evidence support the claim?
-2. Does the evidence contradict the claim?
-3. Is the evidence insufficient to determine?
 
 Return ONLY valid JSON:
 {{
 "consistency": "supports|contradicts|insufficient",
 "confidence": 0.0-1.0,
 "key_points": ["point1", "point2"],
-"reasoning": "brief explanation"
+"reasoning": "brief explanation (max 2 sentences)"
 }}"""
 
         result = call_llm_json(
             prompt,
-            system_prompt="You are a fact verification expert. Analyze claims against evidence objectively.",
+            system_prompt=sys_p,
             max_tokens=500,
         )
 
-        logger.info(f"compare_claim_evidence_tool completed: {result.get('consistency')}")
+        logger.info(
+            "compare_claim_evidence_tool completed: %s",
+            result.get("consistency"),
+        )
         return json.dumps(result)
 
     except Exception as e:
         logger.error(f"Error comparing claim and evidence: {e}")
-        return json.dumps({
-            "consistency": "error",
-            "confidence": 0.0,
-            "key_points": [],
-            "reasoning": str(e),
-            "error": str(e)
-        })
+        fallback_result = _heuristic_consistency_verdict(claim, evidence_text)
+        fallback_result["error"] = str(e)
+        return json.dumps(fallback_result)
 
 
 @tool()
@@ -91,7 +249,7 @@ async def aggregate_evidence_tool(claim: str, evidence_list: str) -> str:
     Returns:
         JSON string with aggregated assessment
     """
-    logger.info(f"[DEBUG] aggregate_evidence_tool called")
+    logger.info("[DEBUG] aggregate_evidence_tool called")
 
     try:
         # Parse evidence list
@@ -99,45 +257,55 @@ async def aggregate_evidence_tool(claim: str, evidence_list: str) -> str:
             evidence_data = json.loads(evidence_list)
             if not isinstance(evidence_data, list):
                 evidence_data = [evidence_data]
-        except:
+        except (json.JSONDecodeError, TypeError):
             evidence_data = [{"text": evidence_list, "score": 0.5}]
 
         # Format evidence for prompt
-        evidence_summary = "\n\n".join([
-            f"Evidence {i+1} (relevance: {ev.get('hybrid_score', ev.get('score', 0.5)):.3f}):\n{ev.get('text', str(ev))}"
-            for i, ev in enumerate(evidence_data[:5])  # Top 5 pieces
-        ])
+        evidence_summary = "\n\n".join(
+            [
+                (
+                    f"Evidence {i+1} (relevance: "
+                    f"{ev.get('hybrid_score', ev.get('score', 0.5)):.3f}):\n"
+                    f"{ev.get('text', str(ev))}"
+                )
+                for i, ev in enumerate(evidence_data[:5])  # Top 5 pieces
+            ]
+        )
 
-        prompt = f"""You are a fact-checker. Aggregate the following evidence to verify the claim.
+        prompt = f"""You are a fact-checker. Aggregate evidence to verify the claim.
+
+V15.6 AGGREGATION RULES:
+1. MAJORITY RULE: If most relevant evidence confirms core claim, return
+   supported.
+2. NUMERIC OVERRIDE: If core numbers/IDs match authoritative sources, favor
+   "supported" even if other details differ slightly.
+3. DECISIVENESS: Avoid "insufficient" if there is any clear evidence. Use it
+   only for total lack of relevance.
+4. CONFIDENCE: 0.7-1.0 for strong evidence, 0.4-0.7 for moderate, < 0.4 for
+   weak but plausible.
 
 Claim: {claim}
 
 Evidence Passages:
 {evidence_summary}
 
-INSTRUCTIONS:
-- If the MAJORITY of evidence supports the claim → verdict: "supported"
-- If the MAJORITY of evidence contradicts the claim → verdict: "contradicted"
-- ONLY use "insufficient" if evidence is truly ambiguous or off-topic
-- Be decisive - favor "supported" or "contradicted" when you have ANY relevant evidence
-- Confidence should reflect strength of evidence (0.3-0.5 = weak, 0.5-0.7 = moderate, 0.7-1.0 = strong)
-
 Return ONLY valid JSON:
 {{
 "overall_verdict": "supported|contradicted|insufficient",
-"confidence": 0.3-1.0,
+"confidence": 0.2-1.0,
 "supporting_count": 0,
 "contradicting_count": 0,
 "key_points": ["point1", "point2"],
 "conflicts": ["conflict1"],
-"reasoning": "explanation"
-}}
-
-IMPORTANT: Make a decision (supported/contradicted) unless evidence is truly ambiguous."""
+"reasoning": "Brief explanation (max 3 sentences)"
+}}"""
 
         result = call_llm_json(
             prompt,
-            system_prompt="You are a decisive fact verification expert. Make clear judgments based on available evidence.",
+            system_prompt=(
+                "You are a decisive fact verification expert. "
+                "Make clear judgments based on available evidence."
+            ),
             max_tokens=600,
         )
 
@@ -146,21 +314,20 @@ IMPORTANT: Make a decision (supported/contradicted) unless evidence is truly amb
             original_conf = result.get("confidence", 0.5)
             result["confidence"] = min(original_conf * 1.15, 0.95)
 
-        logger.info(f"aggregate_evidence_tool completed: {result.get('overall_verdict')} (confidence: {result.get('confidence'):.3f})")
+        logger.info(
+            "aggregate_evidence_tool completed: %s (confidence: %.3f)",
+            result.get("overall_verdict"),
+            result.get("confidence"),
+        )
         return json.dumps(result)
 
     except Exception as e:
         logger.error(f"Error aggregating evidence: {e}")
-        return json.dumps({
-            "overall_verdict": "insufficient",
-            "confidence": 0.3,
-            "supporting_count": 0,
-            "contradicting_count": 0,
-            "key_points": [],
-            "conflicts": [],
-            "reasoning": str(e),
-            "error": str(e)
-        })
+        partial_result = _try_parse_verdict_json(str(e))
+        if partial_result is None:
+            partial_result = _heuristic_evidence_verdict(claim, evidence_data)
+        partial_result["error"] = str(e)
+        return json.dumps(partial_result)
 
 
 @tool()
@@ -175,13 +342,13 @@ async def generate_verdict_tool(claim: str, aggregated_assessment: str) -> str:
     Returns:
         JSON string with final verdict
     """
-    logger.info(f"[DEBUG] generate_verdict_tool called")
+    logger.info("[DEBUG] generate_verdict_tool called")
 
     try:
         # Parse assessment
         try:
             assessment = json.loads(aggregated_assessment)
-        except:
+        except (json.JSONDecodeError, TypeError):
             logger.warning("Failed to parse assessment, using defaults")
             assessment = {"overall_verdict": "insufficient", "confidence": 0.3}
 
@@ -197,12 +364,10 @@ async def generate_verdict_tool(claim: str, aggregated_assessment: str) -> str:
         verdict = verdict_map.get(overall_verdict, "uncertain")
         confidence = assessment.get("confidence", 0.3)
 
-        # Lower threshold from 0.4 to 0.25
-        # Only force "uncertain" if confidence is VERY low
-        if confidence < 0.25:
+        if confidence < 0.2:
             logger.warning(f"Low confidence ({confidence:.3f}), forcing uncertain")
             verdict = "uncertain"
-            confidence = 0.25
+            confidence = 0.2
 
         result = {
             "claim": claim,
@@ -219,7 +384,11 @@ async def generate_verdict_tool(claim: str, aggregated_assessment: str) -> str:
             "reasoning": assessment.get("reasoning", "Based on available evidence")
         }
 
-        logger.info(f"generate_verdict_tool completed: {verdict} (confidence: {confidence:.3f})")
+        logger.info(
+            "generate_verdict_tool completed: %s (confidence: %.3f)",
+            verdict,
+            confidence,
+        )
         return json.dumps(result)
 
     except Exception as e:
@@ -246,13 +415,13 @@ async def confidence_calibration_tool(verdict: str, evidence_quality: str) -> st
     Returns:
         JSON string with calibrated confidence
     """
-    logger.info(f"[DEBUG] confidence_calibration_tool called")
+    logger.info("[DEBUG] confidence_calibration_tool called")
 
     try:
         # Parse quality metrics
         try:
             quality = json.loads(evidence_quality)
-        except:
+        except (json.JSONDecodeError, TypeError):
             quality = {"relevance": 0.5, "consistency": 0.5, "quantity": 1}
 
         # Calibration factors

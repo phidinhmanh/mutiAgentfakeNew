@@ -1,31 +1,33 @@
-# -*- coding: utf-8 -*-
 """LangChain-compatible Gemini chat model supporting Google AI Studio and NVIDIA NIM."""
 
 from __future__ import annotations
 
 import os
-from typing import Any, Iterator
+from collections.abc import Iterator
+from typing import Any
 
 from google import genai
 from google.genai import types
 from langchain_core.language_models import BaseChatModel
 from langchain_core.messages import AIMessage, BaseMessage, HumanMessage, SystemMessage
 from langchain_core.outputs import ChatGeneration, ChatResult
-from pydantic import ConfigDict, Field, PrivateAttr
+from tenacity import retry, stop_after_attempt, wait_exponential
 
 
 class ChatGemini(BaseChatModel):
     """LangChain-compatible chat model for Gemini providers."""
 
-    model_config = ConfigDict(arbitrary_types_allowed=True)
-
-    model_name: str = Field(default="gemini-2.0-flash")
-    temperature: float = Field(default=0.1)
-    max_output_tokens: int = Field(default=2048)
-    provider: str = Field(default="google")
+    model_name: str = "gemini-2.0-flash"
+    temperature: float = 0.1
+    max_output_tokens: int = 2048
+    provider: str = "google"
     google_api_key: str | None = None
     nvidia_api_key: str | None = None
-    _client: genai.Client | None = PrivateAttr(default=None)
+    timeout: int = 60  # Default timeout in seconds
+
+    def __init__(self, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
+        self._client: genai.Client | None = None
 
     @property
     def _llm_type(self) -> str:
@@ -38,6 +40,7 @@ class ChatGemini(BaseChatModel):
             "provider": self.provider,
             "temperature": self.temperature,
             "max_output_tokens": self.max_output_tokens,
+            "timeout": self.timeout,
         }
 
     def _get_client(self) -> genai.Client:
@@ -51,7 +54,8 @@ class ChatGemini(BaseChatModel):
             self._client = genai.Client(
                 api_key=api_key,
                 http_options=types.HttpOptions(
-                    base_url="https://integrate.api.nvidia.com"
+                    base_url="https://integrate.api.nvidia.com",
+                    timeout=self.timeout * 1000,  # genai uses milliseconds
                 ),
             )
             return self._client
@@ -66,7 +70,10 @@ class ChatGemini(BaseChatModel):
                 "GEMINI_API_KEY or GOOGLE_API_KEY environment variable required"
             )
 
-        self._client = genai.Client(api_key=api_key)
+        self._client = genai.Client(
+            api_key=api_key,
+            http_options=types.HttpOptions(timeout=self.timeout * 1000),
+        )
         return self._client
 
     def _build_config(
@@ -102,6 +109,11 @@ class ChatGemini(BaseChatModel):
                 parts.append(str(msg.content))
         return "\n\n".join(parts)
 
+    @retry(
+        stop=stop_after_attempt(3),
+        wait=wait_exponential(multiplier=1, min=2, max=10),
+        reraise=True,
+    )
     def _generate(
         self,
         messages: list[BaseMessage],
@@ -114,7 +126,9 @@ class ChatGemini(BaseChatModel):
             contents=prompt,
             config=self._build_config(stop=stop, **kwargs),
         )
-        generation = ChatGeneration(message=AIMessage(content=self._extract_text(response)))
+        generation = ChatGeneration(
+            message=AIMessage(content=self._extract_text(response))
+        )
         return ChatResult(generations=[generation])
 
     async def _agenerate(
@@ -145,10 +159,10 @@ class ChatGemini(BaseChatModel):
             if text:
                 yield ChatGeneration(message=AIMessage(content=text))
 
-    def bind_tools(self, tools: list[Any], **kwargs: Any) -> "ChatGemini":
+    def bind_tools(self, tools: list[Any], **kwargs: Any) -> ChatGemini:
         return self
 
-    def with_structured_output(self, schema: Any, **kwargs: Any) -> "ChatGemini":
+    def with_structured_output(self, schema: Any, **kwargs: Any) -> ChatGemini:
         return self
 
 
@@ -156,6 +170,7 @@ def create_chat_gemini(
     model_name: str = "gemini-2.0-flash",
     provider: str = "google",
     temperature: float = 0.1,
+    timeout: int = 60,
     **kwargs: Any,
 ) -> ChatGemini:
     """Factory function to create ChatGemini instance."""
@@ -163,6 +178,7 @@ def create_chat_gemini(
         model_name=model_name,
         provider=provider,
         temperature=temperature,
+        timeout=timeout,
         google_api_key=os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY"),
         nvidia_api_key=os.getenv("NVIDIA_API_KEY"),
         **kwargs,

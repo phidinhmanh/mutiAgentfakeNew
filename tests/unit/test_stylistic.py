@@ -1,5 +1,4 @@
 """Tests for stylistic feature extraction."""
-import pytest
 
 from fake_news_detector.models.stylistic import extract_stylistic_features
 

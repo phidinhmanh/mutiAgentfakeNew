@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 
 """
 Delphi-Style Multi-Agent Jury System
@@ -9,13 +8,13 @@ Based on: Delphi method + Cleanlab BOLAA trust scoring
 Supports OpenAI, Google Gemini (AI Studio), and NVIDIA NIM backends.
 """
 
-import os
 import json
 import logging
-from typing import List, Dict, Any
 from dataclasses import dataclass
+from typing import Any
 
 from dotenv import load_dotenv
+
 from trust_agents.config import get_llm_config
 
 load_dotenv()
@@ -27,7 +26,7 @@ class VerifierPersona:
     """A verifier agent with specific personality/focus"""
     name: str
     system_prompt: str
-    focus_areas: List[str]
+    focus_areas: list[str]
     weight: float = 1.0
 
 
@@ -72,7 +71,7 @@ class DelphiJury:
             response = model.generate_content(full_prompt)
             return response.text.strip() if hasattr(response, "text") else str(response)
 
-    def _create_personas(self) -> List[VerifierPersona]:
+    def _create_personas(self) -> list[VerifierPersona]:
         """Create verifier personas with different focuses"""
 
         return [
@@ -129,8 +128,8 @@ RULES:
     def verify_with_jury(
         self,
         claim: str,
-        evidence: List[Dict[str, Any]]
-    ) -> Dict[str, Any]:
+        evidence: list[dict[str, Any]]
+    ) -> dict[str, Any]:
         """
         Verify claim using multi-agent jury with trust-weighted voting.
 
@@ -163,8 +162,8 @@ RULES:
         self,
         persona: VerifierPersona,
         claim: str,
-        evidence: List[Dict[str, Any]]
-    ) -> Dict[str, Any]:
+        evidence: list[dict[str, Any]]
+    ) -> dict[str, Any]:
         """Get verdict from a specific persona"""
 
         logger.info(f"[DELPHI_JURY] Consulting {persona.name}...")
@@ -213,9 +212,9 @@ Analyze from your perspective ({persona.name}) and return ONLY valid JSON:
 
     def _compute_trust_scores(
         self,
-        verdicts: List[Dict[str, Any]],
-        evidence: List[Dict[str, Any]]
-    ) -> List[float]:
+        verdicts: list[dict[str, Any]],
+        evidence: list[dict[str, Any]]
+    ) -> list[float]:
         """Compute trust scores for each verdict."""
         try:
             import numpy as np
@@ -260,16 +259,16 @@ Analyze from your perspective ({persona.name}) and return ONLY valid JSON:
 
     def _aggregate_with_trust(
         self,
-        verdicts: List[Dict[str, Any]],
-        trust_scores: List[float]
-    ) -> Dict[str, Any]:
+        verdicts: list[dict[str, Any]],
+        trust_scores: list[float]
+    ) -> dict[str, Any]:
         """Aggregate verdicts using trust-weighted voting"""
 
         # Weighted votes
         weighted_votes = {"true": 0.0, "false": 0.0, "uncertain": 0.0}
         total_weight = 0.0
 
-        for verdict, trust in zip(verdicts, trust_scores):
+        for verdict, trust in zip(verdicts, trust_scores, strict=False):
             v = verdict.get('verdict', 'uncertain')
             conf = verdict.get('confidence', 0.5)
 
@@ -289,8 +288,8 @@ Analyze from your perspective ({persona.name}) and return ONLY valid JSON:
         final_confidence = weighted_votes[final_verdict]
 
         # Generate reasoning
-        reasoning_parts = [f"Jury Decision (Trust-Weighted Voting):"]
-        for verdict, trust in zip(verdicts, trust_scores):
+        reasoning_parts = ["Jury Decision (Trust-Weighted Voting):"]
+        for verdict, trust in zip(verdicts, trust_scores, strict=False):
             reasoning_parts.append(
                 f"- {verdict['persona']}: {verdict['verdict']} "
                 f"(conf={verdict['confidence']:.2f}, trust={trust:.2f})"
@@ -309,7 +308,7 @@ Analyze from your perspective ({persona.name}) and return ONLY valid JSON:
         }
 
 
-def verify_with_delphi_jury_sync(claim: str, evidence: List[Dict[str, Any]]) -> Dict[str, Any]:
+def verify_with_delphi_jury_sync(claim: str, evidence: list[dict[str, Any]]) -> dict[str, Any]:
     """Synchronous wrapper for Delphi jury verification"""
     jury = DelphiJury()
     return jury.verify_with_jury(claim, evidence)

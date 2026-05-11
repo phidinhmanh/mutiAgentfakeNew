@@ -3,8 +3,6 @@ from __future__ import annotations
 
 from unittest.mock import Mock, patch
 
-import pytest
-
 from fake_news_detector.models.baseline import LABEL_MAP, PhoBERTBaseline
 
 
@@ -38,7 +36,7 @@ class TestPhoBERTBaselineInit:
         mock_model_instance = Mock()
         mock_model.from_pretrained.return_value = mock_model_instance
 
-        model = PhoBERTBaseline()
+        PhoBERTBaseline()
 
         mock_tokenizer.from_pretrained.assert_called_once_with("vinai/phobert-base")
         mock_model.from_pretrained.assert_called_once()
@@ -55,7 +53,7 @@ class TestPhoBERTBaselineInit:
         mock_model_instance = Mock()
         mock_model.from_pretrained.return_value = mock_model_instance
 
-        model = PhoBERTBaseline()
+        PhoBERTBaseline()
 
         call_kwargs = mock_model.from_pretrained.call_args.kwargs
         assert call_kwargs.get("num_labels") == 2
@@ -73,7 +71,7 @@ class TestPhoBERTBaselineInit:
         mock_model_instance = Mock()
         mock_model.from_pretrained.return_value = mock_model_instance
 
-        model = PhoBERTBaseline()
+        PhoBERTBaseline()
         mock_model_instance.eval.assert_called_once()
 
 

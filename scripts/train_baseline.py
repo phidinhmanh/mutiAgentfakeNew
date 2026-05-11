@@ -3,15 +3,14 @@ import argparse
 import logging
 from pathlib import Path
 
-from datasets import load_dataset
+from datasets import Dataset, load_dataset
 from transformers import (
     AutoModelForSequenceClassification,
     AutoTokenizer,
+    DataCollatorWithPadding,
     Trainer,
     TrainingArguments,
-    DataCollatorWithPadding,
 )
-from datasets import Dataset
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Integration tests for TRUSTOrchestrator.
 
 Tests the complete pipeline: Claim Extraction -> Evidence Retrieval -> Verification -> Explanation.
@@ -6,11 +5,7 @@ Tests the complete pipeline: Claim Extraction -> Evidence Retrieval -> Verificat
 
 from __future__ import annotations
 
-from typing import Any
-from unittest.mock import Mock
-from unittest.mock import patch
-
-import pytest
+from unittest.mock import Mock, patch
 
 from trust_agents.orchestrator import TRUSTOrchestrator, TRUSTResult
 

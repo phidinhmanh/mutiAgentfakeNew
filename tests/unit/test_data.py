@@ -1,14 +1,12 @@
 """Tests for data module."""
-import pytest
 
 from fake_news_detector.data.preprocessing import (
     clean_text,
-    split_sentences,
-    extract_numbers,
-    extract_entities,
-    tokenize_words,
     create_chunk_windows,
+    extract_numbers,
+    split_sentences,
     summarize_for_long_text,
+    tokenize_words,
 )
 
 

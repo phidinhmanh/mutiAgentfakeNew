@@ -1,10 +1,7 @@
 """Tests for data loader."""
 from __future__ import annotations
 
-from typing import Any
 from unittest.mock import Mock, patch
-
-import pytest
 
 from fake_news_detector.data.loader import (
     DATASET_NAME,
@@ -24,7 +21,7 @@ class TestLoadViFactCheck:
         mock_dataset.__len__ = Mock(return_value=100)
         mock_load.return_value = mock_dataset
 
-        result = load_vifactcheck("train")
+        load_vifactcheck("train")
         mock_load.assert_called_once()
         assert mock_load.call_args[1].get("split") == "train" or "train" in str(
             mock_load.call_args

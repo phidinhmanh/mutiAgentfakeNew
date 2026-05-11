@@ -1,10 +1,6 @@
 """Tests for citation checker utilities."""
 from __future__ import annotations
 
-from typing import Any
-
-import pytest
-
 from fake_news_detector.utils.citation_checker import (
     _find_matching_evidence,
     _fuzzy_match,

@@ -1,16 +1,24 @@
 """Tests for hybrid retriever."""
 from __future__ import annotations
 
-from typing import Any
 from unittest.mock import Mock, patch
 
 import pytest
 
 from fake_news_detector.rag.retriever import (
-    _merge_results,
-    calculate_confidence_score,
     retrieve_evidence,
 )
+from shared_fact_checking.retrieval.policy import (
+    calculate_confidence_score,
+    merge_results as _merge_results,
+)
+from shared_fact_checking.retrieval.service import _retrieval_cache
+
+
+@pytest.fixture(autouse=True)
+def clear_retrieval_cache():
+    """Clear the global retrieval cache before each test to ensure isolation."""
+    _retrieval_cache.clear()
 
 
 class TestCalculateConfidenceScore:

@@ -1,12 +1,11 @@
 """FAISS vector store for semantic search."""
 import logging
-import os
+import pickle
 from pathlib import Path
 from typing import Any
 
 import faiss
 import numpy as np
-import pickle
 from sentence_transformers import SentenceTransformer
 
 from fake_news_detector.config import settings
@@ -76,7 +75,7 @@ class VectorStore:
         )
 
         results = []
-        for i, (score, idx) in enumerate(zip(scores[0], indices[0])):
+        for i, (score, idx) in enumerate(zip(scores[0], indices[0], strict=False)):
             if idx < len(self.documents):
                 doc = self.documents[idx].copy()
                 doc["score"] = float(score)

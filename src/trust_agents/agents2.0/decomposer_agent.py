@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 
 """
 Decomposer Agent - LoCal-inspired claim decomposition.
@@ -12,10 +11,8 @@ Based on: LoCal (ACM 2024)
 Supports OpenAI, Google Gemini (AI Studio), and NVIDIA NIM backends.
 """
 
-import os
 import json
 import logging
-from typing import List, Dict, Any
 from dataclasses import dataclass
 
 from dotenv import load_dotenv
@@ -31,9 +28,9 @@ logger = logging.getLogger("TRUST_agents.agents.decomposer")
 class DecomposedClaim:
     """Result of claim decomposition"""
     original_claim: str
-    atomic_claims: List[str]
+    atomic_claims: list[str]
     logic_structure: str
-    causal_edges: List[Dict[str, str]]
+    causal_edges: list[dict[str, str]]
     complexity_score: float
 
 
